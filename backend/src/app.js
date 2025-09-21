@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,6 @@ app.get("/", (req, res) => {
   res.send("Expirable URL API Running 🚀");
 });
 
-
+app.use("/auth", authRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
