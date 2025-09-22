@@ -67,6 +67,42 @@ export const createLink = async (req, res) => {
 // };
 
 
+export const getUserLinks = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const links = await Link.find({ ownerId: userId }).sort({ createdAt: -1 });
+    res.json(links);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getDashboardStats = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Get all user's links
+    const links = await Link.find({ ownerId: userId });
+
+    // Calculate statistics
+    const totalLinks = links.length;
+    const totalClicks = links.reduce((sum, link) => sum + (link.clicks || 0), 0);
+
+    // Count active links (not expired)
+    const activeLinks = links.filter(link => {
+      return !link.expiry || new Date(link.expiry) > new Date();
+    }).length;
+
+    res.json({
+      totalLinks,
+      totalClicks,
+      activeLinks
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const redirectLink = async (req, res) => {
   try {
     const { slug } = req.params;
