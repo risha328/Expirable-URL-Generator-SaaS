@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 export default function Login() {
     const { login } = useContext(AuthContext);
@@ -55,13 +55,15 @@ export default function Login() {
         setIsLoading(true);
         try {
             await login(formData.email, formData.password);
-            nav('/dashboard', { 
-                state: { 
+            // Redirect to the original location or dashboard
+            const from = location.state?.from?.pathname || '/dashboard';
+            nav(from, {
+                state: {
                     message: 'Welcome back to Expireo!',
                     type: 'success'
                 }
             });
-        } catch (err) { 
+        } catch (err) {
             setSubmitError(err.response?.data?.message || 'Login failed. Please check your credentials and try again.');
         } finally {
             setIsLoading(false);
@@ -81,13 +83,15 @@ export default function Login() {
 
         try {
             await login(demoAccounts[demoType].email, demoAccounts[demoType].password);
-            nav('/dashboard', { 
-                state: { 
+            // Redirect to the original location or dashboard
+            const from = location.state?.from?.pathname || '/dashboard';
+            nav(from, {
+                state: {
                     message: `Welcome! You're logged in as ${demoType} demo account.`,
                     type: 'success'
                 }
             });
-        } catch (err) { 
+        } catch (err) {
             setSubmitError('Demo login failed. Please try again.');
         } finally {
             setIsLoading(false);

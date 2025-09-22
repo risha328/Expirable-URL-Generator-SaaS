@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const URLCreationComponent = () => {
   return (
@@ -58,7 +59,7 @@ const URLCreationComponent = () => {
           <div className="mt-10 lg:mt-0 lg:order-1">
             <div className="bg-white rounded-xl shadow-xl overflow-hidden">
               <div className="px-6 py-5 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-极客时间900">Create New Link</h3>
+                <Link to='/create' className="text-lg font-medium text-gray-900 hover:text-indigo-600 transition-colors duration-200">Create New Link</Link>
               </div>
               <div className="px-6 py-4 space-y-4">
                 <div>
