@@ -35,8 +35,15 @@ export default function AdminDashboard() {
         totalClicks: 0,
         activeLinks: 0
     });
-    
+
+    const [chartData, setChartData] = useState({
+        labels: [],
+        dailyClicks: [],
+        activeUsers: []
+    });
+
     const [loading, setLoading] = useState(true);
+    const [chartLoading, setChartLoading] = useState(true);
     const [timeRange, setTimeRange] = useState('7d');
 
     useEffect(() => {
@@ -85,34 +92,91 @@ export default function AdminDashboard() {
         fetchStats();
     }, []);
 
-    // Generate labels based on time range
-    const generateLabels = (range) => {
+    // Fetch chart data when timeRange changes
+    useEffect(() => {
+        const fetchChartData = async () => {
+            setChartLoading(true);
+            try {
+                const response = await fetch(`http://localhost:5000/admin/dashboard/chart-data?timeRange=${timeRange}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setChartData({
+                        labels: data.labels || [],
+                        dailyClicks: data.dailyClicks || [],
+                        activeUsers: data.activeUsers || []
+                    });
+                } else {
+                    console.error('Failed to fetch chart data');
+                    // Set default empty data if API fails
+                    setChartData({
+                        labels: [],
+                        dailyClicks: [],
+                        activeUsers: []
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching chart data:', error);
+                // Set default empty data if API fails
+                setChartData({
+                    labels: [],
+                    dailyClicks: [],
+                    activeUsers: []
+                });
+            } finally {
+                setChartLoading(false);
+            }
+        };
+
+        fetchChartData();
+    }, [timeRange]);
+
+    // Generate fallback labels based on time range
+    const generateFallbackLabels = (range) => {
+        const now = new Date();
+        const startDate = new Date();
+
         switch (range) {
             case '7d':
-                return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                startDate.setDate(now.getDate() - 7);
+                const labels = [];
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
+                    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    labels.push(dayNames[date.getDay()]);
+                }
+                return labels;
             case '30d':
                 return Array.from({length: 30}, (_, i) => `Day ${i + 1}`);
             case '90d':
-                return Array.from({length: 90}, (_, i) => `Week ${Math.floor(i / 7) + 1}.${(i % 7) + 1}`);
+                const weekLabels = [];
+                for (let i = 0; i < 90; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
+                    const weekNum = Math.floor(i / 7) + 1;
+                    const dayOfWeek = date.getDay();
+                    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    weekLabels.push(`Week ${weekNum}.${dayNames[dayOfWeek]}`);
+                }
+                return weekLabels;
             default:
-                return [];
+                return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         }
     };
 
     // Daily Clicks Data (Bar Chart)
     const dailyClicksData = {
-        labels: generateLabels(timeRange),
+        labels: chartData.labels.length > 0 ? chartData.labels : generateFallbackLabels(timeRange),
         datasets: [
             {
                 label: 'Daily Clicks',
-                data: (() => {
-                    switch (timeRange) {
-                        case '7d': return [1200, 1900, 3000, 5000, 2000, 3000, 4500];
-                        case '30d': return Array.from({length: 30}, () => Math.floor(Math.random() * 5000) + 1000);
-                        case '90d': return Array.from({length: 90}, () => Math.floor(Math.random() * 4000) + 1500);
-                        default: return [];
-                    }
-                })(),
+                data: chartData.dailyClicks.length > 0 ? chartData.dailyClicks : [0, 0, 0, 0, 0, 0, 0],
                 backgroundColor: 'rgba(68, 136, 239, 0.8)',
                 borderColor: 'rgba(68, 68, 239, 1)',
                 borderWidth: 2,
@@ -124,18 +188,11 @@ export default function AdminDashboard() {
 
     // Active Users Trend Data (Line Chart)
     const activeUsersData = {
-        labels: generateLabels(timeRange),
+        labels: chartData.labels.length > 0 ? chartData.labels : generateFallbackLabels(timeRange),
         datasets: [
             {
                 label: 'Active Users',
-                data: (() => {
-                    switch (timeRange) {
-                        case '7d': return [450, 500, 480, 520, 510, 530, 550];
-                        case '30d': return Array.from({length: 30}, () => Math.floor(Math.random() * 200) + 400);
-                        case '90d': return Array.from({length: 90}, () => Math.floor(Math.random() * 300) + 300);
-                        default: return [];
-                    }
-                })(),
+                data: chartData.activeUsers.length > 0 ? chartData.activeUsers : [0, 0, 0, 0, 0, 0, 0],
                 borderColor: 'rgb(59, 130, 246)',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 borderWidth: 3,
@@ -307,7 +364,7 @@ export default function AdminDashboard() {
                     </div>
                 </div>
                 <div className="h-64">
-                    {loading ? (
+                    {chartLoading ? (
                         <div className="h-full flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
                         </div>
