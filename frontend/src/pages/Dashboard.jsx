@@ -222,8 +222,17 @@ export default function Dashboard() {
                 {/* Links Table */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     {isLoading ? (
-                        <div className="flex justify-center items-center py-12">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <div className="flex flex-col justify-center items-center py-12">
+                            <div className="relative">
+                                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200"></div>
+                                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
+                            </div>
+                            <p className="mt-4 text-gray-600 font-medium">Loading your links...</p>
+                            <div className="mt-2 flex space-x-1">
+                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                            </div>
                         </div>
                     ) : filteredLinks.length === 0 ? (
                         <div className="text-center py-12">

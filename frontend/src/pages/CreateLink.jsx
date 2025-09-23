@@ -43,7 +43,7 @@
 // }
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api/api';
 import { Link } from 'react-router-dom';
 
@@ -54,6 +54,16 @@ export default function CreateLink() {
     const [result, setResult] = useState(null);
     const [err, setErr] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isPageLoading, setIsPageLoading] = useState(true);
+
+    useEffect(() => {
+        // Simulate page loading time
+        const timer = setTimeout(() => {
+            setIsPageLoading(false);
+        }, 800);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -80,6 +90,25 @@ export default function CreateLink() {
             alert('Link copied to clipboard!');
         }
     };
+
+    if (isPageLoading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="relative">
+                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200"></div>
+                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
+                    </div>
+                    <p className="mt-4 text-gray-600 font-medium">Loading Create Link...</p>
+                    <div className="mt-2 flex justify-center space-x-1">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
@@ -188,11 +217,15 @@ export default function CreateLink() {
                         >
                             {isLoading ? (
                                 <div className="flex items-center justify-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Creating Link...
+                                    <div className="relative mr-3">
+                                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                                    </div>
+                                    <span>Creating Link...</span>
+                                    <div className="ml-2 flex space-x-1">
+                                        <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                                        <div className="w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                                        <div className="w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                                    </div>
                                 </div>
                             ) : (
                                 'Create Short URL'

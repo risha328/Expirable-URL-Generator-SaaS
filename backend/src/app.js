@@ -34,21 +34,9 @@ app.use(helmet());
 app.use(cors());
 app.use(rateLimit({ windowMs: 1 * 60 * 1000, max: 100 }));
 
-// Use express.json() only for POST, PUT, PATCH on /url and /auth routes
-app.use("/url", (req, res, next) => {
-  if (["POST", "PUT", "PATCH"].includes(req.method)) {
-    express.json()(req, res, next);
-  } else {
-    next();
-  }
-});
-app.use("/auth", (req, res, next) => {
-  if (["POST", "PUT", "PATCH"].includes(req.method)) {
-    express.json()(req, res, next);
-  } else {
-    next();
-  }
-});
+// Use express.json() for all requests to /url and /auth routes
+app.use("/url", express.json());
+app.use("/auth", express.json());
 
 app.use("/analytics", analyticsRoutes);// For analytics route if needed
 
