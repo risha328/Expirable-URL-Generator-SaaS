@@ -42,19 +42,48 @@ export default function AdminDashboard() {
     useEffect(() => {
         const fetchStats = async () => {
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            setStats({
-                totalUsers: 12457,
-                totalLinks: 89234,
-                totalClicks: 1245896,
-                activeLinks: 23456
-            });
-            setLoading(false);
+            try {
+                const response = await fetch('http://localhost:5000/admin/dashboard/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setStats({
+                        totalUsers: data.totalUsers || 0,
+                        totalLinks: data.totalLinks || 0,
+                        totalClicks: data.totalClicks || 0,
+                        activeLinks: data.activeLinks || 0
+                    });
+                } else {
+                    console.error('Failed to fetch dashboard stats');
+                    // Set default values if API fails
+                    setStats({
+                        totalUsers: 0,
+                        totalLinks: 0,
+                        totalClicks: 0,
+                        activeLinks: 0
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching dashboard stats:', error);
+                // Set default values if API fails
+                setStats({
+                    totalUsers: 0,
+                    totalLinks: 0,
+                    totalClicks: 0,
+                    activeLinks: 0
+                });
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchStats();
-    }, [timeRange]);
+    }, []);
 
     // Generate labels based on time range
     const generateLabels = (range) => {
