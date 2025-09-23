@@ -92,24 +92,6 @@ Docker (optional)
 
 Firebase/Cloudinary (for optional file uploads)
 
-📂 Project Structure
-expireo/
-│── backend/          # Express + MongoDB backend
-│   ├── models/       # Mongoose schemas
-│   ├── routes/       # Express routes (auth, url, admin)
-│   ├── controllers/  # Business logic
-│   └── utils/        # Helpers (jwt, mailer, etc.)
-│
-│── frontend/         # React + Vite frontend
-│   ├── src/
-│   │   ├── pages/    # Dashboard, CreateLink, Analytics
-│   │   ├── components/ # Reusable UI
-│   │   └── api/      # Axios config
-│
-│── README.md
-│── .env.example
-│── docker-compose.yml
-
 🚀 Getting Started
 1️⃣ Clone Repo
 git clone https://github.com/your-username/expireo.git
