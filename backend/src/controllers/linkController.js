@@ -3,6 +3,13 @@ import { nanoid } from "nanoid";
 import Link from "../models/Link.js";
 import Analytics from "../models/Analytics.js";
 import User from "../models/User.js";
+import {
+  parseUserAgent,
+  extractScreenResolution,
+  extractLanguage,
+  extractTimezone,
+  getLocationFromIP
+} from "../utils/analyticsUtils.js";
 
 export const createLink = async (req, res) => {
   try {
@@ -123,13 +130,45 @@ export const redirectLink = async (req, res) => {
       if (!valid) return res.status(403).json({ message: "Wrong password" });
     }
 
-    link.clicks++;
-    link.analytics.push({
-      ip: req.ip,
-      timestamp: new Date(),
-      userAgent: req.headers["user-agent"]
-    });
+    // Extract comprehensive analytics data
+    const userAgent = req.headers["user-agent"];
+    const referrer = req.headers["referer"] || req.headers["referrer"];
+    const acceptLanguage = req.headers["accept-language"];
 
+    const userAgentData = parseUserAgent(userAgent);
+    const screenResolution = extractScreenResolution(userAgent);
+    const language = extractLanguage(acceptLanguage);
+    const timezone = extractTimezone(userAgent);
+
+    // Get location data from IP (placeholder for now)
+    const locationData = await getLocationFromIP(req.ip);
+
+    // Create detailed analytics record
+    const analyticsData = {
+      linkId: link._id,
+      userId: link.ownerId,
+      timestamp: new Date(),
+      ip: req.ip,
+      referrer: referrer,
+      userAgent: userAgent,
+      country: locationData.country,
+      city: locationData.city,
+      region: locationData.region,
+      deviceType: userAgentData.deviceType,
+      browser: userAgentData.browser,
+      browserVersion: userAgentData.browserVersion,
+      os: userAgentData.os,
+      osVersion: userAgentData.osVersion,
+      screenResolution: screenResolution,
+      timezone: timezone,
+      language: language
+    };
+
+    // Save analytics data
+    await Analytics.create(analyticsData);
+
+    // Update link click count
+    link.clicks++;
     await link.save();
 
     // Return target URL as JSON instead of server-side redirect

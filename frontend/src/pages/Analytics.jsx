@@ -105,9 +105,15 @@ export default function Analytics() {
         return 'Unknown';
     };
 
-    const getLocationFromIP = (ip) => {
-        // This is a simplified version - in production, you'd use an IP geolocation service
-        if (ip === '::1' || ip === '127.0.0.1') return 'Localhost';
+    const getLocationFromIP = (event) => {
+        // Use the location data from the analytics record
+        if (event.country && event.city) {
+            return `${event.city}, ${event.country}`;
+        } else if (event.country) {
+            return event.country;
+        } else if (event.ip === '::1' || event.ip === '127.0.0.1') {
+            return 'Localhost';
+        }
         return 'Unknown location';
     };
 
@@ -310,7 +316,7 @@ export default function Analytics() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{getLocationFromIP(event.ip)}</div>
+                                                <div className="text-sm text-gray-900">{getLocationFromIP(event)}</div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="text-sm font-mono text-gray-500">{event.ip}</div>
