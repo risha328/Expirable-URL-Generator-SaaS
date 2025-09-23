@@ -100,13 +100,13 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
                 {/* Header */}
                 <div className="text-center">
                     <Link to="/" className="inline-block mb-8">
                         <div className="flex items-center justify-center space-x-2">
-                            <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
                                 <span className="text-white font-bold text-lg">E</span>
                             </div>
                             <span className="text-2xl font-bold text-gray-900">Expireo Admin</span>
@@ -123,11 +123,11 @@ export default function AdminLogin() {
                 {/* Form Container */}
                 <div className="bg-white rounded-2xl shadow-xl p-8">
                     {submitError && (
-                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
-                            <svg className="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center">
+                            <svg className="w-5 h-5 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                             </svg>
-                            <span className="text-red-800 text-sm">{submitError}</span>
+                            <span className="text-blue-800 text-sm">{submitError}</span>
                         </div>
                     )}
 
@@ -143,13 +143,13 @@ export default function AdminLogin() {
                                 type="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200 ${
-                                    errors.email ? 'border-red-300' : 'border-gray-300'
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 ${
+                                    errors.email ? 'border-blue-300' : 'border-gray-300'
                                 }`}
                                 placeholder="admin@expireo.com"
                             />
                             {errors.email && (
-                                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                                <p className="mt-1 text-sm text-blue-600">{errors.email}</p>
                             )}
                         </div>
 
@@ -161,7 +161,7 @@ export default function AdminLogin() {
                                 </label>
                                 <Link
                                     to="/admin/forgot-password"
-                                    className="text-sm text-red-600 hover:text-red-500 font-medium transition-colors duration-200"
+                                    className="text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors duration-200"
                                 >
                                     Forgot password?
                                 </Link>
@@ -172,13 +172,13 @@ export default function AdminLogin() {
                                 type="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200 ${
-                                    errors.password ? 'border-red-300' : 'border-gray-300'
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 ${
+                                    errors.password ? 'border-blue-300' : 'border-gray-300'
                                 }`}
                                 placeholder="••••••••"
                             />
                             {errors.password && (
-                                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                                <p className="mt-1 text-sm text-blue-600">{errors.password}</p>
                             )}
                         </div>
 
@@ -186,7 +186,7 @@ export default function AdminLogin() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-sm hover:shadow-md"
+                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm hover:shadow-md"
                         >
                             {isLoading ? (
                                 <div className="flex items-center justify-center">
@@ -208,7 +208,7 @@ export default function AdminLogin() {
                             Don't have an admin account?{' '}
                             <Link
                                 to="/admin/signup"
-                                className="font-medium text-red-600 hover:text-red-500 transition-colors duration-200"
+                                className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
                             >
                                 Create Admin Account
                             </Link>
@@ -229,7 +229,7 @@ export default function AdminLogin() {
                 {/* Security Notice */}
                 <div className="text-center">
                     <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                        <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                         </svg>
                         <span>Admin access is restricted and monitored</span>

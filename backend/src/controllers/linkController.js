@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import Link from "../models/Link.js";
 import Analytics from "../models/Analytics.js";
+import User from "../models/User.js";
 
 export const createLink = async (req, res) => {
   try {
@@ -133,6 +134,69 @@ export const redirectLink = async (req, res) => {
 
     // Return target URL as JSON instead of server-side redirect
     return res.json({ targetUrl: link.targetUrl });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Admin functions
+export const getAllLinks = async (req, res) => {
+  try {
+    const links = await Link.find().populate('ownerId', 'firstName lastName email').sort({ createdAt: -1 });
+    res.json(links);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const deleteLink = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const link = await Link.findByIdAndDelete(id);
+    if (!link) return res.status(404).json({ message: "Link not found" });
+    res.json({ message: "Link deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const forceExpireLink = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const link = await Link.findByIdAndUpdate(id, { status: 'expired' }, { new: true });
+    if (!link) return res.status(404).json({ message: "Link not found" });
+    res.json({ message: "Link expired successfully", link });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getReportedLinks = async (req, res) => {
+  try {
+    const links = await Link.find({ status: 'reported' }).populate('ownerId', 'firstName lastName email').sort({ createdAt: -1 });
+    res.json(links);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const warnUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    // For now, just log the warning. In a real app, you might send an email or notification.
+    console.log(`Warning sent to user ${userId}`);
+    res.json({ message: "User warned successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const blockUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findByIdAndUpdate(userId, { role: 'blocked' }, { new: true });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ message: "User blocked successfully", user });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
