@@ -131,7 +131,8 @@ export const redirectLink = async (req, res) => {
 
     await link.save();
 
-    return res.redirect(link.targetUrl);
+    // Return target URL as JSON instead of server-side redirect
+    return res.json({ targetUrl: link.targetUrl });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

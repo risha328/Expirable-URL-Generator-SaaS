@@ -27,10 +27,17 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
+      // Token expired or invalid - clear auth state
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+
+      // Only redirect to login if we're not already on a login-related page
+      // and if this isn't a token validation request
+      const currentPath = window.location.pathname;
+      if (!currentPath.includes('/login') && !currentPath.includes('/signup')) {
+        // Use a more graceful redirect that doesn't interfere with React Router
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

@@ -62,3 +62,24 @@ export const login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const validateToken = async (req, res) => {
+  try {
+    // Token validation is handled by authMiddleware
+    // If we reach here, token is valid
+    const user = await User.findById(req.user.id).select('-passwordHash');
+    if (!user) return res.status(401).json({ message: "User not found" });
+
+    res.json({
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -7,12 +7,46 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+
+    // Validate token on app startup
+    const validateToken = async (token) => {
+        try {
+            const res = await api.get('/auth/validate');
+            return res.data.user;
+        } catch (error) {
+            // Token is invalid or expired
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            return null;
+        }
+    };
 
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
-        if (token && userStr) setUser(JSON.parse(userStr));
+        const initializeAuth = async () => {
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+
+            if (token && userStr) {
+                // Validate token with backend
+                const validatedUser = await validateToken(token);
+                if (validatedUser) {
+                    setUser(validatedUser);
+                } else {
+                    setUser(null);
+                }
+            } else {
+                setUser(null);
+            }
+
+            setIsLoading(false);
+            setIsInitialized(true);
+        };
+
+        initializeAuth();
     }, []);
 
 
@@ -41,7 +75,14 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, login, signup, logout }}>
+        <AuthContext.Provider value={{
+            user,
+            login,
+            signup,
+            logout,
+            isLoading,
+            isInitialized
+        }}>
             {children}
         </AuthContext.Provider>
     );

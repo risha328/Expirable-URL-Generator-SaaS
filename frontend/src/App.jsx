@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import CreateLink from './pages/CreateLink';
@@ -12,9 +13,9 @@ import Features from './pages/Features';
 import Contact from './pages/Contact';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
+import RedirectHandler from './components/RedirectHandler';
 
-
-export default function App() {
+function AppContent() {
     return (
         <div className="min-h-screen">
             <Navbar />
@@ -41,9 +42,18 @@ export default function App() {
                             <Analytics />
                         </ProtectedRoute>
                     } />
+                    <Route path="/:slug" element={<RedirectHandler />} />
                 </Routes>
                 <Footer />
             </main>
         </div>
+    );
+}
+
+export default function App() {
+    return (
+        <AuthProvider>
+            <AppContent />
+        </AuthProvider>
     );
 }
