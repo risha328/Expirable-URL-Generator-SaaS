@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, login, adminSignup, adminLogin, validateToken } from "../controllers/authController.js";
+import { signup, login, adminSignup, adminLogin, validateToken, getAllUsers } from "../controllers/authController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import adminMiddleware from "../middlewares/adminMiddleware.js";
 
@@ -10,5 +10,6 @@ router.post("/login", login); // Public route for user login
 router.post("/admin/signup", adminSignup); // Public route for admin signup (requires admin code)
 router.post("/admin/login", adminLogin); // Public route for admin login
 router.get("/validate", authMiddleware, validateToken); // Protected route for token validation
+router.get("/admin/users", adminMiddleware, getAllUsers); // Admin-only route to get all users
 
 export default router;

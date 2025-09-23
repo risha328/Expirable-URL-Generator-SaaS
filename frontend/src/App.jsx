@@ -6,6 +6,7 @@ import Signup from './pages/Signup';
 import AdminLogin from './pages/AdminLogin';
 import AdminSignup from './pages/AdminSignup';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminUsers from './pages/AdminUsers';
 import CreateLink from './pages/CreateLink';
 import Analytics from './pages/Analytics';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -85,6 +86,11 @@ function AppContent() {
                 <Route path="/admin/dashboard" element={
                     <AdminProtectedRoute>
                         <AdminDashboard />
+                    </AdminProtectedRoute>
+                } />
+                <Route path="/admin/users" element={
+                    <AdminProtectedRoute>
+                        <AdminUsers />
                     </AdminProtectedRoute>
                 } />
 

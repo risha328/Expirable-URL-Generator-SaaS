@@ -150,3 +150,25 @@ export const validateToken = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    // Admin middleware already verified admin role
+    // Only return users with role "user", exclude admins
+    const users = await User.find({ role: 'user' }).select('-passwordHash').sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      users: users.map(user => ({
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt
+      }))
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

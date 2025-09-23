@@ -228,7 +228,7 @@ export default function AdminSidebar() {
                                     onClick={() => handleItemClick(item.path)}
                                     className={`w-full flex items-center rounded-lg transition-all duration-200 group ${
                                         active
-                                            ? 'bg-gradient-to-r from-red-50 to-orange-50 text-red-700 border-r-4 border-red-600 font-semibold'
+                                            ? 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 border-r-4 border-blue-600 font-semibold'
                                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                     } ${isCollapsed ? 'justify-center px-3 py-4' : 'px-4 py-3'}`}
                                     title={isCollapsed ? item.name : ''}
@@ -236,7 +236,7 @@ export default function AdminSidebar() {
                                     <div className={`relative ${isCollapsed ? '' : 'mr-3'}`}>
                                         {item.icon}
                                         {active && (
-                                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
                                         )}
                                     </div>
                                     {!isCollapsed && (
@@ -253,7 +253,7 @@ export default function AdminSidebar() {
             {isCollapsed && (
                 <div className="p-4 border-t border-gray-200">
                     <div className="flex justify-center">
-                        <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
                             <span className="text-white font-bold text-sm">A</span>
                         </div>
                     </div>
@@ -265,7 +265,7 @@ export default function AdminSidebar() {
                 <div className="p-6 border-t border-gray-200">
                     <div className="bg-gray-50 rounded-lg p-3">
                         <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
                                 <span className="text-white font-bold text-lg">A</span>
                             </div>
                             <div className="flex-1 min-w-0">

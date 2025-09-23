@@ -1,48 +1,3 @@
-// import React, { useContext } from 'react';
-// import { AuthContext } from '../../context/AuthContext';
-// import { Link } from 'react-router-dom';
-
-// export default function AdminNavbar() {
-//     const { user, logout } = useContext(AuthContext);
-
-//     const handleLogout = () => {
-//         logout();
-//     };
-
-//     return (
-//         <nav className="bg-white shadow-sm border-b border-red-200">
-//             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//                 <div className="flex justify-between items-center py-4">
-//                     <div className="flex items-center space-x-4">
-//                         <Link to="/" className="flex items-center space-x-2">
-//                             <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
-//                                 <span className="text-white font-bold text-lg">E</span>
-//                             </div>
-//                             <span className="text-xl font-bold text-gray-900">Expireo Admin</span>
-//                         </Link>
-//                     </div>
-//                     <div className="flex items-center space-x-4">
-//                         <span className="text-sm text-gray-600">
-//                             Welcome, {user?.firstName} {user?.lastName}
-//                         </span>
-//                         <Link
-//                             to="/"
-//                             className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
-//                         >
-//                             ← Back to Site
-//                         </Link>
-//                         <button
-//                             onClick={handleLogout}
-//                             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-//                         >
-//                             Logout
-//                         </button>
-//                     </div>
-//                 </div>
-//             </div>
-//         </nav>
-//     );
-// }
 
 
 import React, { useContext, useState } from 'react';
@@ -67,12 +22,12 @@ export default function AdminNavbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Left Section - Logo and Brand */}
-                    <div className="flex items-center space-x-4">
-                        <Link 
-                            to="/admin" 
-                            className="flex items-center space-x-3 hover:opacity-90 transition-opacity duration-200"
+                    <div className="flex items-center -ml-4 pl-0">
+                        <Link
+                            to="/admin"
+                            className="flex items-center space-x-1 hover:opacity-90 transition-opacity duration-200"
                         >
-                            <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center shadow-md">
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md">
                                 <span className="text-white font-bold text-xl">E</span>
                             </div>
                             <div className="flex flex-col">
@@ -109,7 +64,7 @@ export default function AdminNavbar() {
                                 onClick={toggleDropdown}
                                 className="flex items-center space-x-3 bg-gray-50 hover:bg-gray-100 rounded-lg px-3 py-2 transition-colors duration-200 border border-gray-200"
                             >
-                                <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center shadow-sm">
+                                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-sm">
                                     <span className="text-white font-bold text-sm uppercase">
                                         {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
                                     </span>
@@ -172,7 +127,7 @@ export default function AdminNavbar() {
                                     <div className="px-2 py-2 border-t border-gray-100">
                                         <button
                                             onClick={handleLogout}
-                                            className="flex items-center space-x-3 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                                            className="flex items-center space-x-3 w-full px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
