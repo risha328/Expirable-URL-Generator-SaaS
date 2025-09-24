@@ -136,6 +136,77 @@ export default function Dashboard() {
         return ((clicks / stats.totalClicks) * 100).toFixed(1);
     };
 
+    const formatExpiryDate = (expiryDate) => {
+        if (!expiryDate) return 'No expiry';
+        return new Date(expiryDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const getTimeRemaining = (expiryDate) => {
+        if (!expiryDate) return 'Never expires';
+
+        const now = new Date();
+        const expiry = new Date(expiryDate);
+        const diffMs = expiry - now;
+
+        if (diffMs <= 0) return 'Expired';
+
+        const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+        if (days > 0) {
+            return `${days}d ${hours}h ${minutes}m`;
+        } else if (hours > 0) {
+            return `${hours}h ${minutes}m`;
+        } else {
+            return `${minutes}m`;
+        }
+    };
+
+    const getExpiryStatus = (expiryDate) => {
+        if (!expiryDate) return 'no-expiry';
+
+        const now = new Date();
+        const expiry = new Date(expiryDate);
+        const diffMs = expiry - now;
+
+        if (diffMs <= 0) return 'expired';
+        if (diffMs <= 24 * 60 * 60 * 1000) return 'expiring-soon'; // Within 24 hours
+        return 'active';
+    };
+
+    const getStatusBadge = (status) => {
+        switch (status) {
+            case 'expired':
+                return 'bg-red-100 text-red-800';
+            case 'expiring-soon':
+                return 'bg-yellow-100 text-yellow-800';
+            case 'no-expiry':
+                return 'bg-gray-100 text-gray-800';
+            default:
+                return 'bg-green-100 text-green-800';
+        }
+    };
+
+    const getStatusText = (status) => {
+        switch (status) {
+            case 'expired':
+                return 'Expired';
+            case 'expiring-soon':
+                return 'Expires Soon';
+            case 'no-expiry':
+                return 'No Expiry';
+            default:
+                return 'Active';
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -260,7 +331,9 @@ export default function Dashboard() {
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clicks</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expires</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Left</th>
                                         <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                     </tr>
                                 </thead>
@@ -313,8 +386,16 @@ export default function Dashboard() {
                                                         {getClickPercentage(link.clicks || 0)}% of total
                                                     </div>
                                                 </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(getExpiryStatus(link.expiry))}`}>
+                                                        {getStatusText(getExpiryStatus(link.expiry))}
+                                                    </span>
+                                                </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {formatDate(link.createdAt)}
+                                                    {formatExpiryDate(link.expiry)}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    {getTimeRemaining(link.expiry)}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <div className="flex items-center justify-end space-x-2">
