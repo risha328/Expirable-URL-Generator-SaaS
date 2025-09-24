@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import api from '../api/api';
 
 export default function CreateLink() {
+    const { user } = useContext(AuthContext);
     const [targetUrl, setTargetUrl] = useState('');
     const [password, setPassword] = useState('');
     const [expiry, setExpiry] = useState('');
@@ -9,6 +12,7 @@ export default function CreateLink() {
     const [err, setErr] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isPageLoading, setIsPageLoading] = useState(true);
+    const [linksThisMonth, setLinksThisMonth] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {

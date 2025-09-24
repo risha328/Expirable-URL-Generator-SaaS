@@ -17,8 +17,50 @@ import {
 export const createLink = async (req, res) => {
   try {
     const { targetUrl, password, expiry } = req.body;
+    const ownerId = req.user.id;
 
-     const ownerId = req.user.id;
+    // Get user to check subscription status
+    const user = await User.findById(ownerId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check subscription limits for free users
+    if (!user.isSubscribed) {
+      // Count links created this month
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0, 0, 0, 0);
+
+      const linksThisMonth = await Link.countDocuments({
+        ownerId: ownerId,
+        createdAt: { $gte: startOfMonth }
+      });
+
+      if (linksThisMonth >= 5) {
+        return res.status(403).json({
+          message: "Free plan limit reached. You've created 5 links this month. Upgrade to Pro for unlimited links.",
+          limitReached: true
+        });
+      }
+
+      // Free users cannot use password protection
+      if (password) {
+        return res.status(403).json({
+          message: "Password protection is a Pro feature. Upgrade to Pro to use this feature.",
+          requiresPro: true
+        });
+      }
+
+      // Free users cannot set custom expiration times
+      if (expiry) {
+        return res.status(403).json({
+          message: "Custom expiration times are a Pro feature. Upgrade to Pro to use this feature.",
+          requiresPro: true
+        });
+      }
+    }
+
     console.log(`Creating link for user: ${req.user.firstName} ${req.user.lastName}`);
     const slug = nanoid(7);
 

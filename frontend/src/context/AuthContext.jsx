@@ -59,6 +59,14 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
+    const updateSubscription = async (isSubscribed) => {
+        const res = await api.put('/auth/subscription', { isSubscribed });
+        const { user } = res.data;
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+        return user;
+    };
+
 
     const signup = async (firstName, lastName, email, password) => {
         const res = await api.post('/auth/signup', { firstName, lastName, email, password });
@@ -81,6 +89,7 @@ export const AuthProvider = ({ children }) => {
             login,
             signup,
             logout,
+            updateSubscription,
             isLoading,
             isInitialized
         }}>

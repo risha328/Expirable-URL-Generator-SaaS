@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(true);
+  const { user, updateSubscription } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const plans = [
     {
@@ -72,6 +77,23 @@ const Pricing = () => {
 
   const toggleBilling = () => {
     setIsAnnual(!isAnnual);
+  };
+
+  const handlePayNow = async (planName) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (planName === 'Pro') {
+      try {
+        await updateSubscription(true);
+        toast.success('You Successfully subscribed and you get all pro version features');
+        navigate('/dashboard');
+      } catch (error) {
+        toast.error('Failed to update subscription. Please try again.');
+      }
+    }
   };
 
   return (
@@ -171,16 +193,29 @@ const Pricing = () => {
                 ))}
               </ul>
               
-              <a
-                href="#"
-                className={`block w-full py-3 px-6 text-center rounded-md text-base font-semibold ${
-                  plan.popular
-                    ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-              >
-                {plan.cta}
-              </a>
+              {plan.name === 'Pro' ? (
+                <button
+                  onClick={() => handlePayNow(plan.name)}
+                  className={`block w-full py-3 px-6 text-center rounded-md text-base font-semibold ${
+                    plan.popular
+                      ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                >
+                  Pay Now
+                </button>
+              ) : (
+                <a
+                  href="#"
+                  className={`block w-full py-3 px-6 text-center rounded-md text-base font-semibold ${
+                    plan.popular
+                      ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                >
+                  {plan.cta}
+                </a>
+              )}
             </div>
           ))}
         </div>
@@ -250,6 +285,7 @@ const Pricing = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

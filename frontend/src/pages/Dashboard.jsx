@@ -47,11 +47,13 @@
 
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import api from '../api/api';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Dashboard() {
+    const { user } = useContext(AuthContext);
     const [links, setLinks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [stats, setStats] = useState({
@@ -215,6 +217,40 @@ export default function Dashboard() {
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
                     <p className="text-gray-600 mt-2">Manage your expiration tracking links and view analytics</p>
                 </div>
+
+                {/* Subscription Status */}
+                {user && (
+                    <div className="mb-8 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <div className={`p-3 rounded-lg mr-4 ${user.isSubscribed ? 'bg-green-100' : 'bg-gray-100'}`}>
+                                    <svg className={`w-6 h-6 ${user.isSubscribed ? 'text-green-600' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900">
+                                        {user.isSubscribed ? 'Pro Plan Active' : 'Free Plan'}
+                                    </h3>
+                                    <p className="text-gray-600">
+                                        {user.isSubscribed
+                                            ? 'You have access to all Pro features including unlimited links, advanced analytics, and more.'
+                                            : 'Upgrade to Pro for unlimited links, advanced analytics, custom expiration times, and more.'
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                            {!user.isSubscribed && (
+                                <Link
+                                    to="/pricing"
+                                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200"
+                                >
+                                    Upgrade to Pro
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

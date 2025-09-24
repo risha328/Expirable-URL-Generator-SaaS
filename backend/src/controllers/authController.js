@@ -55,7 +55,8 @@ export const login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role
+        role: user.role,
+        isSubscribed: user.isSubscribed
       }
     });
   } catch (err) {
@@ -143,7 +144,8 @@ export const validateToken = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role
+        role: user.role,
+        isSubscribed: user.isSubscribed
       }
     });
   } catch (err) {
@@ -167,6 +169,41 @@ export const getAllUsers = async (req, res) => {
         role: user.role,
         createdAt: user.createdAt
       }))
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const updateSubscription = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { isSubscribed } = req.body;
+
+    if (typeof isSubscribed !== 'boolean') {
+      return res.status(400).json({ message: "isSubscribed must be a boolean" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { isSubscribed },
+      { new: true }
+    ).select('-passwordHash');
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Subscription updated successfully",
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        isSubscribed: user.isSubscribed
+      }
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
