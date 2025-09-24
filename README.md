@@ -34,6 +34,40 @@ Two-Factor Authentication (2FA) (optional)
 
 Abuse detection & reporting system
 
+🛡️ Advanced Security Features
+
+Brute Force Protection
+
+Rate limiting per IP on download endpoints
+
+Automatic link lockout after failed password attempts
+
+Configurable failed attempt thresholds and lockout duration
+
+Failed attempt logging for admin monitoring
+
+DDoS & Abuse Protection
+
+Per-IP request throttling with configurable limits
+
+Per-link request monitoring with automatic flagging
+
+IP analytics tracking for suspicious activity detection
+
+Automatic link disabling for abnormal traffic patterns
+
+Security Monitoring
+
+Real-time failed attempt tracking
+
+IP analytics dashboard for admins
+
+Flagged links management system
+
+Manual IP blocking/unblocking capabilities
+
+Comprehensive security event logging
+
 ⚙️ Admin Features
 
 User management (ban/unban, reset password)
@@ -116,6 +150,15 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=465
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
+
+# Security Configuration (see SECURITY_CONFIG.md for details)
+MAX_FAILED_ATTEMPTS=5
+LOCKOUT_DURATION_MINUTES=15
+TRACKING_WINDOW_MINUTES=60
+MAX_REQUESTS_PER_IP=50
+MAX_REQUESTS_PER_LINK=100
+TRACKING_WINDOW_HOURS=1
+SUSPICIOUS_THRESHOLD=30
 
 📊 Sidebar (Admin Panel)
 

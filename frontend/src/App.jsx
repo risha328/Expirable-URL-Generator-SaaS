@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminLogin from './pages/AdminLogin';
@@ -21,6 +22,7 @@ import Contact from './pages/Contact';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import RedirectHandler from './components/RedirectHandler';
+import AdminSettings from './pages/AdminSettings';
 
 function AppContent() {
     return (
@@ -105,6 +107,11 @@ function AppContent() {
                         <AdminAnalytics />
                     </AdminProtectedRoute>
                 } />
+                <Route path="/admin/settings" element={
+                    <AdminProtectedRoute>
+                        <AdminSettings />
+                    </AdminProtectedRoute>
+                } />
 
                 {/* Protected user routes with common navbar and footer */}
                 <Route path="/dashboard" element={
@@ -152,6 +159,30 @@ export default function App() {
     return (
         <AuthProvider>
             <AppContent />
+            <Toaster
+                position="top-right"
+                toastOptions={{
+                    duration: 5000,
+                    style: {
+                        background: '#363636',
+                        color: '#fff',
+                    },
+                    success: {
+                        duration: 3000,
+                        theme: {
+                            primary: '#4ade80',
+                            secondary: '#fff',
+                        },
+                    },
+                    error: {
+                        duration: 4000,
+                        theme: {
+                            primary: '#f87171',
+                            secondary: '#fff',
+                        },
+                    },
+                }}
+            />
         </AuthProvider>
     );
 }

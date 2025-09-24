@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function RedirectHandler() {
     const { slug } = useParams();
@@ -31,11 +32,14 @@ export default function RedirectHandler() {
             if (response.ok) {
                 const data = await response.json();
                 if (data.targetUrl) {
+                    toast.success('Password entered successfully! Redirecting...');
                     window.location.href = data.targetUrl;
                 } else {
                     setError('Link not found or expired');
                 }
             } else {
+                const errorData = await response.json().catch(() => ({}));
+
                 // Handle different error status codes
                 if (response.status === 404) {
                     setError('Link not found');
@@ -45,8 +49,30 @@ export default function RedirectHandler() {
                     setIsPasswordRequired(true);
                     setIsLoading(false);
                     return;
+                } else if (response.status === 403) {
+                    // Wrong password - show failed attempt count
+                    const failedAttempts = errorData.failedAttempts || 1;
+                    toast.error(`Wrong password! ${failedAttempts} failed attempt(s)`);
+                    setIsPasswordRequired(true);
+                    setIsLoading(false);
+                    return;
+                } else if (response.status === 429) {
+                    // Rate limited or locked
+                    if (errorData.lockedUntil) {
+                        const lockTime = new Date(errorData.lockedUntil);
+                        const remainingMinutes = Math.ceil((lockTime - new Date()) / 1000 / 60);
+                        toast.error(`Link temporarily locked due to too many failed attempts. Try again in ${remainingMinutes} minutes.`);
+                    } else {
+                        toast.error(errorData.message || 'Too many requests. Please try again later.');
+                    }
+                    setError(errorData.message || 'Link temporarily unavailable');
+                } else if (response.status === 403 && errorData.flaggedReason) {
+                    // Link flagged for abuse
+                    toast.error(`Link has been flagged: ${errorData.flaggedReason}`);
+                    setError('Link has been flagged for suspicious activity');
                 } else {
-                    setError('Unable to access link');
+                    toast.error(errorData.message || 'Unable to access link');
+                    setError(errorData.message || 'Unable to access link');
                 }
             }
         } catch (err) {

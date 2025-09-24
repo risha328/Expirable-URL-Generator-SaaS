@@ -9,6 +9,14 @@ import {
   getDeviceBrowserStats,
   getAnalyticsSummary
 } from "../controllers/adminAnalyticsController.js";
+import {
+  getFailedAttempts,
+  getFlaggedLinks,
+  getIPAnalytics,
+  unflagLink,
+  blockIP,
+  unblockIP
+} from "../controllers/adminSecurityController.js";
 import adminMiddleware from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
@@ -31,5 +39,13 @@ router.get("/analytics/device-browser-stats", adminMiddleware, getDeviceBrowserS
 
 // Analytics Summary
 router.get("/analytics/summary", adminMiddleware, getAnalyticsSummary);
+
+// Security Routes
+router.get("/security/failed-attempts", adminMiddleware, getFailedAttempts);
+router.get("/security/flagged-links", adminMiddleware, getFlaggedLinks);
+router.get("/security/ip-analytics", adminMiddleware, getIPAnalytics);
+router.post("/security/unflag-link/:linkId", adminMiddleware, unflagLink);
+router.post("/security/block-ip", adminMiddleware, blockIP);
+router.post("/security/unblock-ip", adminMiddleware, unblockIP);
 
 export default router;

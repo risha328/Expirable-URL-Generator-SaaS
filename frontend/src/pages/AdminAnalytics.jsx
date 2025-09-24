@@ -44,17 +44,44 @@ const AdminAnalytics = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [timeRange, setTimeRange] = useState('30'); // 7, 30, 90, 365
   const [chartView, setChartView] = useState('daily'); // daily, monthly
+  const [securityData, setSecurityData] = useState({
+    failedAttempts: [],
+    flaggedLinks: [],
+    ipAnalytics: []
+  });
+  const [securityLoading, setSecurityLoading] = useState(false);
 
   useEffect(() => {
     fetchAnalyticsData();
   }, [timeRange, chartView]);
+
+  const fetchSecurityData = async () => {
+    try {
+      setSecurityLoading(true);
+      const [failedAttemptsRes, flaggedLinksRes, ipAnalyticsRes] = await Promise.all([
+        api.get('/admin/security/failed-attempts'),
+        api.get('/admin/security/flagged-links'),
+        api.get('/admin/security/ip-analytics')
+      ]);
+
+      setSecurityData({
+        failedAttempts: failedAttemptsRes.data,
+        flaggedLinks: flaggedLinksRes.data,
+        ipAnalytics: ipAnalyticsRes.data
+      });
+    } catch (err) {
+      console.error('Failed to fetch security data:', err);
+    } finally {
+      setSecurityLoading(false);
+    }
+  };
 
   const fetchAnalyticsData = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const endpoint = chartView === 'monthly' 
+      const endpoint = chartView === 'monthly'
         ? `/admin/analytics/monthly-clicks?months=${Math.ceil(timeRange / 30)}`
         : `/admin/analytics/daily-clicks?days=${timeRange}`;
 
@@ -90,6 +117,36 @@ const AdminAnalytics = () => {
       setError(err.response?.data?.message || 'Failed to fetch analytics data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUnflagLink = async (linkId) => {
+    try {
+      await api.post(`/admin/security/unflag-link/${linkId}`);
+      // Refresh security data
+      fetchSecurityData();
+    } catch (err) {
+      console.error('Failed to unflag link:', err);
+    }
+  };
+
+  const handleBlockIP = async (ip) => {
+    try {
+      await api.post('/admin/security/block-ip', { ip });
+      // Refresh security data
+      fetchSecurityData();
+    } catch (err) {
+      console.error('Failed to block IP:', err);
+    }
+  };
+
+  const handleUnblockIP = async (ip) => {
+    try {
+      await api.post('/admin/security/unblock-ip', { ip });
+      // Refresh security data
+      fetchSecurityData();
+    } catch (err) {
+      console.error('Failed to unblock IP:', err);
     }
   };
 
@@ -309,10 +366,15 @@ const AdminAnalytics = () => {
         {/* Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
           <div className="flex space-x-1 mb-4 sm:mb-0">
-            {['overview', 'traffic', 'users', 'links'].map((tab) => (
+            {['overview', 'traffic', 'users', 'links', 'security'].map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveTab(tab)}
+                onClick={() => {
+                  setActiveTab(tab);
+                  if (tab === 'security') {
+                    fetchSecurityData();
+                  }
+                }}
                 className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                   activeTab === tab
                     ? 'bg-blue-600 text-white shadow-sm'
@@ -321,7 +383,8 @@ const AdminAnalytics = () => {
               >
                 {tab === 'overview' ? 'Overview' :
                  tab === 'traffic' ? 'Traffic Insights' :
-                 tab === 'users' ? 'Top Users' : 'Top Links'}
+                 tab === 'users' ? 'Top Users' :
+                 tab === 'links' ? 'Top Links' : 'Security'}
               </button>
             ))}
           </div>
@@ -519,6 +582,136 @@ const AdminAnalytics = () => {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {activeTab === 'security' && (
+          <div className="space-y-6">
+            {securityLoading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            ) : (
+              <>
+                {/* Failed Attempts */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                  <div className="p-6 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900">Failed Login Attempts</h3>
+                  </div>
+                  <div className="divide-y divide-gray-200">
+                    {securityData.failedAttempts.map((attempt, index) => (
+                      <div key={index} className="p-6 hover:bg-gray-50 transition-colors duration-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-2xl">🚫</span>
+                            <div>
+                              <div className="font-medium text-gray-900">{attempt.ip}</div>
+                              <div className="text-sm text-gray-500">
+                                {attempt.userAgent || 'Unknown User Agent'}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold text-red-600">{attempt.attempts} attempts</div>
+                            <div className="text-sm text-gray-500">
+                              Last attempt: {new Date(attempt.lastAttempt).toLocaleString()}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Flagged Links */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                  <div className="p-6 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900">Flagged Suspicious Links</h3>
+                  </div>
+                  <div className="divide-y divide-gray-200">
+                    {securityData.flaggedLinks.map((link, index) => (
+                      <div key={index} className="p-6 hover:bg-gray-50 transition-colors duration-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-2xl">⚠️</span>
+                            <div>
+                              <div className="font-medium text-gray-900 text-sm bg-gray-100 px-2 py-1 rounded">
+                                {link.slug}
+                              </div>
+                              <div className="text-sm text-gray-600 truncate max-w-full mt-1">
+                                {link.targetUrl}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold text-orange-600">{link.suspiciousClicks} suspicious clicks</div>
+                            <div className="text-sm text-gray-500">
+                              Created: {new Date(link.createdAt).toLocaleDateString()}
+                            </div>
+                            <button
+                              onClick={() => handleUnflagLink(link._id)}
+                              className="mt-2 px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
+                            >
+                              Unflag
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* IP Analytics */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                  <div className="p-6 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900">IP Analytics</h3>
+                  </div>
+                  <div className="divide-y divide-gray-200">
+                    {securityData.ipAnalytics.map((ipData, index) => (
+                      <div key={index} className="p-6 hover:bg-gray-50 transition-colors duration-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-2xl">🌐</span>
+                            <div>
+                              <div className="font-medium text-gray-900">{ipData.ip}</div>
+                              <div className="text-sm text-gray-500">
+                                {ipData.country} • {ipData.city}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-semibold text-gray-900">{ipData.totalClicks} total clicks</div>
+                            <div className="text-sm text-gray-500">
+                              {ipData.uniqueLinks} unique links
+                            </div>
+                            {ipData.isBlocked && (
+                              <div className="text-sm text-red-600 font-medium">Blocked</div>
+                            )}
+                            <div className="flex space-x-2 mt-2">
+                              {!ipData.isBlocked ? (
+                                <button
+                                  onClick={() => handleBlockIP(ipData.ip)}
+                                  className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+                                >
+                                  Block IP
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleUnblockIP(ipData.ip)}
+                                  className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
+                                >
+                                  Unblock IP
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

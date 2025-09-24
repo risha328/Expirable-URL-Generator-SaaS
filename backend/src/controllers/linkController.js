@@ -3,6 +3,9 @@ import { nanoid } from "nanoid";
 import Link from "../models/Link.js";
 import Analytics from "../models/Analytics.js";
 import User from "../models/User.js";
+import FailedAttempt from "../models/FailedAttempt.js";
+import IPAnalytics from "../models/IPAnalytics.js";
+import { logFailedAttempt, resetFailedAttempts } from "../middlewares/bruteForceMiddleware.js";
 import {
   parseUserAgent,
   extractScreenResolution,
@@ -114,21 +117,10 @@ export const getDashboardStats = async (req, res) => {
 export const redirectLink = async (req, res) => {
   try {
     const { slug } = req.params;
-    // Accept password from body for POST, query for GET
-    const password = req.method === "POST" ? req.body.password : req.query.password;
 
-    const link = await Link.findOne({ slug });
+    // Link is already validated and retrieved by passwordValidationMiddleware
+    const link = req.link;
     if (!link) return res.status(404).json({ message: "Link not found" });
-
-    if (link.expiry && new Date() > link.expiry) {
-      return res.status(410).json({ message: "Link expired" });
-    }
-
-    if (link.passwordHash) {
-      if (!password) return res.status(401).json({ message: "Password required" });
-      const valid = await bcrypt.compare(password, link.passwordHash);
-      if (!valid) return res.status(403).json({ message: "Wrong password" });
-    }
 
     // Extract comprehensive analytics data
     const userAgent = req.headers["user-agent"];
@@ -236,6 +228,159 @@ export const blockUser = async (req, res) => {
     const user = await User.findByIdAndUpdate(userId, { role: 'blocked' }, { new: true });
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json({ message: "User blocked successfully", user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Security monitoring functions
+export const getFailedAttempts = async (req, res) => {
+  try {
+    const { linkId, limit = 50 } = req.query;
+    let query = {};
+
+    if (linkId) {
+      query.linkId = linkId;
+    }
+
+    const failedAttempts = await FailedAttempt.find(query)
+      .populate('linkId', 'slug targetUrl')
+      .sort({ timestamp: -1 })
+      .limit(parseInt(limit));
+
+    res.json({
+      success: true,
+      count: failedAttempts.length,
+      failedAttempts
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getFlaggedLinks = async (req, res) => {
+  try {
+    const flaggedLinks = await Link.find({
+      $or: [
+        { flaggedForAbuse: true },
+        { status: 'locked' },
+        { status: 'flagged' }
+      ]
+    })
+    .populate('ownerId', 'firstName lastName email')
+    .sort({ flaggedAt: -1, lastFailedAttempt: -1 });
+
+    res.json({
+      success: true,
+      count: flaggedLinks.length,
+      flaggedLinks
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getIPAnalytics = async (req, res) => {
+  try {
+    const { flagged, blocked, limit = 50 } = req.query;
+    let query = {};
+
+    if (flagged === 'true') query.flagged = true;
+    if (blocked === 'true') query.blocked = true;
+
+    const ipAnalytics = await IPAnalytics.find(query)
+      .populate('linksAccessed', 'slug targetUrl')
+      .sort({ lastRequest: -1 })
+      .limit(parseInt(limit));
+
+    res.json({
+      success: true,
+      count: ipAnalytics.length,
+      ipAnalytics
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const unflagLink = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const link = await Link.findByIdAndUpdate(id, {
+      flaggedForAbuse: false,
+      flaggedReason: null,
+      flaggedAt: null,
+      lockedUntil: null,
+      lockReason: null
+    }, { new: true });
+
+    if (!link) return res.status(404).json({ message: "Link not found" });
+
+    res.json({
+      success: true,
+      message: "Link unflagged successfully",
+      link
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const blockIP = async (req, res) => {
+  try {
+    const { ip } = req.params;
+    const { reason, duration } = req.body; // duration in minutes
+
+    let resetTime = null;
+    if (duration) {
+      resetTime = new Date(Date.now() + duration * 60 * 1000);
+    }
+
+    const ipAnalytics = await IPAnalytics.findOneAndUpdate(
+      { ip },
+      {
+        blocked: true,
+        blockReason: reason || 'Manual block by admin',
+        blockedAt: new Date(),
+        resetTime
+      },
+      { upsert: true, new: true }
+    );
+
+    res.json({
+      success: true,
+      message: "IP blocked successfully",
+      ipAnalytics
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const unblockIP = async (req, res) => {
+  try {
+    const { ip } = req.params;
+
+    const ipAnalytics = await IPAnalytics.findOneAndUpdate(
+      { ip },
+      {
+        blocked: false,
+        blockReason: null,
+        blockedAt: null,
+        resetTime: null
+      },
+      { new: true }
+    );
+
+    if (!ipAnalytics) {
+      return res.status(404).json({ message: "IP not found" });
+    }
+
+    res.json({
+      success: true,
+      message: "IP unblocked successfully",
+      ipAnalytics
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
