@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import chatbotRoutes from "./routes/chatbotRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -31,6 +32,7 @@ app.use("/auth", authRoutes);
 app.use("/url", linkRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/admin", adminRoutes);
+app.use("/chat", chatbotRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
