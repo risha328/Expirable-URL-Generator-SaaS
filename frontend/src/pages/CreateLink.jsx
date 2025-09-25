@@ -3,6 +3,36 @@ import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../api/api';
 
+// Simple URL safety check (client-side)
+const isSafeUrl = (url) => {
+  try {
+    const parsedUrl = new URL(url);
+
+    // Must be http or https
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      return false;
+    }
+
+    // Check for suspicious keywords in the URL string
+    const suspiciousKeywords = ['phishing', 'malware', 'virus', 'hack', 'exploit', 'scam', 'fake'];
+    const urlString = url.toLowerCase();
+    if (suspiciousKeywords.some(keyword => urlString.includes(keyword))) {
+      return false;
+    }
+
+    // Blacklist of known bad domains (simple example)
+    const blacklistedDomains = ['example-bad.com', 'malicious-site.net'];
+    if (blacklistedDomains.includes(parsedUrl.hostname)) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    // Invalid URL
+    return false;
+  }
+};
+
 export default function CreateLink() {
     const { user } = useContext(AuthContext);
     const [targetUrl, setTargetUrl] = useState('');
@@ -28,6 +58,13 @@ export default function CreateLink() {
         e.preventDefault();
         setIsLoading(true);
         setErr(null);
+
+        // Client-side safety check
+        if (!isSafeUrl(targetUrl)) {
+            setErr("The provided URL appears to be unsafe and cannot be shortened. Please enter a valid, safe URL.");
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const token = localStorage.getItem('token');

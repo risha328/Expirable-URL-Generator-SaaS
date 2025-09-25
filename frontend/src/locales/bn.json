@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "home": "হোম",
+    "features": "বৈশিষ্ট্য",
+    "pricing": "মূল্য নির্ধারণ",
+    "contact": "যোগাযোগ",
+    "signIn": "সাইন ইন",
+    "signUp": "সাইন আপ",
+    "yourProfile": "আপনার প্রোফাইল",
+    "logout": "লগ আউট",
+    "language": "ভাষা"
+  },
+  "home": {
+    "title": "এক্সপায়রোতে স্বাগতম",
+    "subtitle": "সহজেই মেয়াদোত্তীর্ণ লিঙ্ক তৈরি করুন",
+    "getStarted": "শুরু করুন"
+  },
+  "features": {
+    "title": "বৈশিষ্ট্য",
+    "description": "জানুন কী এক্সপায়রোকে বিশেষ করে তোলে"
+  },
+  "pricing": {
+    "title": "মূল্য নির্ধারণ",
+    "description": "আপনার প্রয়োজন অনুসারে পরিকল্পনা চয়ন করুন"
+  },
+  "contact": {
+    "title": "যোগাযোগ করুন",
+    "description": "আমাদের টিমের সাথে যোগাযোগ করুন"
+  },
+  "login": {
+    "title": "সাইন ইন",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "submit": "সাইন ইন"
+  },
+  "signup": {
+    "title": "সাইন আপ",
+    "firstName": "প্রথম নাম",
+    "lastName": "শেষ নাম",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "submit": "সাইন আপ"
+  },
+  "dashboard": {
+    "title": "ড্যাশবোর্ড",
+    "welcome": "ফিরে আসার জন্য স্বাগতম"
+  },
+  "createLink": {
+    "title": "লিঙ্ক তৈরি করুন",
+    "url": "URL",
+    "expiration": "মেয়াদ শেষের সময়",
+    "submit": "লিঙ্ক তৈরি করুন"
+  },
+  "languages": {
+    "english": "ইংরেজি",
+    "spanish": "স্পেনিশ",
+    "french": "ফ্রেঞ্চ",
+    "hindi": "হিন্দি",
+    "bengali": "বাংলা",
+    "chinese": "চীনা",
+    "arabic": "আরবি",
+    "portuguese": "পর্তুগিজ",
+    "russian": "রুশ",
+    "japanese": "জাপানি"
+  }
+}

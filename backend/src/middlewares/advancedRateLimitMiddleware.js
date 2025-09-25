@@ -34,9 +34,11 @@ export const ipRateLimit = async (req, res, next) => {
       }
     }
 
-    // Check request rate
+    // Check request rate using sliding window
     const windowStart = new Date(Date.now() - TRACKING_WINDOW_HOURS * 60 * 60 * 1000);
-    const recentRequests = ipAnalytics.requestCount;
+    const recentRequests = ipAnalytics.requestTimestamps.filter(req =>
+      req.timestamp >= windowStart
+    ).length;
 
     if (recentRequests >= MAX_REQUESTS_PER_IP) {
       // Flag IP for suspicious activity
@@ -51,9 +53,16 @@ export const ipRateLimit = async (req, res, next) => {
       });
     }
 
-    // Update request count and last request time
-    ipAnalytics.requestCount += 1;
-    ipAnalytics.lastRequest = new Date();
+    // Update request timestamps and last request time
+    const currentTime = new Date();
+    ipAnalytics.requestTimestamps.push({ timestamp: currentTime });
+    ipAnalytics.lastRequest = currentTime;
+
+    // Keep only recent timestamps (last 1000 to prevent unbounded growth)
+    if (ipAnalytics.requestTimestamps.length > 1000) {
+      ipAnalytics.requestTimestamps = ipAnalytics.requestTimestamps.slice(-1000);
+    }
+
     await ipAnalytics.save();
 
     // Store IP analytics in request for later use

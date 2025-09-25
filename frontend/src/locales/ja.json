@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "home": "ホーム",
+    "features": "機能",
+    "pricing": "料金",
+    "contact": "お問い合わせ",
+    "signIn": "サインイン",
+    "signUp": "サインアップ",
+    "yourProfile": "あなたのプロフィール",
+    "logout": "ログアウト",
+    "language": "言語"
+  },
+  "home": {
+    "title": "Expireo へようこそ",
+    "subtitle": "簡単に期限切れリンクを作成",
+    "getStarted": "始める"
+  },
+  "features": {
+    "title": "機能",
+    "description": "Expireo を特別にするものを発見"
+  },
+  "pricing": {
+    "title": "料金",
+    "description": "あなたのニーズに合ったプランを選択"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "description": "私たちのチームに連絡"
+  },
+  "login": {
+    "title": "サインイン",
+    "email": "メール",
+    "password": "パスワード",
+    "submit": "サインイン"
+  },
+  "signup": {
+    "title": "サインアップ",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "メール",
+    "password": "パスワード",
+    "submit": "サインアップ"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "welcome": "おかえりなさい"
+  },
+  "createLink": {
+    "title": "リンクを作成",
+    "url": "URL",
+    "expiration": "有効期限",
+    "submit": "リンクを作成"
+  },
+  "languages": {
+    "english": "英語",
+    "spanish": "スペイン語",
+    "french": "フランス語",
+    "hindi": "ヒンディー語",
+    "bengali": "ベンガル語",
+    "chinese": "中国語",
+    "arabic": "アラビア語",
+    "portuguese": "ポルトガル語",
+    "russian": "ロシア語",
+    "japanese": "日本語"
+  }
+}

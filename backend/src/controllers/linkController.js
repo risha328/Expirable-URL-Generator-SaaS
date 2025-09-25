@@ -14,10 +14,45 @@ import {
   getLocationFromIP
 } from "../utils/analyticsUtils.js";
 
+// Simple URL safety check
+const isSafeUrl = (url) => {
+  try {
+    const parsedUrl = new URL(url);
+
+    // Must be http or https
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      return false;
+    }
+
+    // Check for suspicious keywords in the URL string
+    const suspiciousKeywords = ['phishing', 'malware', 'virus', 'hack', 'exploit', 'scam', 'fake'];
+    const urlString = url.toLowerCase();
+    if (suspiciousKeywords.some(keyword => urlString.includes(keyword))) {
+      return false;
+    }
+
+    // Blacklist of known bad domains (simple example)
+    const blacklistedDomains = ['example-bad.com', 'malicious-site.net'];
+    if (blacklistedDomains.includes(parsedUrl.hostname)) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    // Invalid URL
+    return false;
+  }
+};
+
 export const createLink = async (req, res) => {
   try {
     const { targetUrl, password, expiry } = req.body;
     const ownerId = req.user.id;
+
+    // Check if the URL is safe
+    if (!isSafeUrl(targetUrl)) {
+      return res.status(400).json({ message: "The provided URL appears to be unsafe and cannot be shortened." });
+    }
 
     // Get user to check subscription status
     const user = await User.findById(ownerId);

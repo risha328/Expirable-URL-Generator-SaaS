@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "home": "الرئيسية",
+    "features": "الميزات",
+    "pricing": "التسعير",
+    "contact": "اتصل بنا",
+    "signIn": "تسجيل الدخول",
+    "signUp": "التسجيل",
+    "yourProfile": "ملفك الشخصي",
+    "logout": "تسجيل الخروج",
+    "language": "اللغة"
+  },
+  "home": {
+    "title": "مرحبا بك في Expireo",
+    "subtitle": "إنشاء روابط قابلة للانتهاء بسهولة",
+    "getStarted": "ابدأ"
+  },
+  "features": {
+    "title": "الميزات",
+    "description": "اكتشف ما يجعل Expireo مميزًا"
+  },
+  "pricing": {
+    "title": "التسعير",
+    "description": "اختر الخطة التي تناسب احتياجاتك"
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "description": "تواصل مع فريقنا"
+  },
+  "login": {
+    "title": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "submit": "تسجيل الدخول"
+  },
+  "signup": {
+    "title": "التسجيل",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "submit": "التسجيل"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحبا بعودتك"
+  },
+  "createLink": {
+    "title": "إنشاء رابط",
+    "url": "URL",
+    "expiration": "وقت الانتهاء",
+    "submit": "إنشاء رابط"
+  },
+  "languages": {
+    "english": "الإنجليزية",
+    "spanish": "الإسبانية",
+    "french": "الفرنسية",
+    "hindi": "الهندية",
+    "bengali": "البنغالية",
+    "chinese": "الصينية",
+    "arabic": "العربية",
+    "portuguese": "البرتغالية",
+    "russian": "الروسية",
+    "japanese": "اليابانية"
+  }
+}

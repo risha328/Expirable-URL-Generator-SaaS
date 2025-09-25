@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "contact": "Contact",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "yourProfile": "Votre profil",
+    "logout": "Se déconnecter",
+    "language": "Langue"
+  },
+  "home": {
+    "title": "Bienvenue sur Expireo",
+    "subtitle": "Créez des liens expirables facilement",
+    "getStarted": "Commencer"
+  },
+  "features": {
+    "title": "Fonctionnalités",
+    "description": "Découvrez ce qui rend Expireo spécial"
+  },
+  "pricing": {
+    "title": "Tarifs",
+    "description": "Choisissez le plan qui convient à vos besoins"
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "description": "Entrez en contact avec notre équipe"
+  },
+  "login": {
+    "title": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "submit": "Se connecter"
+  },
+  "signup": {
+    "title": "S'inscrire",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "submit": "S'inscrire"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue de retour"
+  },
+  "createLink": {
+    "title": "Créer un lien",
+    "url": "URL",
+    "expiration": "Temps d'expiration",
+    "submit": "Créer un lien"
+  },
+  "languages": {
+    "english": "Anglais",
+    "spanish": "Espagnol",
+    "french": "Français",
+    "hindi": "Hindi",
+    "bengali": "Bengali",
+    "chinese": "Chinois",
+    "arabic": "Arabe",
+    "portuguese": "Portugais",
+    "russian": "Russe",
+    "japanese": "Japonais"
+  }
+}

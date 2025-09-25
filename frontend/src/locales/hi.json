@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "home": "होम",
+    "features": "सुविधाएँ",
+    "pricing": "मूल्य निर्धारण",
+    "contact": "संपर्क",
+    "signIn": "साइन इन",
+    "signUp": "साइन अप",
+    "yourProfile": "आपका प्रोफ़ाइल",
+    "logout": "लॉग आउट",
+    "language": "भाषा"
+  },
+  "home": {
+    "title": "एक्सपायरो में आपका स्वागत है",
+    "subtitle": "आसानी से समाप्त होने वाले लिंक बनाएं",
+    "getStarted": "शुरू करें"
+  },
+  "features": {
+    "title": "सुविधाएँ",
+    "description": "जानें कि एक्सपायरो को क्या खास बनाता है"
+  },
+  "pricing": {
+    "title": "मूल्य निर्धारण",
+    "description": "अपनी आवश्यकताओं के अनुसार योजना चुनें"
+  },
+  "contact": {
+    "title": "हमसे संपर्क करें",
+    "description": "हमारी टीम से संपर्क करें"
+  },
+  "login": {
+    "title": "साइन इन",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "submit": "साइन इन"
+  },
+  "signup": {
+    "title": "साइन अप",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "submit": "साइन अप"
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "welcome": "वापसी पर स्वागत"
+  },
+  "createLink": {
+    "title": "लिंक बनाएं",
+    "url": "URL",
+    "expiration": "समाप्ति समय",
+    "submit": "लिंक बनाएं"
+  },
+  "languages": {
+    "english": "अंग्रेजी",
+    "spanish": "स्पेनिश",
+    "french": "फ्रेंच",
+    "hindi": "हिंदी",
+    "bengali": "बंगाली",
+    "chinese": "चीनी",
+    "arabic": "अरबी",
+    "portuguese": "पुर्तगाली",
+    "russian": "रूसी",
+    "japanese": "जापानी"
+  }
+}

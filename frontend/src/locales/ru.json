@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "home": "Главная",
+    "features": "Функции",
+    "pricing": "Цены",
+    "contact": "Контакты",
+    "signIn": "Войти",
+    "signUp": "Регистрация",
+    "yourProfile": "Ваш профиль",
+    "logout": "Выйти",
+    "language": "Язык"
+  },
+  "home": {
+    "title": "Добро пожаловать в Expireo",
+    "subtitle": "Легко создавайте истекающие ссылки",
+    "getStarted": "Начать"
+  },
+  "features": {
+    "title": "Функции",
+    "description": "Узнайте, что делает Expireo особенным"
+  },
+  "pricing": {
+    "title": "Цены",
+    "description": "Выберите план, подходящий для ваших нужд"
+  },
+  "contact": {
+    "title": "Свяжитесь с нами",
+    "description": "Свяжитесь с нашей командой"
+  },
+  "login": {
+    "title": "Войти",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "submit": "Войти"
+  },
+  "signup": {
+    "title": "Регистрация",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "submit": "Регистрация"
+  },
+  "dashboard": {
+    "title": "Панель управления",
+    "welcome": "Добро пожаловать обратно"
+  },
+  "createLink": {
+    "title": "Создать ссылку",
+    "url": "URL",
+    "expiration": "Время истечения",
+    "submit": "Создать ссылку"
+  },
+  "languages": {
+    "english": "Английский",
+    "spanish": "Испанский",
+    "french": "Французский",
+    "hindi": "Хинди",
+    "bengali": "Бенгальский",
+    "chinese": "Китайский",
+    "arabic": "Арабский",
+    "portuguese": "Португальский",
+    "russian": "Русский",
+    "japanese": "Японский"
+  }
+}
