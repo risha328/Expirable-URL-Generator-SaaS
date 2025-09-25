@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["user", "admin"], default: "user" },
   isSubscribed: { type: Boolean, default: false },
   subscriptionPlan: { type: String, enum: ["Free", "Pro", "Business", "Enterprise"], default: "Free" },
+  phone: { type: String },
+  bio: { type: String },
+  dateOfBirth: { type: Date },
+  address: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -13,19 +13,424 @@
   "home": {
     "title": "Welcome to Expireo",
     "subtitle": "Create expirable links with ease",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "hero": {
+      "title": "Secure Links",
+      "titleHighlight": "That Expire",
+      "subtitle": "Create temporary links that automatically disappear. Perfect for sharing sensitive information, one-time downloads, and time-limited access.",
+      "getStarted": "Get Started",
+      "liveDemo": "Live Demo",
+      "stats": {
+        "linksCreated": "Links Created",
+        "activeUsers": "Active Users",
+        "uptime": "Uptime"
+      }
+    },
+    "dashboard": {
+      "title": "Advanced URL Management",
+      "description": "Manage all your links in one place. Set expiration dates, add password protection, and track clicks in real-time.",
+      "features": {
+        "password": {
+          "title": "Password Protection",
+          "description": "Add an extra layer of security to your sensitive links."
+        },
+        "expiration": {
+          "title": "Custom Expiration",
+          "description": "Set links to expire after a specific time or number of clicks."
+        },
+        "fileSharing": {
+          "title": "Secure File Sharing",
+          "description": "Share files securely with one-time download links."
+        }
+      },
+      "links": {
+        "yourLinks": "Your Links",
+        "financialReport": "Financial Report",
+        "clientProposal": "Client Proposal",
+        "privatePhotos": "Private Photos",
+        "active": "Active",
+        "expiring": "Expiring",
+        "expired": "Expired",
+        "expires": "Expires:",
+        "expiredAgo": "Expired:",
+        "days": "days",
+        "hours": "hours",
+        "daysAgo": "days ago",
+        "clicks": "Clicks:",
+        "createNew": "Create New Link"
+      }
+    },
+    "urlCreation": {
+      "title": "Create Your First Link",
+      "description": "Transform any URL into a secure, expirable link in seconds. Control access, set expiration times, and protect your content.",
+      "features": {
+        "lightningFast": {
+          "title": "Lightning Fast",
+          "description": "Create secure links in under 30 seconds with our intuitive interface."
+        },
+        "passwordProtection": {
+          "title": "Password Protection",
+          "description": "Add password protection to keep your links secure and private."
+        },
+        "customPrivacy": {
+          "title": "Custom Privacy",
+          "description": "Choose who can access your links and for how long they remain active."
+        }
+      },
+      "createNewLink": "Create New Link",
+      "destinationUrl": "Destination URL",
+      "expiration": "Expiration",
+      "password": "Password (Optional)",
+      "passwordPlaceholder": "Enter password",
+      "customAlias": "Custom Alias (Optional)",
+      "customAliasPlaceholder": "my-custom-link",
+      "createSecureLink": "Create Secure Link"
+    },
+    "analytics": {
+      "header": "Link Analytics & Insights",
+      "description": "Get detailed insights into your link performance. Track clicks, analyze traffic sources, and optimize your sharing strategy.",
+      "createdOn": "Created on",
+      "expiresIn": "Expires in",
+      "last7days": "Last 7 days",
+      "last30days": "Last 30 days",
+      "last90days": "Last 90 days",
+      "allTime": "All time",
+      "exportData": "Export Data",
+      "tabs": {
+        "overview": "Overview",
+        "geography": "Geography",
+        "devices": "Devices",
+        "referrers": "Referrers"
+      },
+      "clicksOverTime": "Clicks Over Time",
+      "devices": "Devices",
+      "geographicDistribution": "Geographic Distribution",
+      "browserUsage": "Browser Usage",
+      "browserShare": "Browser Share",
+      "stats": {
+        "totalClicks": "Total Clicks",
+        "uniqueVisitors": "Unique Visitors",
+        "clickRate": "Click Rate",
+        "avgTime": "Avg. Time to Click",
+        "daysLeft": "Days Left",
+        "conversion": "Conversion Rate"
+      },
+      "insights": {
+        "peakPerformance": {
+          "title": "Peak Performance",
+          "description": "Your links are performing exceptionally well during business hours."
+        },
+        "globalReach": {
+          "title": "Global Reach",
+          "description": "Your content is being accessed from multiple countries worldwide."
+        },
+        "mobileFirst": {
+          "title": "Mobile-First",
+          "description": "Most of your traffic comes from mobile devices. Ensure mobile optimization."
+        }
+      },
+      "clicks": "clicks"
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Join thousands of users who trust Expireo for their secure link sharing needs.",
+      "getStarted": "Get Started Today",
+      "learnMore": "Learn More"
+    }
   },
   "features": {
-    "title": "Features",
-    "description": "Discover what makes Expireo special"
+    "header": "Powerful Features for Modern Link Management",
+    "description": "Everything you need to create, manage, and analyze your expirable links with enterprise-grade security and performance.",
+    "categories": {
+      "linkManagement": "Link Management",
+      "fileSharing": "File Sharing",
+      "analytics": "Analytics",
+      "security": "Security",
+      "teamCollaboration": "Team Collaboration",
+      "monetization": "Monetization"
+    },
+    "linkManagement": {
+      "urlShortening": {
+        "title": "URL Shortening",
+        "description": "Transform long URLs into clean, professional short links that are easy to share and remember."
+      },
+      "expirationSettings": {
+        "title": "Expiration Settings",
+        "description": "Set custom expiration times or click limits to automatically deactivate links when needed."
+      },
+      "passwordProtection": {
+        "title": "Password Protection",
+        "description": "Add password protection to sensitive links for an additional layer of security."
+      },
+      "bulkCreation": {
+        "title": "Bulk Creation",
+        "description": "Create multiple links at once with CSV import and API integration for efficiency."
+      }
+    },
+    "fileSharing": {
+      "secureTransfer": {
+        "title": "Secure File Transfer",
+        "description": "Share files up to 1GB securely with end-to-end encryption and automatic cleanup."
+      },
+      "oneTimeDownloads": {
+        "title": "One-Time Downloads",
+        "description": "Create links that allow only one download before automatically expiring."
+      },
+      "largeFileSupport": {
+        "title": "Large File Support",
+        "description": "Upload and share large files without worrying about size limitations or storage costs."
+      },
+      "autoExpiration": {
+        "title": "Auto Expiration",
+        "description": "Files are automatically deleted from our servers after expiration or download."
+      }
+    },
+    "analytics": {
+      "clickAnalytics": {
+        "title": "Click Analytics",
+        "description": "Track detailed click data including timestamps, IP addresses, and user agents."
+      },
+      "geographicData": {
+        "title": "Geographic Data",
+        "description": "See where your links are being accessed from with detailed geographic insights."
+      },
+      "deviceInfo": {
+        "title": "Device Information",
+        "description": "Understand your audience with device type, browser, and operating system data."
+      },
+      "referrerTracking": {
+        "title": "Referrer Tracking",
+        "description": "Track which websites and platforms are driving traffic to your links."
+      }
+    },
+    "security": {
+      "endToEndEncryption": {
+        "title": "End-to-End Encryption",
+        "description": "All data is encrypted in transit and at rest using industry-standard protocols."
+      },
+      "twoFactorAuth": {
+        "title": "Two-Factor Authentication",
+        "description": "Add an extra layer of security to your account with 2FA support."
+      },
+      "customPolicies": {
+        "title": "Custom Security Policies",
+        "description": "Define custom security policies for different types of links and users."
+      },
+      "compliance": {
+        "title": "GDPR & HIPAA Compliance",
+        "description": "Built to comply with global data protection regulations and healthcare standards."
+      }
+    },
+    "teamCollaboration": {
+      "teamWorkspaces": {
+        "title": "Team Workspaces",
+        "description": "Create shared workspaces for your team to collaborate on link management."
+      },
+      "roleBasedAccess": {
+        "title": "Role-Based Access Control",
+        "description": "Assign different permissions and access levels to team members."
+      },
+      "sharedLibraries": {
+        "title": "Shared Link Libraries",
+        "description": "Build and share collections of links across your organization."
+      },
+      "activityLogs": {
+        "title": "Activity Logs",
+        "description": "Track all link creation, access, and management activities for audit purposes."
+      }
+    },
+    "monetization": {
+      "adSupported": {
+        "title": "Ad-Supported Free Tier",
+        "description": "Free plan supported by non-intrusive ads to help us provide the service."
+      },
+      "premiumOptions": {
+        "title": "Premium Options",
+        "description": "Remove ads and unlock advanced features with our premium plans."
+      },
+      "revenueAnalytics": {
+        "title": "Revenue Analytics",
+        "description": "Track revenue from premium features and enterprise contracts."
+      },
+      "paymentIntegration": {
+        "title": "Payment Integration",
+        "description": "Seamlessly integrate with popular payment processors for subscriptions."
+      }
+    },
+    "stats": {
+      "trusted": "Trusted by developers worldwide",
+      "description": "Join thousands of users who rely on Expireo for their secure link sharing needs.",
+      "linksCreated": "Links Created",
+      "activeUsers": "Active Users",
+      "uptime": "Uptime",
+      "support": "Support"
+    },
+    "cta": {
+      "ready": "Ready to get started?",
+      "description": "Start creating secure, expirable links today and see the difference.",
+      "getStarted": "Get Started",
+      "scheduleDemo": "Schedule Demo"
+    }
   },
   "pricing": {
-    "title": "Pricing",
-    "description": "Choose the plan that fits your needs"
+    "header": "Simple, Transparent Pricing",
+    "description": "Choose the plan that works best for you and your team",
+    "billing": {
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "discount": "20% off",
+      "toggle": "Toggle billing",
+      "perYear": "/year",
+      "perMonth": "/month",
+      "billedAnnually": "Billed annually"
+    },
+    "popular": "Most popular",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "description": "Perfect for individuals getting started",
+        "features": [
+          "5 expirable links per month",
+          "Basic analytics (click count)",
+          "24-hour link expiration",
+          "No password protection",
+          "Standard support"
+        ],
+        "cta": "Get Started"
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Ideal for professionals and small teams",
+        "features": [
+          "Unlimited expirable links",
+          "Advanced analytics (geography, devices)",
+          "Custom expiration times",
+          "Password protection",
+          "Custom branding",
+          "Priority support",
+          "File sharing (up to 100MB)"
+        ],
+        "cta": "Start Free Trial"
+      },
+      "business": {
+        "name": "Business",
+        "description": "For organizations with advanced needs",
+        "features": [
+          "Everything in Pro, plus:",
+          "Team members (up to 5)",
+          "Custom domains",
+          "API access",
+          "Advanced security features",
+          "File sharing (up to 1GB)",
+          "White-label options",
+          "Dedicated account manager"
+        ],
+        "cta": "Contact Sales"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "For large organizations with custom requirements",
+        "custom": "Custom",
+        "features": [
+          "Unlimited team members",
+          "SAML/SSO integration",
+          "Custom SLAs",
+          "Advanced compliance (GDPR, HIPAA)",
+          "On-premise deployment options",
+          "Custom integration support",
+          "24/7 premium support",
+          "Training and onboarding"
+        ],
+        "cta": "Contact Sales"
+      }
+    },
+    "payNow": "Pay Now",
+    "toast": {
+      "success": "You Successfully subscribed and you get all pro version features",
+      "error": "Failed to update subscription. Please try again."
+    },
+    "faq": {
+      "header": "Frequently asked questions",
+      "changePlans": {
+        "question": "Can I change plans anytime?",
+        "answer": "Yes, you can upgrade, downgrade, or cancel your plan at any time. Changes to your plan will be reflected in your next billing cycle."
+      },
+      "nonProfits": {
+        "question": "Do you offer discounts for non-profits?",
+        "answer": "Absolutely! We offer special pricing for non-profit organizations and educational institutions. Contact our sales team for more information."
+      },
+      "paymentMethods": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all major credit cards, PayPal, and for annual plans we also support bank transfers."
+      },
+      "setupFee": {
+        "question": "Is there a setup fee?",
+        "answer": "No, there are no setup fees for any of our plans. You only pay the advertised price."
+      },
+      "refund": {
+        "question": "Can I get a refund?",
+        "answer": "We offer a 14-day money-back guarantee for all annual plans. Monthly plans can be canceled at any time without further charges."
+      },
+      "customPlans": {
+        "question": "Do you offer custom plans?",
+        "answer": "Yes, we can create custom plans for organizations with specific needs. Contact our sales team to discuss your requirements."
+      }
+    },
+    "cta": {
+      "questions": "Still have questions?",
+      "description": "Our team is here to help you choose the right plan for your needs.",
+      "contactSales": "Contact Sales",
+      "scheduleDemo": "Schedule a Demo"
+    }
   },
   "contact": {
-    "title": "Contact Us",
-    "description": "Get in touch with our team"
+    "header": "Get in Touch",
+    "description": "Have questions or need support? We're here to help you make the most of Expireo.",
+    "form": {
+      "title": "Send us a message",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "office": {
+        "title": "Office",
+        "address": "123 Tech Street, San Francisco, CA 94105, USA"
+      },
+      "phone": {
+        "title": "Phone",
+        "number": "+1 (555) 123-4567"
+      },
+      "email": {
+        "title": "Email",
+        "address": "support@expireo.com"
+      },
+      "hours": {
+        "title": "Support Hours",
+        "schedule": "Monday - Friday: 9:00 AM - 6:00 PM PST"
+      }
+    },
+    "faq": {
+      "header": "Frequently Asked Questions",
+      "responseTime": {
+        "question": "What's your typical response time?",
+        "answer": "We aim to respond to all inquiries within 24 hours during business days. For urgent technical issues, we provide priority support."
+      },
+      "supportChannels": {
+        "question": "What support channels do you offer?",
+        "answer": "We offer support through email, live chat, and our comprehensive help center. Enterprise customers also get dedicated account managers."
+      },
+      "technicalIssues": {
+        "question": "How do I report technical issues?",
+        "answer": "For technical issues, please use our contact form or email support@expireo.com with detailed information about the problem you're experiencing."
+      },
+      "businessInquiries": {
+        "question": "How can I inquire about business partnerships?",
+        "answer": "For business partnerships, custom solutions, or enterprise inquiries, please contact our sales team at sales@expireo.com."
+      }
+    }
   },
   "login": {
     "title": "Sign In",
@@ -62,5 +467,37 @@
     "portuguese": "Portuguese",
     "russian": "Russian",
     "japanese": "Japanese"
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "Manage your account information and preferences",
+    "loading": "Loading profile...",
+    "fetchError": "Failed to load profile. Please try again.",
+    "updateSuccess": "Profile updated successfully!",
+    "updateError": "Failed to update profile. Please try again.",
+    "personalInfo": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "emailNote": "Email cannot be changed",
+    "phone": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "address": "Address",
+    "addressLabel": "Address",
+    "addressPlaceholder": "Enter your full address",
+    "bio": "Bio",
+    "bioLabel": "About You",
+    "bioPlaceholder": "Tell us about yourself...",
+    "subscription": "Subscription",
+    "currentPlan": "Current Plan",
+    "proActive": "Pro plan active",
+    "freePlan": "Free plan",
+    "upgrade": "Upgrade",
+    "edit": "Edit Profile",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "characters": "characters",
+    "retry": "Retry"
   }
 }

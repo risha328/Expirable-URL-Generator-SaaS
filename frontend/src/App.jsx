@@ -21,6 +21,7 @@ import Features from './pages/Features';
 import Contact from './pages/Contact';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
 import RedirectHandler from './components/RedirectHandler';
 import AdminSettings from './pages/AdminSettings';
 
@@ -142,6 +143,17 @@ function AppContent() {
                         <main className="container mx-auto p-4">
                             <ProtectedRoute>
                                 <Analytics />
+                            </ProtectedRoute>
+                            <Footer />
+                        </main>
+                    </>
+                } />
+                <Route path="/profile" element={
+                    <>
+                        <Navbar />
+                        <main className="container mx-auto p-4">
+                            <ProtectedRoute>
+                                <Profile />
                             </ProtectedRoute>
                             <Footer />
                         </main>

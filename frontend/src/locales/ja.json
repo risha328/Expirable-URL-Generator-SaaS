@@ -13,7 +13,53 @@
   "home": {
     "title": "Expireo へようこそ",
     "subtitle": "簡単に期限切れリンクを作成",
-    "getStarted": "始める"
+    "getStarted": "始める",
+    "hero": {
+      "title": "安全なリンク",
+      "titleHighlight": "期限切れ",
+      "subtitle": "自動的に消える一時リンクを作成。機密情報の共有、一回限りのダウンロード、時間制限付きアクセスに最適。",
+      "getStarted": "始める",
+      "liveDemo": "ライブデモ",
+      "stats": {
+        "linksCreated": "作成されたリンク",
+        "activeUsers": "アクティブユーザー",
+        "uptime": "稼働時間"
+      }
+    },
+    "dashboard": {
+      "title": "高度なURL管理",
+      "description": "すべてのリンクを一箇所で管理。有効期限を設定、パスワード保護を追加、リアルタイムでクリックを追跡。",
+      "features": {
+        "password": {
+          "title": "パスワード保護",
+          "description": "機密リンクに追加のセキュリティ層を追加。"
+        },
+        "expiration": {
+          "title": "カスタム有効期限",
+          "description": "特定の時間またはクリック数後にリンクを期限切れにするよう設定。"
+        },
+        "fileSharing": {
+          "title": "安全なファイル共有",
+          "description": "一回限りのダウンロードリンクでファイルを安全に共有。"
+        }
+      },
+      "links": {
+        "yourLinks": "あなたのリンク",
+        "financialReport": "財務レポート",
+        "clientProposal": "クライアント提案",
+        "privatePhotos": "プライベート写真",
+        "active": "アクティブ",
+        "expiring": "期限切れ間近",
+        "expired": "期限切れ",
+        "expires": "期限:",
+        "expiredAgo": "期限切れ:",
+        "days": "日",
+        "hours": "時間",
+        "daysAgo": "日前",
+        "clicks": "クリック:",
+        "createNew": "新しいリンクを作成"
+      }
+    }
   },
   "features": {
     "title": "機能",
@@ -24,8 +70,73 @@
     "description": "あなたのニーズに合ったプランを選択"
   },
   "contact": {
-    "title": "お問い合わせ",
-    "description": "私たちのチームに連絡"
+    "header": "お問い合わせ",
+    "description": "私たちのチームはあなたを助けるためにここにいます。何か質問、フィードバック、または支援が必要な場合、私たちは聞きたいと思っています。",
+    "info": {
+      "email": "メール",
+      "phone": "電話",
+      "address": "住所",
+      "support": "サポート",
+      "sales": "営業",
+      "general": "一般問い合わせ"
+    },
+    "form": {
+      "title": "お問い合わせ",
+      "name": "あなたの名前",
+      "namePlaceholder": "あなたのフルネームを入力してください",
+      "email": "メールアドレス",
+      "emailPlaceholder": "your@email.com",
+      "subject": "件名",
+      "subjectPlaceholder": "メッセージの件名",
+      "message": "メッセージ",
+      "messagePlaceholder": "ここにメッセージを入力...",
+      "submit": "メッセージを送信",
+      "sending": "送信中...",
+      "success": "メッセージが正常に送信されました！",
+      "error": "メッセージの送信中にエラーが発生しました。もう一度お試しください。"
+    },
+    "office": {
+      "title": "私たちのオフィス",
+      "description": "私たちの本社を訪れるか、私たちとのビデオ通話をスケジュールしてください。",
+      "hours": "営業時間",
+      "mondayFriday": "月曜日 - 金曜日",
+      "saturday": "土曜日",
+      "sunday": "日曜日"
+    },
+    "social": {
+      "title": "私たちとつながる",
+      "description": "最新の更新とニュースのためにソーシャルメディアで私たちをフォローしてください。",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "discord": "Discord"
+    },
+    "faq": {
+      "title": "クイックアンサー",
+      "description": "最も一般的な質問の回答を見つけます。",
+      "gettingStarted": {
+        "question": "どうやって始めますか？",
+        "answer": "登録するだけで最初の期限切れリンクを作成し始められます。私たちのシンプルなオンボーディングプロセスが数分であなたを準備します。"
+      },
+      "security": {
+        "question": "データのセキュリティはどのように保証されますか？",
+        "answer": "エンドツーエンドの暗号化、定期的なセキュリティ監査、および業界標準を使用してデータセキュリティを保証します。"
+      },
+      "support": {
+        "question": "支援をどのように受けられますか？",
+        "answer": "このフォームを使用してサポートチームに連絡するか、包括的なドキュメントとコミュニティフォーラムを確認してください。"
+      },
+      "pricing": {
+        "question": "カスタム価格を提供していますか？",
+        "answer": "はい、特定の要件を持つ組織向けにカスタム価格を提供します。詳細については営業チームにご連絡ください。"
+      }
+    },
+    "cta": {
+      "title": "まだ支援が必要ですか？",
+      "description": "サポートチームに連絡して、できるだけ早くお手伝いします。",
+      "contactSupport": "サポートに連絡",
+      "scheduleCall": "通話をスケジュール"
+    }
   },
   "login": {
     "title": "サインイン",

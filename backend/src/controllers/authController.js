@@ -217,3 +217,86 @@ export const updateSubscription = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-passwordHash');
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        bio: user.bio,
+        dateOfBirth: user.dateOfBirth,
+        address: user.address,
+        role: user.role,
+        isSubscribed: user.isSubscribed,
+        subscriptionPlan: user.subscriptionPlan,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { firstName, lastName, phone, bio, dateOfBirth, address } = req.body;
+
+    // Validate required fields
+    if (!firstName || !lastName) {
+      return res.status(400).json({ message: "First name and last name are required" });
+    }
+
+    const updateData = {
+      firstName,
+      lastName,
+      phone,
+      bio,
+      address
+    };
+
+    // Handle date of birth
+    if (dateOfBirth) {
+      updateData.dateOfBirth = new Date(dateOfBirth);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true }
+    ).select('-passwordHash');
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        bio: user.bio,
+        dateOfBirth: user.dateOfBirth,
+        address: user.address,
+        role: user.role,
+        isSubscribed: user.isSubscribed,
+        subscriptionPlan: user.subscriptionPlan,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -2,75 +2,77 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Pricing = () => {
+  const { t } = useTranslation();
   const [isAnnual, setIsAnnual] = useState(true);
   const { user, updateSubscription } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const plans = [
     {
-      name: 'Free',
-      description: 'Perfect for individuals getting started',
+      name: t('pricing.plans.free.name'),
+      description: t('pricing.plans.free.description'),
       price: { monthly: 0, annual: 0 },
       features: [
-        '5 expirable links per month',
-        'Basic analytics (click count)',
-        '24-hour link expiration',
-        'No password protection',
-        'Standard support'
+        t('pricing.plans.free.features.1'),
+        t('pricing.plans.free.features.2'),
+        t('pricing.plans.free.features.3'),
+        t('pricing.plans.free.features.4'),
+        t('pricing.plans.free.features.5')
       ],
-      cta: 'Get Started',
+      cta: t('pricing.plans.free.cta'),
       popular: false
     },
     {
-      name: 'Pro',
-      description: 'Ideal for professionals and small teams',
-      price: { monthly: 9, annual: 90 },
+      name: t('pricing.plans.pro.name'),
+      description: t('pricing.plans.pro.description'),
+      price: { monthly: 4, annual: 40 },
       features: [
-        'Unlimited expirable links',
-        'Advanced analytics (geography, devices)',
-        'Custom expiration times',
-        'Password protection',
-        'Custom branding',
-        'Priority support',
-        'File sharing (up to 100MB)'
+        t('pricing.plans.pro.features.1'),
+        t('pricing.plans.pro.features.2'),
+        t('pricing.plans.pro.features.3'),
+        t('pricing.plans.pro.features.4'),
+        t('pricing.plans.pro.features.5'),
+        t('pricing.plans.pro.features.6'),
+        t('pricing.plans.pro.features.7')
       ],
-      cta: 'Start Free Trial',
+      cta: t('pricing.plans.pro.cta'),
       popular: true
     },
     {
-      name: 'Business',
-      description: 'For organizations with advanced needs',
-      price: { monthly: 29, annual: 290 },
+      name: t('pricing.plans.business.name'),
+      description: t('pricing.plans.business.description'),
+      price: { monthly: 10, annual: 100 },
       features: [
-        'Everything in Pro, plus:',
-        'Team members (up to 5)',
-        'Custom domains',
-        'API access',
-        'Advanced security features',
-        'File sharing (up to 1GB)',
-        'White-label options',
-        'Dedicated account manager'
+        t('pricing.plans.business.features.1'),
+        t('pricing.plans.business.features.2'),
+        t('pricing.plans.business.features.3'),
+        t('pricing.plans.business.features.4'),
+        t('pricing.plans.business.features.5'),
+        t('pricing.plans.business.features.6'),
+        t('pricing.plans.business.features.7'),
+        t('pricing.plans.business.features.8')
       ],
-      cta: 'Contact Sales',
+      cta: t('pricing.plans.business.cta'),
       popular: false
     },
     {
-      name: 'Enterprise',
-      description: 'For large organizations with custom requirements',
-      price: { monthly: 'Custom', annual: 'Custom' },
+      name: t('pricing.plans.enterprise.name'),
+      description: t('pricing.plans.enterprise.description'),
+      price: { monthly: t('pricing.plans.enterprise.custom'), annual: t('pricing.plans.enterprise.custom') },
       features: [
-        'Unlimited team members',
-        'SAML/SSO integration',
-        'Custom SLAs',
-        'Advanced compliance (GDPR, HIPAA)',
-        'On-premise deployment options',
-        'Custom integration support',
-        '24/7 premium support',
-        'Training and onboarding'
+        t('pricing.plans.enterprise.features.1'),
+        t('pricing.plans.enterprise.features.2'),
+        t('pricing.plans.enterprise.features.3'),
+        t('pricing.plans.enterprise.features.4'),
+        t('pricing.plans.enterprise.features.5'),
+        t('pricing.plans.enterprise.features.6'),
+        t('pricing.plans.enterprise.features.7'),
+        t('pricing.plans.enterprise.features.8')
       ],
-      cta: 'Contact Sales',
+      cta: t('pricing.plans.enterprise.cta'),
       popular: false
     }
   ];
@@ -88,10 +90,10 @@ const Pricing = () => {
     if (planName === 'Pro') {
       try {
         await updateSubscription(true, planName);
-        toast.success('You Successfully subscribed and you get all pro version features');
+        toast.success(t('pricing.toast.success'));
         navigate('/dashboard');
       } catch (error) {
-        toast.error('Failed to update subscription. Please try again.');
+        toast.error(t('pricing.toast.error'));
       }
     }
   };
@@ -102,20 +104,20 @@ const Pricing = () => {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-            Simple, Transparent Pricing
+            {t('pricing.header')}
           </h1>
           <p className="mt-5 max-w-xl mx-auto text-xl text-gray-600">
-            Choose the plan that works best for you and your team
+            {t('pricing.description')}
           </p>
-          
+
           {/* Billing Toggle */}
           <div className="mt-8 flex justify-center items-center">
-            <span className={`text-lg font-medium ${!isAnnual ? 'text-indigo-600' : 'text-gray-500'}`}>Monthly</span>
+            <span className={`text-lg font-medium ${!isAnnual ? 'text-indigo-600' : 'text-gray-500'}`}>{t('pricing.billing.monthly')}</span>
             <button
               onClick={toggleBilling}
               className="mx-4 relative inline-flex items-center h-6 rounded-full w-12 bg-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <span className="sr-only">Toggle billing</span>
+              <span className="sr-only">{t('pricing.billing.toggle')}</span>
               <span
                 className={`${
                   isAnnual ? 'translate-x-6' : 'translate-x-1'
@@ -123,9 +125,9 @@ const Pricing = () => {
               />
             </button>
             <div className="flex items-center">
-              <span className={`text-lg font-medium ${isAnnual ? 'text-indigo-600' : 'text-gray-500'}`}>Annual</span>
+              <span className={`text-lg font-medium ${isAnnual ? 'text-indigo-600' : 'text-gray-500'}`}>{t('pricing.billing.annual')}</span>
               <span className="ml-2 px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-                20% off
+                {t('pricing.billing.discount')}
               </span>
             </div>
           </div>
@@ -142,15 +144,15 @@ const Pricing = () => {
             >
               {plan.popular && (
                 <div className="absolute top-0 py-1.5 px-4 bg-indigo-500 rounded-full text-xs font-semibold uppercase tracking-wide text-white transform -translate-y-1/2">
-                  Most popular
+                  {t('pricing.popular')}
                 </div>
               )}
-              
+
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">{plan.name}</h2>
                 <p className="mt-2 text-gray-600">{plan.description}</p>
               </div>
-              
+
               <div className="mb-6">
                 <div className="flex items-baseline">
                   {typeof plan.price[isAnnual ? 'annual' : 'monthly'] === 'number' ? (
@@ -159,7 +161,7 @@ const Pricing = () => {
                         ${isAnnual ? plan.price.annual : plan.price.monthly}
                       </span>
                       <span className="ml-1 text-xl font-semibold text-gray-500">
-                        {isAnnual ? '/year' : '/month'}
+                        {isAnnual ? t('pricing.perYear') : t('pricing.perMonth')}
                       </span>
                     </>
                   ) : (
@@ -169,13 +171,13 @@ const Pricing = () => {
                   )}
                 </div>
                 {typeof plan.price[isAnnual ? 'annual' : 'monthly'] === 'number' && isAnnual && (
-                  <p className="mt-1 text-sm text-gray-500">Billed annually</p>
+                  <p className="mt-1 text-sm text-gray-500">{t('pricing.billedAnnually')}</p>
                 )}
               </div>
-              
+
               <ul className="space-y-4 mb-8">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center">
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-green-500"
                       xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +186,7 @@ const Pricing = () => {
                     >
                       <path
                         fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 极客时间 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                         clipRule="evenodd"
                       />
                     </svg>
@@ -192,7 +194,7 @@ const Pricing = () => {
                   </li>
                 ))}
               </ul>
-              
+
               {plan.name === 'Pro' ? (
                 <button
                   onClick={() => handlePayNow(plan.name)}
@@ -202,7 +204,7 @@ const Pricing = () => {
                       : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                   } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 >
-                  Pay Now
+                  {t('pricing.payNow')}
                 </button>
               ) : (
                 <a
@@ -222,42 +224,42 @@ const Pricing = () => {
 
         {/* FAQ Section */}
         <div className="mt-24">
-          <h2 className="text-3xl font-extrabold text-gray-900 text-center">Frequently asked questions</h2>
+          <h2 className="text-3xl font-extrabold text-gray-900 text-center">{t('pricing.faq.header')}</h2>
           <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div>
-              <h3 className="text-lg font-medium text-gray-900">Can I change plans anytime?</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t('pricing.faq.changePlans.question')}</h3>
               <p className="mt-2 text-base text-gray-600">
-                Yes, you can upgrade, downgrade, or cancel your plan at any time. Changes to your plan will be reflected in your next billing cycle.
+                {t('pricing.faq.changePlans.answer')}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">Do you offer discounts for non-profits?</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t('pricing.faq.nonProfits.question')}</h3>
               <p className="mt-2 text-base text-gray-600">
-                Absolutely! We offer special pricing for non-profit organizations and educational institutions. Contact our sales team for more information.
+                {t('pricing.faq.nonProfits.answer')}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">What payment methods do you accept?</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t('pricing.faq.paymentMethods.question')}</h3>
               <p className="mt-2 text-base text-gray-600">
-                We accept all major credit cards, PayPal, and for annual plans we also support bank transfers.
+                {t('pricing.faq.paymentMethods.answer')}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">Is there a setup fee?</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t('pricing.faq.setupFee.question')}</h3>
               <p className="mt-2 text-base text-gray-600">
-                No, there are no setup fees for any of our plans. You only pay the advertised price.
+                {t('pricing.faq.setupFee.answer')}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">Can I get a refund?</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t('pricing.faq.refund.question')}</h3>
               <p className="mt-2 text-base text-gray-600">
-                We offer a 14-day money-back guarantee for all annual plans. Monthly plans can be canceled at any time without further charges.
+                {t('pricing.faq.refund.answer')}
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-medium text-gray-900">Do you offer custom plans?</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t('pricing.faq.customPlans.question')}</h3>
               <p className="mt-2 text-base text-gray-600">
-                Yes, we can create custom plans for organizations with specific needs. Contact our sales team to discuss your requirements.
+                {t('pricing.faq.customPlans.answer')}
               </p>
             </div>
           </div>
@@ -265,22 +267,22 @@ const Pricing = () => {
 
         {/* CTA Section */}
         <div className="mt-24 bg-indigo-700 rounded-2xl p-8 text-center">
-          <h2 className="text-3xl font-extrabold text-white">Still have questions?</h2>
+          <h2 className="text-3xl font-extrabold text-white">{t('pricing.cta.questions')}</h2>
           <p className="mt-4 text-xl text-indigo-200">
-            Our team is here to help you choose the right plan for your needs.
+            {t('pricing.cta.description')}
           </p>
           <div className="mt-8">
             <a
               href="#"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50"
             >
-              Contact Sales
+              {t('pricing.cta.contactSales')}
             </a>
             <a
               href="#"
               className="ml-4 inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-indigo-600"
             >
-              Schedule a Demo
+              {t('pricing.cta.scheduleDemo')}
             </a>
           </div>
         </div>

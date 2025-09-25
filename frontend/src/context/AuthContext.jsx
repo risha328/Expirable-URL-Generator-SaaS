@@ -14,9 +14,18 @@ export const AuthProvider = ({ children }) => {
     // Validate token on app startup
     const validateToken = async (token) => {
         try {
-            const res = await api.get('/auth/validate');
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+            const res = await api.get('/auth/validate', { signal: controller.signal });
+            clearTimeout(timeoutId);
             return res.data.user;
         } catch (error) {
+            if (error.name === 'AbortError') {
+                console.error('Token validation timed out');
+            } else {
+                console.error('Token validation error:', error);
+            }
             // Token is invalid or expired
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -46,7 +55,14 @@ export const AuthProvider = ({ children }) => {
             setIsInitialized(true);
         };
 
-        initializeAuth();
+        const timeout = setTimeout(() => {
+            setIsLoading(false);
+            setIsInitialized(true);
+        }, 15000); // Overall timeout for initialization
+
+        initializeAuth().finally(() => {
+            clearTimeout(timeout);
+        });
     }, []);
 
 

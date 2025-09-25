@@ -13,7 +13,19 @@
   "home": {
     "title": "欢迎来到 Expireo",
     "subtitle": "轻松创建可过期链接",
-    "getStarted": "开始使用"
+    "getStarted": "开始使用",
+    "hero": {
+      "title": "安全链接",
+      "titleHighlight": "会过期",
+      "subtitle": "创建自动消失的临时链接。适用于共享敏感信息、一次性下载和时间限制访问。",
+      "getStarted": "开始使用",
+      "liveDemo": "现场演示",
+      "stats": {
+        "linksCreated": "已创建链接",
+        "activeUsers": "活跃用户",
+        "uptime": "正常运行时间"
+      }
+    }
   },
   "features": {
     "title": "功能",
@@ -24,8 +36,73 @@
     "description": "选择适合您的计划"
   },
   "contact": {
-    "title": "联系我们",
-    "description": "与我们的团队取得联系"
+    "header": "联系我们",
+    "description": "我们的团队在这里帮助您。无论您有任何问题、反馈或需要帮助，我们都想倾听。",
+    "info": {
+      "email": "电子邮件",
+      "phone": "电话",
+      "address": "地址",
+      "support": "支持",
+      "sales": "销售",
+      "general": "一般查询"
+    },
+    "form": {
+      "title": "联系我们",
+      "name": "您的姓名",
+      "namePlaceholder": "输入您的全名",
+      "email": "电子邮件地址",
+      "emailPlaceholder": "your@email.com",
+      "subject": "主题",
+      "subjectPlaceholder": "您的消息主题",
+      "message": "消息",
+      "messagePlaceholder": "在此处输入您的消息...",
+      "submit": "发送消息",
+      "sending": "正在发送...",
+      "success": "消息发送成功！",
+      "error": "发送消息时出错。请重试。"
+    },
+    "office": {
+      "title": "我们的办公室",
+      "description": "来我们的主办公室或安排与我们的视频通话。",
+      "hours": "办公时间",
+      "mondayFriday": "星期一 - 星期五",
+      "saturday": "星期六",
+      "sunday": "星期日"
+    },
+    "social": {
+      "title": "与我们连接",
+      "description": "在社交媒体上关注我们以获取最新更新和新闻。",
+      "twitter": "推特",
+      "linkedin": "领英",
+      "github": "GitHub",
+      "discord": "Discord"
+    },
+    "faq": {
+      "title": "快速回答",
+      "description": "查找我们最常见问题的答案。",
+      "gettingStarted": {
+        "question": "我如何开始？",
+        "answer": "只需注册并开始创建您的第一个过期链接。我们的简单入门流程将在几分钟内让您准备就绪。"
+      },
+      "security": {
+        "question": "我的数据安全性如何保证？",
+        "answer": "我们使用端到端加密、定期安全审计和行业标准来确保您的数据安全。"
+      },
+      "support": {
+        "question": "我如何获得帮助？",
+        "answer": "使用此表单与我们的支持团队联系，或查看我们的全面文档和社区论坛。"
+      },
+      "pricing": {
+        "question": "您提供自定义定价吗？",
+        "answer": "是的，我们为具有特定需求的企业提供自定义定价。有关更多信息，请联系我们的销售团队。"
+      }
+    },
+    "cta": {
+      "title": "还需要帮助？",
+      "description": "联系我们的支持团队，我们将尽快帮助您。",
+      "contactSupport": "联系支持",
+      "scheduleCall": "安排通话"
+    }
   },
   "login": {
     "title": "登录",

@@ -13,19 +13,424 @@
   "home": {
     "title": "Bienvenue sur Expireo",
     "subtitle": "Créez des liens expirables facilement",
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "hero": {
+      "title": "Liens Sécurisés",
+      "titleHighlight": "Qui Expirent",
+      "subtitle": "Créez des liens temporaires qui disparaissent automatiquement. Parfait pour partager des informations sensibles, des téléchargements uniques et un accès limité dans le temps.",
+      "getStarted": "Commencer",
+      "liveDemo": "Démo en Direct",
+      "stats": {
+        "linksCreated": "Liens Créés",
+        "activeUsers": "Utilisateurs Actifs",
+        "uptime": "Temps de Fonctionnement"
+      }
+    },
+    "dashboard": {
+      "title": "Gestion Avancée des URLs",
+      "description": "Gérez tous vos liens en un seul endroit. Définissez des dates d'expiration, ajoutez une protection par mot de passe et suivez les clics en temps réel.",
+      "features": {
+        "password": {
+          "title": "Protection par Mot de Passe",
+          "description": "Ajoutez une couche supplémentaire de sécurité à vos liens sensibles."
+        },
+        "expiration": {
+          "title": "Expiration Personnalisée",
+          "description": "Configurez les liens pour qu'ils expirent après une durée spécifique ou un nombre de clics."
+        },
+        "fileSharing": {
+          "title": "Partage de Fichiers Sécurisé",
+          "description": "Partagez des fichiers en toute sécurité avec des liens de téléchargement unique."
+        }
+      },
+      "links": {
+        "yourLinks": "Vos Liens",
+        "financialReport": "Rapport Financier",
+        "clientProposal": "Proposition Client",
+        "privatePhotos": "Photos Privées",
+        "active": "Actif",
+        "expiring": "Expire Bientôt",
+        "expired": "Expiré",
+        "expires": "Expire :",
+        "expiredAgo": "Expiré :",
+        "days": "jours",
+        "hours": "heures",
+        "daysAgo": "jours auparavant",
+        "clicks": "Clics :",
+        "createNew": "Créer Nouveau Lien"
+      }
+    },
+    "urlCreation": {
+      "title": "Créez Votre Premier Lien",
+      "description": "Transformez n'importe quelle URL en lien sécurisé et expirable en secondes. Contrôlez l'accès, définissez les délais d'expiration et protégez votre contenu.",
+      "features": {
+        "lightningFast": {
+          "title": "Rapide comme l'Éclair",
+          "description": "Créez des liens sécurisés en moins de 30 secondes avec notre interface intuitive."
+        },
+        "passwordProtection": {
+          "title": "Protection par Mot de Passe",
+          "description": "Ajoutez une protection par mot de passe pour garder vos liens sécurisés et privés."
+        },
+        "customPrivacy": {
+          "title": "Confidentialité Personnalisée",
+          "description": "Choisissez qui peut accéder à vos liens et pendant combien de temps ils restent actifs."
+        }
+      },
+      "createNewLink": "Créer Nouveau Lien",
+      "destinationUrl": "URL de Destination",
+      "expiration": "Expiration",
+      "password": "Mot de Passe (Optionnel)",
+      "passwordPlaceholder": "Entrez le mot de passe",
+      "customAlias": "Alias Personnalisé (Optionnel)",
+      "customAliasPlaceholder": "mon-lien-personnalise",
+      "createSecureLink": "Créer Lien Sécurisé"
+    },
+    "analytics": {
+      "header": "Analyses et Informations sur les Liens",
+      "description": "Obtenez des informations détaillées sur les performances de vos liens. Suivez les clics, analysez les sources de trafic et optimisez votre stratégie de partage.",
+      "createdOn": "Créé le",
+      "expiresIn": "Expire dans",
+      "last7days": "7 derniers jours",
+      "last30days": "30 derniers jours",
+      "last90days": "90 derniers jours",
+      "allTime": "Tout le temps",
+      "exportData": "Exporter les Données",
+      "tabs": {
+        "overview": "Aperçu",
+        "geography": "Géographie",
+        "devices": "Appareils",
+        "referrers": "Référents"
+      },
+      "clicksOverTime": "Clics dans le Temps",
+      "devices": "Appareils",
+      "geographicDistribution": "Distribution Géographique",
+      "browserUsage": "Utilisation du Navigateur",
+      "browserShare": "Part du Navigateur",
+      "stats": {
+        "totalClicks": "Clics Totaux",
+        "uniqueVisitors": "Visiteurs Uniques",
+        "clickRate": "Taux de Clics",
+        "avgTime": "Temps Moyen jusqu'au Clic",
+        "daysLeft": "Jours Restants",
+        "conversion": "Taux de Conversion"
+      },
+      "insights": {
+        "peakPerformance": {
+          "title": "Performance de Pointe",
+          "description": "Vos liens fonctionnent exceptionnellement bien pendant les heures de travail."
+        },
+        "globalReach": {
+          "title": "Portée Globale",
+          "description": "Votre contenu est accessible depuis plusieurs pays du monde entier."
+        },
+        "mobileFirst": {
+          "title": "Mobile d'Abord",
+          "description": "La plupart de votre trafic provient d'appareils mobiles. Assurez l'optimisation mobile."
+        }
+      },
+      "clicks": "clics"
+    },
+    "cta": {
+      "title": "Prêt à Commencer ?",
+      "subtitle": "Rejoignez des milliers d'utilisateurs qui font confiance à Expireo pour leurs besoins de partage de liens sécurisés.",
+      "getStarted": "Commencer Aujourd'hui",
+      "learnMore": "En Savoir Plus"
+    }
   },
   "features": {
-    "title": "Fonctionnalités",
-    "description": "Découvrez ce qui rend Expireo spécial"
+    "header": "Fonctionnalités Puissantes pour la Gestion Moderne des Liens",
+    "description": "Tout ce dont vous avez besoin pour créer, gérer et analyser vos liens expirables avec sécurité et performance de niveau entreprise.",
+    "categories": {
+      "linkManagement": "Gestion des Liens",
+      "fileSharing": "Partage de Fichiers",
+      "analytics": "Analyses",
+      "security": "Sécurité",
+      "teamCollaboration": "Collaboration d'Équipe",
+      "monetization": "Monétisation"
+    },
+    "linkManagement": {
+      "urlShortening": {
+        "title": "Raccourcissement d'URLs",
+        "description": "Transformez les URLs longues en liens courts propres et professionnels qui sont faciles à partager et à mémoriser."
+      },
+      "expirationSettings": {
+        "title": "Paramètres d'Expiration",
+        "description": "Définissez des délais d'expiration personnalisés ou des limites de clics pour désactiver les liens automatiquement quand nécessaire."
+      },
+      "passwordProtection": {
+        "title": "Protection par Mot de Passe",
+        "description": "Ajoutez une protection par mot de passe aux liens sensibles pour une couche supplémentaire de sécurité."
+      },
+      "bulkCreation": {
+        "title": "Création en Masse",
+        "description": "Créez plusieurs liens à la fois avec l'importation CSV et l'intégration API pour plus d'efficacité."
+      }
+    },
+    "fileSharing": {
+      "secureTransfer": {
+        "title": "Transfert Sécurisé de Fichiers",
+        "description": "Partagez des fichiers jusqu'à 1GB en toute sécurité avec le chiffrement de bout en bout et le nettoyage automatique."
+      },
+      "oneTimeDownloads": {
+        "title": "Téléchargements Uniques",
+        "description": "Créez des liens qui permettent un seul téléchargement avant d'expirer automatiquement."
+      },
+      "largeFileSupport": {
+        "title": "Support des Gros Fichiers",
+        "description": "Téléchargez et partagez des gros fichiers sans vous soucier des limitations de taille ou des coûts de stockage."
+      },
+      "autoExpiration": {
+        "title": "Expiration Automatique",
+        "description": "Les fichiers sont automatiquement supprimés de nos serveurs après l'expiration ou le téléchargement."
+      }
+    },
+    "analytics": {
+      "clickAnalytics": {
+        "title": "Analyses de Clics",
+        "description": "Suivez les données détaillées de clics incluant les timestamps, les adresses IP et les agents utilisateur."
+      },
+      "geographicData": {
+        "title": "Données Géographiques",
+        "description": "Voyez d'où vos liens sont accédés avec des informations géographiques détaillées."
+      },
+      "deviceInfo": {
+        "title": "Informations sur l'Appareil",
+        "description": "Comprenez votre audience avec les données de type d'appareil, de navigateur et de système d'exploitation."
+      },
+      "referrerTracking": {
+        "title": "Suivi des Référents",
+        "description": "Suivez quels sites web et plateformes dirigent le trafic vers vos liens."
+      }
+    },
+    "security": {
+      "endToEndEncryption": {
+        "title": "Chiffrement de Bout en Bout",
+        "description": "Toutes les données sont chiffrées en transit et au repos en utilisant des protocoles standard de l'industrie."
+      },
+      "twoFactorAuth": {
+        "title": "Authentification à Deux Facteurs",
+        "description": "Ajoutez une couche supplémentaire de sécurité à votre compte avec le support 2FA."
+      },
+      "customPolicies": {
+        "title": "Politiques de Sécurité Personnalisées",
+        "description": "Définissez des politiques de sécurité personnalisées pour différents types de liens et d'utilisateurs."
+      },
+      "compliance": {
+        "title": "Conformité RGPD et HIPAA",
+        "description": "Construit pour se conformer aux réglementations globales de protection des données et aux normes de soins de santé."
+      }
+    },
+    "teamCollaboration": {
+      "teamWorkspaces": {
+        "title": "Espaces de Travail d'Équipe",
+        "description": "Créez des espaces de travail partagés pour que votre équipe collabore à la gestion des liens."
+      },
+      "roleBasedAccess": {
+        "title": "Contrôle d'Accès Basé sur les Rôles",
+        "description": "Assignez différents permis et niveaux d'accès aux membres de l'équipe."
+      },
+      "sharedLibraries": {
+        "title": "Bibliothèques Partagées de Liens",
+        "description": "Construisez et partagez des collections de liens dans toute votre organisation."
+      },
+      "activityLogs": {
+        "title": "Journaux d'Activité",
+        "description": "Suivez toutes les activités de création, d'accès et de gestion des liens pour les audits."
+      }
+    },
+    "monetization": {
+      "adSupported": {
+        "title": "Plan Gratuit Supporté par les Publicités",
+        "description": "Plan gratuit supporté par des publicités non intrusives pour nous aider à fournir le service."
+      },
+      "premiumOptions": {
+        "title": "Options Premium",
+        "description": "Supprimez les publicités et débloquez des fonctions avancées avec nos plans premium."
+      },
+      "revenueAnalytics": {
+        "title": "Analyses de Revenus",
+        "description": "Suivez les revenus des fonctions premium et des contrats d'entreprise."
+      },
+      "paymentIntegration": {
+        "title": "Intégration de Paiement",
+        "description": "Intégrez parfaitement avec les processeurs de paiement populaires pour les abonnements."
+      }
+    },
+    "stats": {
+      "trusted": "Fait confiance par les développeurs du monde entier",
+      "description": "Rejoignez des milliers d'utilisateurs qui font confiance à Expireo pour leurs besoins de partage de liens sécurisés.",
+      "linksCreated": "Liens Créés",
+      "activeUsers": "Utilisateurs Actifs",
+      "uptime": "Temps de Fonctionnement",
+      "support": "Support"
+    },
+    "cta": {
+      "ready": "Prêt à commencer ?",
+      "description": "Commencez à créer des liens sécurisés et expirables aujourd'hui et voyez la différence.",
+      "getStarted": "Commencer",
+      "scheduleDemo": "Planifier une Démo"
+    }
   },
   "pricing": {
-    "title": "Tarifs",
-    "description": "Choisissez le plan qui convient à vos besoins"
+    "header": "Tarifs Simples et Transparents",
+    "description": "Choisissez le plan qui convient le mieux à vous et à votre équipe",
+    "billing": {
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "discount": "20% de réduction",
+      "toggle": "Changer la facturation",
+      "perYear": "/an",
+      "perMonth": "/mois",
+      "billedAnnually": "Facturé annuellement"
+    },
+    "popular": "Le plus populaire",
+    "plans": {
+      "free": {
+        "name": "Gratuit",
+        "description": "Parfait pour les individus qui commencent",
+        "features": [
+          "5 liens expirables par mois",
+          "Analyses de base (comptage des clics)",
+          "Expiration des liens de 24 heures",
+          "Pas de protection par mot de passe",
+          "Support standard"
+        ],
+        "cta": "Commencer"
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Idéal pour les professionnels et les petites équipes",
+        "features": [
+          "Liens expirables illimités",
+          "Analyses avancées (géographie, appareils)",
+          "Temps d'expiration personnalisés",
+          "Protection par mot de passe",
+          "Marque personnalisée",
+          "Support prioritaire",
+          "Partage de fichiers (jusqu'à 100MB)"
+        ],
+        "cta": "Commencer l'Essai Gratuit"
+      },
+      "business": {
+        "name": "Business",
+        "description": "Pour les organisations avec des besoins avancés",
+        "features": [
+          "Tout en Pro, plus :",
+          "Membres d'équipe (jusqu'à 5)",
+          "Domaines personnalisés",
+          "Accès API",
+          "Fonctionnalités de sécurité avancées",
+          "Partage de fichiers (jusqu'à 1GB)",
+          "Options de marque blanche",
+          "Gestionnaire de compte dédié"
+        ],
+        "cta": "Contacter les Ventes"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "description": "Pour les grandes organisations avec des exigences personnalisées",
+        "custom": "Personnalisé",
+        "features": [
+          "Membres d'équipe illimités",
+          "Intégration SAML/SSO",
+          "SLAs personnalisés",
+          "Conformité avancée (RGPD, HIPAA)",
+          "Options de déploiement on-premise",
+          "Support d'intégration personnalisée",
+          "Support premium 24/7",
+          "Formation et intégration"
+        ],
+        "cta": "Contacter les Ventes"
+      }
+    },
+    "payNow": "Payer Maintenant",
+    "toast": {
+      "success": "Vous vous êtes abonné avec succès et obtenez toutes les fonctions de la version pro",
+      "error": "Erreur lors de la mise à jour de l'abonnement. Veuillez réessayer."
+    },
+    "faq": {
+      "header": "Questions fréquemment posées",
+      "changePlans": {
+        "question": "Puis-je changer de plan à tout moment ?",
+        "answer": "Oui, vous pouvez mettre à niveau, rétrograder ou annuler votre plan à tout moment. Les changements à votre plan se refléteront lors de votre prochain cycle de facturation."
+      },
+      "nonProfits": {
+        "question": "Offrez-vous des réductions pour les organisations à but non lucratif ?",
+        "answer": "Absolument ! Nous offrons des prix spéciaux pour les organisations à but non lucratif et les institutions éducatives. Contactez notre équipe de ventes pour plus d'informations."
+      },
+      "paymentMethods": {
+        "question": "Quels modes de paiement acceptez-vous ?",
+        "answer": "Nous acceptons toutes les principales cartes de crédit, PayPal, et pour les plans annuels nous supportons également les virements bancaires."
+      },
+      "setupFee": {
+        "question": "Y a-t-il des frais d'installation ?",
+        "answer": "Non, il n'y a pas de frais d'installation pour aucun de nos plans. Vous ne payez que le prix annoncé."
+      },
+      "refund": {
+        "question": "Puis-je obtenir un remboursement ?",
+        "answer": "Nous offrons une garantie de remboursement de 14 jours pour tous les plans annuels. Les plans mensuels peuvent être annulés à tout moment sans frais supplémentaires."
+      },
+      "customPlans": {
+        "question": "Offrez-vous des plans personnalisés ?",
+        "answer": "Oui, nous pouvons créer des plans personnalisés pour les organisations avec des besoins spécifiques. Contactez notre équipe de ventes pour discuter de vos exigences."
+      }
+    },
+    "cta": {
+      "questions": "Vous avez encore des questions ?",
+      "description": "Notre équipe est là pour vous aider à choisir le plan correct pour vos besoins.",
+      "contactSales": "Contacter les Ventes",
+      "scheduleDemo": "Planifier une Démo"
+    }
   },
   "contact": {
-    "title": "Nous contacter",
-    "description": "Entrez en contact avec notre équipe"
+    "header": "Entrez en Contact",
+    "description": "Vous avez des questions ou besoin de support ? Nous sommes là pour vous aider à tirer le meilleur parti d'Expireo.",
+    "form": {
+      "title": "Envoyez-nous un message",
+      "name": "Nom",
+      "email": "Email",
+      "subject": "Sujet",
+      "message": "Message",
+      "submit": "Envoyer le Message"
+    },
+    "info": {
+      "office": {
+        "title": "Bureau",
+        "address": "123 Tech Street, San Francisco, CA 94105, USA"
+      },
+      "phone": {
+        "title": "Téléphone",
+        "number": "+1 (555) 123-4567"
+      },
+      "email": {
+        "title": "Email",
+        "address": "support@expireo.com"
+      },
+      "hours": {
+        "title": "Heures de Support",
+        "schedule": "Lundi - Vendredi : 9h00 - 18h00 PST"
+      }
+    },
+    "faq": {
+      "header": "Questions Fréquemment Posées",
+      "responseTime": {
+        "question": "Quel est notre temps de réponse typique ?",
+        "answer": "Nous nous efforçons de répondre à toutes les demandes dans les 24 heures pendant les jours ouvrables. Pour les problèmes techniques urgents, nous fournissons un support prioritaire."
+      },
+      "supportChannels": {
+        "question": "Quels canaux de support proposons-nous ?",
+        "answer": "Nous proposons un support par email, chat en direct et notre centre d'aide complet. Les clients d'entreprise obtiennent également des gestionnaires de compte dédiés."
+      },
+      "technicalIssues": {
+        "question": "Comment signaler des problèmes techniques ?",
+        "answer": "Pour les problèmes techniques, veuillez utiliser notre formulaire de contact ou envoyer un email à support@expireo.com avec des informations détaillées sur le problème que vous rencontrez."
+      },
+      "businessInquiries": {
+        "question": "Comment puis-je demander des partenariats commerciaux ?",
+        "answer": "Pour les partenariats commerciaux, les solutions personnalisées ou les demandes d'entreprise, veuillez contacter notre équipe de ventes à sales@expireo.com."
+      }
+    }
   },
   "login": {
     "title": "Se connecter",

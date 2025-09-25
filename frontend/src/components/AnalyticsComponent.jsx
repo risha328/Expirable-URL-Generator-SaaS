@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const AnalyticsComponent = () => {
+  const { t } = useTranslation();
   const [timeRange, setTimeRange] = useState('7d');
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -60,10 +62,10 @@ const AnalyticsComponent = () => {
         {/* Header Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
-            Advanced Analytics & Insights
+            {t('home.analytics.header')}
           </h1>
           <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Track your link performance with comprehensive analytics and gain valuable insights into your audience behavior.
+            {t('home.analytics.description')}
           </p>
         </div>
 
@@ -74,21 +76,21 @@ const AnalyticsComponent = () => {
             <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">expireo.link/fin-report-2023</h2>
-                <p className="text-gray-500 mt-1">Created on Jan 15, 2024 • Expires in 15 days</p>
+                <p className="text-gray-500 mt-1">{t('home.analytics.createdOn')} Jan 15, 2024 • {t('home.analytics.expiresIn')} 15 {t('home.analytics.days')}</p>
               </div>
               <div className="flex space-x-2 mt-4 sm:mt-0">
-                <select 
+                <select
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value)}
                   className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="7d">Last 7 days</option>
-                  <option value="30d">Last 30 days</option>
-                  <option value="90d">Last 90 days</option>
-                  <option value="all">All time</option>
+                  <option value="7d">{t('home.analytics.last7days')}</option>
+                  <option value="30d">{t('home.analytics.last30days')}</option>
+                  <option value="90d">{t('home.analytics.last90days')}</option>
+                  <option value="all">{t('home.analytics.allTime')}</option>
                 </select>
                 <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                  Export Data
+                  {t('home.analytics.exportData')}
                 </button>
               </div>
             </div>
@@ -106,9 +108,9 @@ const AnalyticsComponent = () => {
                         : 'border-transparent text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    {tab === 'overview' ? 'Overview' : 
-                     tab === 'geography' ? 'Geography' :
-                     tab === 'devices' ? 'Devices & Browsers' : 'Referrers'}
+                    {tab === 'overview' ? t('home.analytics.tabs.overview') :
+                     tab === 'geography' ? t('home.analytics.tabs.geography') :
+                     tab === 'devices' ? t('home.analytics.tabs.devices') : t('home.analytics.tabs.referrers')}
                   </button>
                 ))}
               </nav>
@@ -121,27 +123,27 @@ const AnalyticsComponent = () => {
             <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-blue-600">{statsData.totalClicks.toLocaleString()}</div>
-                <div className="text-sm text-blue-800 font-medium">Total Clicks</div>
+                <div className="text-sm text-blue-800 font-medium">{t('home.analytics.stats.totalClicks')}</div>
               </div>
               <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-green-600">{statsData.uniqueVisitors.toLocaleString()}</div>
-                <div className="text-sm text-green-800 font-medium">Unique Visitors</div>
+                <div className="text-sm text-green-800 font-medium">{t('home.analytics.stats.uniqueVisitors')}</div>
               </div>
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-purple-600">{statsData.clickThroughRate}</div>
-                <div className="text-sm text-purple-800 font-medium">Click Rate</div>
+                <div className="text-sm text-purple-800 font-medium">{t('home.analytics.stats.clickRate')}</div>
               </div>
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-orange-600">{statsData.avgTimeToClick}</div>
-                <div className="text-sm text-orange-800 font-medium">Avg. Time</div>
+                <div className="text-sm text-orange-800 font-medium">{t('home.analytics.stats.avgTime')}</div>
               </div>
               <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-red-600">{statsData.daysRemaining}</div>
-                <div className="text-sm text-red-800 font-medium">Days Left</div>
+                <div className="text-sm text-red-800 font-medium">{t('home.analytics.stats.daysLeft')}</div>
               </div>
               <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-indigo-600">{statsData.conversionRate}</div>
-                <div className="text-sm text-indigo-800 font-medium">Conversion</div>
+                <div className="text-sm text-indigo-800 font-medium">{t('home.analytics.stats.conversion')}</div>
               </div>
             </div>
 
@@ -150,8 +152,8 @@ const AnalyticsComponent = () => {
               {/* Click Chart */}
               <div className="xl:col-span-2 bg-gray-50 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">Clicks Over Time</h3>
-                  <span className="text-sm text-gray-500">{timeRange === '7d' ? 'Last 7 days' : 'Last 30 days'}</span>
+                  <h3 className="text-lg font-semibold text-gray-900">{t('home.analytics.clicksOverTime')}</h3>
+                  <span className="text-sm text-gray-500">{timeRange === '7d' ? t('home.analytics.last7days') : t('home.analytics.last30days')}</span>
                 </div>
                 <div className="h-64">
                   <div className="flex justify-between items-end h-full space-x-2">
@@ -163,7 +165,7 @@ const AnalyticsComponent = () => {
                             style={{ height: item.height }}
                           >
                             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              {item.clicks} clicks
+                              {item.clicks} {t('home.analytics.clicks')}
                             </div>
                           </div>
                         </div>
@@ -177,7 +179,7 @@ const AnalyticsComponent = () => {
 
               {/* Devices Chart */}
               <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Devices</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{t('home.analytics.devices')}</h3>
                 <div className="space-y-4">
                   {deviceData.map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
@@ -210,7 +212,7 @@ const AnalyticsComponent = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Geographic Distribution */}
               <div className="bg-white border border-gray-200 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Geographic Distribution</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('home.analytics.geographicDistribution')}</h3>
                 <div className="space-y-3">
                   {geographicData.map((location, index) => (
                     <div key={index} className="flex items-center justify-between py-2 group hover:bg-gray-50 rounded-lg px-2 transition-colors duration-200">
@@ -232,7 +234,7 @@ const AnalyticsComponent = () => {
 
               {/* Browser Usage */}
               <div className="bg-white border border-gray-200 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Browser Usage</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('home.analytics.browserUsage')}</h3>
                 <div className="space-y-4">
                   {browserData.map((browser, index) => (
                     <div key={index} className="flex items-center justify-between">
@@ -249,7 +251,7 @@ const AnalyticsComponent = () => {
                 </div>
                 <div className="mt-6">
                   <div className="flex justify-between text-sm text-gray-600 mb-2">
-                    <span>Browser Share</span>
+                    <span>{t('home.analytics.browserShare')}</span>
                     <span>100%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
@@ -276,9 +278,9 @@ const AnalyticsComponent = () => {
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                 <span className="text-2xl">🚀</span>
               </div>
-              <h4 className="font-semibold text-gray-900">Peak Performance</h4>
+              <h4 className="font-semibold text-gray-900">{t('home.analytics.insights.peakPerformance.title')}</h4>
             </div>
-            <p className="text-gray-600 text-sm">Friday between 2-4 PM is your highest engagement period</p>
+            <p className="text-gray-600 text-sm">{t('home.analytics.insights.peakPerformance.description')}</p>
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
@@ -286,9 +288,9 @@ const AnalyticsComponent = () => {
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <span className="text-2xl">🌍</span>
               </div>
-              <h4 className="font-semibold text-gray-900">Global Reach</h4>
+              <h4 className="font-semibold text-gray-900">{t('home.analytics.insights.globalReach.title')}</h4>
             </div>
-            <p className="text-gray-600 text-sm">Your link has reached users in 6 different countries</p>
+            <p className="text-gray-600 text-sm">{t('home.analytics.insights.globalReach.description')}</p>
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
@@ -296,9 +298,9 @@ const AnalyticsComponent = () => {
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                 <span className="text-2xl">📱</span>
               </div>
-              <h4 className="font-semibold text-gray-900">Mobile First</h4>
+              <h4 className="font-semibold text-gray-900">{t('home.analytics.insights.mobileFirst.title')}</h4>
             </div>
-            <p className="text-gray-600 text-sm">45.7% of your audience accesses via mobile devices</p>
+            <p className="text-gray-600 text-sm">{t('home.analytics.insights.mobileFirst.description')}</p>
           </div>
         </div>
       </div>

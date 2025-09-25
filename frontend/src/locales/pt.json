@@ -13,7 +13,19 @@
   "home": {
     "title": "Bem-vindo ao Expireo",
     "subtitle": "Crie links expiráveis com facilidade",
-    "getStarted": "Começar"
+    "getStarted": "Começar",
+    "hero": {
+      "title": "Links Seguros",
+      "titleHighlight": "Que Expiram",
+      "subtitle": "Crie links temporários que desaparecem automaticamente. Ideal para compartilhar informações sensíveis, downloads únicos e acesso limitado no tempo.",
+      "getStarted": "Começar",
+      "liveDemo": "Demonstração ao Vivo",
+      "stats": {
+        "linksCreated": "Links Criados",
+        "activeUsers": "Usuários Ativos",
+        "uptime": "Tempo de Atividade"
+      }
+    }
   },
   "features": {
     "title": "Recursos",
@@ -24,8 +36,73 @@
     "description": "Escolha o plano que atende às suas necessidades"
   },
   "contact": {
-    "title": "Entre em Contato",
-    "description": "Entre em contato com nossa equipe"
+    "header": "Entre em Contato",
+    "description": "Nossa equipe está aqui para ajudá-lo. Seja qual for a sua dúvida, feedback ou necessidade de ajuda, queremos ouvir.",
+    "info": {
+      "email": "E-mail",
+      "phone": "Telefone",
+      "address": "Endereço",
+      "support": "Suporte",
+      "sales": "Vendas",
+      "general": "Consultas Gerais"
+    },
+    "form": {
+      "title": "Entre em Contato",
+      "name": "Seu Nome",
+      "namePlaceholder": "Digite seu nome completo",
+      "email": "Endereço de E-mail",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Assunto da sua mensagem",
+      "message": "Mensagem",
+      "messagePlaceholder": "Digite sua mensagem aqui...",
+      "submit": "Enviar Mensagem",
+      "sending": "Enviando...",
+      "success": "Mensagem enviada com sucesso!",
+      "error": "Erro ao enviar mensagem. Tente novamente."
+    },
+    "office": {
+      "title": "Nossos Escritórios",
+      "description": "Visite nosso escritório principal ou agende uma chamada de vídeo conosco.",
+      "hours": "Horário de Funcionamento",
+      "mondayFriday": "Segunda - Sexta",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    },
+    "social": {
+      "title": "Conecte-se Conosco",
+      "description": "Siga-nos nas redes sociais para obter as últimas atualizações e notícias.",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "discord": "Discord"
+    },
+    "faq": {
+      "title": "Respostas Rápidas",
+      "description": "Encontre respostas para nossas perguntas mais frequentes.",
+      "gettingStarted": {
+        "question": "Como começar?",
+        "answer": "Basta se cadastrar e começar a criar seu primeiro link expirável. Nosso processo de integração simples irá prepará-lo em poucos minutos."
+      },
+      "security": {
+        "question": "Como a segurança dos meus dados é garantida?",
+        "answer": "Garantimos a segurança dos seus dados usando criptografia de ponta a ponta, auditorias de segurança regulares e padrões da indústria."
+      },
+      "support": {
+        "question": "Como posso obter ajuda?",
+        "answer": "Use este formulário para entrar em contato com nossa equipe de suporte, ou consulte nossa documentação abrangente e fóruns da comunidade."
+      },
+      "pricing": {
+        "question": "Vocês oferecem preços personalizados?",
+        "answer": "Sim, oferecemos preços personalizados para organizações com necessidades específicas. Para mais informações, entre em contato com nossa equipe de vendas."
+      }
+    },
+    "cta": {
+      "title": "Ainda precisa de ajuda?",
+      "description": "Entre em contato com nossa equipe de suporte e nós o ajudaremos o mais rápido possível.",
+      "contactSupport": "Contatar Suporte",
+      "scheduleCall": "Agendar Chamada"
+    }
   },
   "login": {
     "title": "Entrar",
