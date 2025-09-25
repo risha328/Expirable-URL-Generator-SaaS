@@ -161,14 +161,16 @@ export const getAllUsers = async (req, res) => {
 
     res.json({
       success: true,
-      users: users.map(user => ({
+    users: users.map(user => ({
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         role: user.role,
+        isSubscribed: user.isSubscribed,
+        subscriptionPlan: user.subscriptionPlan || (user.isSubscribed ? "Pro" : "Free"),
         createdAt: user.createdAt
-      }))
+    }))
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -178,15 +180,20 @@ export const getAllUsers = async (req, res) => {
 export const updateSubscription = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { isSubscribed } = req.body;
+    const { isSubscribed, subscriptionPlan } = req.body;
 
     if (typeof isSubscribed !== 'boolean') {
       return res.status(400).json({ message: "isSubscribed must be a boolean" });
     }
 
+    const updateData = { isSubscribed };
+    if (subscriptionPlan) {
+      updateData.subscriptionPlan = subscriptionPlan;
+    }
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { isSubscribed },
+      updateData,
       { new: true }
     ).select('-passwordHash');
 
@@ -202,7 +209,8 @@ export const updateSubscription = async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
-        isSubscribed: user.isSubscribed
+        isSubscribed: user.isSubscribed,
+        subscriptionPlan: user.subscriptionPlan
       }
     });
   } catch (err) {

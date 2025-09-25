@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true },
   role: { type: String, enum: ["user", "admin"], default: "user" },
   isSubscribed: { type: Boolean, default: false },
+  subscriptionPlan: { type: String, enum: ["Free", "Pro", "Business", "Enterprise"], default: "Free" },
   createdAt: { type: Date, default: Date.now }
 });
 

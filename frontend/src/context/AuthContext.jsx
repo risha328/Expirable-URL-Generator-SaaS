@@ -59,8 +59,8 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
-    const updateSubscription = async (isSubscribed) => {
-        const res = await api.put('/auth/subscription', { isSubscribed });
+    const updateSubscription = async (isSubscribed, subscriptionPlan) => {
+        const res = await api.put('/auth/subscription', { isSubscribed, subscriptionPlan });
         const { user } = res.data;
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);

@@ -87,7 +87,7 @@ const Pricing = () => {
 
     if (planName === 'Pro') {
       try {
-        await updateSubscription(true);
+        await updateSubscription(true, planName);
         toast.success('You Successfully subscribed and you get all pro version features');
         navigate('/dashboard');
       } catch (error) {
