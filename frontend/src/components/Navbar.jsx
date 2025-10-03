@@ -68,7 +68,9 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <span className="text-indigo-600 font-bold text-2xl">Expireo</span>
+              <Link to="/" className="text-indigo-600 font-bold text-2xl hover:text-indigo-700 transition-colors">
+                Expireo
+              </Link>
             </div>
             <div className="hidden md:ml-6 md:flex md:space-x-8">
               <Link to="/" className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">

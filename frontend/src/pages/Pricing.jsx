@@ -161,7 +161,7 @@ const Pricing = () => {
                         ${isAnnual ? plan.price.annual : plan.price.monthly}
                       </span>
                       <span className="ml-1 text-xl font-semibold text-gray-500">
-                        {isAnnual ? t('pricing.perYear') : t('pricing.perMonth')}
+                        {isAnnual ? t('pricing.billing.perYear') : t('pricing.billing.perMonth')}
                       </span>
                     </>
                   ) : (
@@ -171,7 +171,7 @@ const Pricing = () => {
                   )}
                 </div>
                 {typeof plan.price[isAnnual ? 'annual' : 'monthly'] === 'number' && isAnnual && (
-                  <p className="mt-1 text-sm text-gray-500">{t('pricing.billedAnnually')}</p>
+                  <p className="mt-1 text-sm text-gray-500">{t('pricing.billing.billedAnnually')}</p>
                 )}
               </div>
 

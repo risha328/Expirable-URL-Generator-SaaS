@@ -2,6 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MINUTES = 15;
+
 export const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -39,8 +42,44 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
+    // Check if account is locked
+    if (user.lockUntil && new Date() < user.lockUntil) {
+      const remainingTime = Math.ceil((user.lockUntil - new Date()) / 1000 / 60);
+      return res.status(429).json({
+        message: `Account temporarily locked due to too many failed attempts. Try again in ${remainingTime} minutes.`,
+        lockedUntil: user.lockUntil,
+        lockReason: user.lockReason
+      });
+    }
+
     const valid = await bcrypt.compare(password, user.passwordHash);
-    if (!valid) return res.status(400).json({ message: "Invalid credentials" });
+    if (!valid) {
+      const newAttempts = user.failedLoginAttempts + 1;
+      if (newAttempts >= MAX_FAILED_ATTEMPTS) {
+        // Lock the account
+        const lockUntil = new Date(Date.now() + LOCKOUT_DURATION_MINUTES * 60 * 1000);
+        await User.findByIdAndUpdate(user._id, {
+          failedLoginAttempts: MAX_FAILED_ATTEMPTS,
+          lockUntil: lockUntil,
+          lockReason: `Too many failed login attempts (${MAX_FAILED_ATTEMPTS})`
+        });
+        return res.status(429).json({
+          message: `Account temporarily locked due to too many failed attempts. Try again in ${LOCKOUT_DURATION_MINUTES} minutes.`,
+          lockedUntil: lockUntil,
+          lockReason: `Too many failed login attempts (${MAX_FAILED_ATTEMPTS})`
+        });
+      } else {
+        await User.findByIdAndUpdate(user._id, { failedLoginAttempts: newAttempts });
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+    }
+
+    // Successful login - reset failed attempts and lock
+    await User.findByIdAndUpdate(user._id, {
+      failedLoginAttempts: 0,
+      lockUntil: null,
+      lockReason: null
+    });
 
     const token = jwt.sign(
       { id: user._id, firstName: user.firstName, lastName: user.lastName, role: user.role },
@@ -102,13 +141,49 @@ export const adminLogin = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
+    // Check if account is locked
+    if (user.lockUntil && new Date() < user.lockUntil) {
+      const remainingTime = Math.ceil((user.lockUntil - new Date()) / 1000 / 60);
+      return res.status(429).json({
+        message: `Account temporarily locked due to too many failed attempts. Try again in ${remainingTime} minutes.`,
+        lockedUntil: user.lockUntil,
+        lockReason: user.lockReason
+      });
+    }
+
     // Check if user has admin role
     if (user.role !== "admin") {
       return res.status(403).json({ message: "Admin access required" });
     }
 
     const valid = await bcrypt.compare(password, user.passwordHash);
-    if (!valid) return res.status(400).json({ message: "Invalid credentials" });
+    if (!valid) {
+      const newAttempts = user.failedLoginAttempts + 1;
+      if (newAttempts >= MAX_FAILED_ATTEMPTS) {
+        // Lock the account
+        const lockUntil = new Date(Date.now() + LOCKOUT_DURATION_MINUTES * 60 * 1000);
+        await User.findByIdAndUpdate(user._id, {
+          failedLoginAttempts: MAX_FAILED_ATTEMPTS,
+          lockUntil: lockUntil,
+          lockReason: `Too many failed login attempts (${MAX_FAILED_ATTEMPTS})`
+        });
+        return res.status(429).json({
+          message: `Account temporarily locked due to too many failed attempts. Try again in ${LOCKOUT_DURATION_MINUTES} minutes.`,
+          lockedUntil: lockUntil,
+          lockReason: `Too many failed login attempts (${MAX_FAILED_ATTEMPTS})`
+        });
+      } else {
+        await User.findByIdAndUpdate(user._id, { failedLoginAttempts: newAttempts });
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+    }
+
+    // Successful login - reset failed attempts and lock
+    await User.findByIdAndUpdate(user._id, {
+      failedLoginAttempts: 0,
+      lockUntil: null,
+      lockReason: null
+    });
 
     const token = jwt.sign(
       { id: user._id, firstName: user.firstName, lastName: user.lastName, role: user.role },

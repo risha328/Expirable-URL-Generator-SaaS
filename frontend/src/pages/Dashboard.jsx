@@ -51,7 +51,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import api from '../api/api';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import ChatbotComponent from '../components/ChatbotComponent';
 
 export default function Dashboard() {
     const { user } = useContext(AuthContext);
@@ -475,7 +474,6 @@ export default function Dashboard() {
                     </div>
                 )}
             </div>
-            <ChatbotComponent />
         </div>
     );
 }

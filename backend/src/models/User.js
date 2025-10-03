@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
   bio: { type: String },
   dateOfBirth: { type: Date },
   address: { type: String },
+  failedLoginAttempts: { type: Number, default: 0 },
+  lockUntil: { type: Date, default: null },
+  lockReason: { type: String, default: null },
   createdAt: { type: Date, default: Date.now }
 });
 

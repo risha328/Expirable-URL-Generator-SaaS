@@ -24,6 +24,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import RedirectHandler from './components/RedirectHandler';
 import AdminSettings from './pages/AdminSettings';
+import ChatbotComponent from './components/ChatbotComponent';
 
 function AppContent() {
     return (
@@ -171,6 +172,7 @@ export default function App() {
     return (
         <AuthProvider>
             <AppContent />
+            <ChatbotComponent />
             <Toaster
                 position="top-right"
                 toastOptions={{

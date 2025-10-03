@@ -268,6 +268,29 @@ export const deleteLink = async (req, res) => {
   }
 };
 
+export const deleteUserLink = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const userId = req.user.id;
+
+    console.log(`Attempting to delete link - Slug: ${slug}, UserId: ${userId}`);
+
+    // Find and delete the link, ensuring it belongs to the current user
+    const link = await Link.findOneAndDelete({ slug, ownerId: userId });
+
+    if (!link) {
+      console.log(`Link not found - Slug: ${slug}, UserId: ${userId}`);
+      return res.status(404).json({ message: "Link not found or you don't have permission to delete it" });
+    }
+
+    console.log(`Link deleted successfully - Slug: ${slug}, UserId: ${userId}`);
+    res.json({ message: "Link deleted successfully" });
+  } catch (err) {
+    console.error(`Error deleting link - Slug: ${slug}, UserId: ${userId}, Error: ${err.message}`);
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const forceExpireLink = async (req, res) => {
   try {
     const { id } = req.params;

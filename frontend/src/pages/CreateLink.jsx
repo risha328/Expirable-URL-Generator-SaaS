@@ -281,7 +281,7 @@ export default function CreateLink() {
                                 <div className="flex space-x-2">
                                     <input
                                         type="text"
-                                        value={result.shortUrl}
+                                        value={result.shortUrl.replace('http://localhost:5000', 'http://localhost:5173')}
                                         readOnly
                                         className="flex-1 px-3 py-2 bg-white border border-green-200 rounded-lg font-mono text-sm text-green-800"
                                     />
@@ -297,18 +297,10 @@ export default function CreateLink() {
                                 </div>
                             </div>
 
-                            <div className="flex space-x-3 pt-3">
-                                <a
-                                    href={result.shortUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-lg font-medium transition-colors duration-200"
-                                >
-                                    Test Link
-                                </a>
+                            <div className="pt-3">
                                 <button
                                     onClick={() => navigate('/dashboard')}
-                                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-center py-2 px-4 rounded-lg font-medium transition-colors duration-200"
+                                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-center py-2 px-4 rounded-lg font-medium transition-colors duration-200"
                                 >
                                     Dashboard
                                 </button>
