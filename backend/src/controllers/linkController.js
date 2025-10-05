@@ -113,7 +113,7 @@ export const createLink = async (req, res) => {
       expiry
     });
 
-    res.json({ shortUrl: `${process.env.BASE_URL}/${slug}` });
+    res.json({ slug });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

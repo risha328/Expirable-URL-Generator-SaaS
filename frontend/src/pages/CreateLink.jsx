@@ -111,8 +111,9 @@ export default function CreateLink() {
     };
 
     const copyToClipboard = () => {
-        if (result?.shortUrl) {
-            navigator.clipboard.writeText(result.shortUrl);
+        if (result?.slug) {
+            const fullUrl = `https://expireo.vercel.app/${result.slug}`;
+            navigator.clipboard.writeText(fullUrl);
             alert('Link copied to clipboard!');
         }
     };
@@ -281,7 +282,7 @@ export default function CreateLink() {
                                 <div className="flex space-x-2">
                                     <input
                                         type="text"
-                                        value={result.shortUrl.replace('http://localhost:5000', 'http://localhost:5173')}
+                            value={result.slug ? `https://expireo.vercel.app/${result.slug}` : ''}
                                         readOnly
                                         className="flex-1 px-3 py-2 bg-white border border-green-200 rounded-lg font-mono text-sm text-green-800"
                                     />
