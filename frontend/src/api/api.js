@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: process.env.VITE_BACKEND_URL || "http://localhost:5000", // Backend URL without /api prefix
+  baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000", // Backend URL without /api prefix
   headers: {
     'Content-Type': 'application/json',
   },
