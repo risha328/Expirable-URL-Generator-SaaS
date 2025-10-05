@@ -277,7 +277,7 @@ export default function CreateLink() {
                         </div>
 
                         <div className="space-y-3">
-                            <div>
+                            {/* <div>
                                 <label className="block text-sm font-medium text-green-700 mb-1">Your Short URL:</label>
                                 <div className="flex space-x-2">
                                     <input
@@ -296,7 +296,7 @@ export default function CreateLink() {
                                         Copy
                                     </button>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="pt-3">
                                 <button
