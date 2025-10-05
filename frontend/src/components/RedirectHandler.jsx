@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
 export default function RedirectHandler() {
     const { slug } = useParams();
     const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +23,22 @@ export default function RedirectHandler() {
             setError(null);
 
             // Use native fetch instead of authenticated API to avoid auth redirects
-            const response = await fetch(`http://localhost:5000/url/${slug}${providedPassword ? `?password=${encodeURIComponent(providedPassword)}` : ''}`);
+            const url = `${backendUrl}/url/${slug}`;
+            let response;
+
+            if (providedPassword) {
+                // Use POST for password-protected links
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ password: providedPassword }),
+                });
+            } else {
+                // Use GET for normal links
+                response = await fetch(url);
+            }
 
             if (response.redirected) {
                 // If the response is redirected, follow the redirect
