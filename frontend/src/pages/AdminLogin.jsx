@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import api from '../api/api';
 
 export default function AdminLogin() {
     const { login, setUser } = useContext(AuthContext);
@@ -62,27 +63,15 @@ export default function AdminLogin() {
 
         setIsLoading(true);
         try {
-            // Use admin-specific login endpoint
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/admin/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Admin login failed');
-            }
+            // Use admin-specific login endpoint via api instance
+            const response = await api.post('/auth/admin/login', formData);
 
             // Store token and user data
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
 
             // Update AuthContext user state
-            setUser(data.user);
+            setUser(response.data.user);
 
             // Redirect to admin dashboard or original location
             const from = location.state?.from?.pathname || '/admin/dashboard';
@@ -93,7 +82,7 @@ export default function AdminLogin() {
                 }
             });
         } catch (err) {
-            setSubmitError(err.message || 'Admin login failed. Please check your credentials and try again.');
+            setSubmitError(err.response?.data?.message || err.message || 'Admin login failed. Please check your credentials and try again.');
         } finally {
             setIsLoading(false);
         }
