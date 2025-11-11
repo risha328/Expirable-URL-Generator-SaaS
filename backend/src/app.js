@@ -18,7 +18,7 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(cors(
-  { origin: process.env.BASE_URL || "http://localhost:5001" }
+  { origin: "http://localhost:5173" }
 ));
 // app.use(rateLimit({ windowMs: 1 * 60 * 1000, max: 100 })); // Disabled for development
 
@@ -36,7 +36,7 @@ app.use("/analytics", analyticsRoutes);
 app.use("/admin", adminRoutes);
 app.use("/chat", chatbotRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 

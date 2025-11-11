@@ -73,29 +73,9 @@ export default function CreateLink() {
                 return;
             }
 
-            const response = await fetch('http://localhost:5000/url', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ targetUrl, password, expiry })
-            });
+            const response = await api.post('/url', { targetUrl, password, expiry });
 
-            if (response.status === 401) {
-                // Token expired or invalid - redirect to login
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                navigate('/login');
-                return;
-            }
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to create link');
-            }
-
-            const data = await response.json();
+            const data = response.data;
             setResult(data);
 
             // Clear form after successful creation
@@ -104,7 +84,7 @@ export default function CreateLink() {
             setExpiry('');
         } catch (error) {
             console.error('Link creation error:', error);
-            setErr(error.message || 'Error creating link. Please try again.');
+            setErr(error.response?.data?.message || error.message || 'Error creating link. Please try again.');
         } finally {
             setIsLoading(false);
         }

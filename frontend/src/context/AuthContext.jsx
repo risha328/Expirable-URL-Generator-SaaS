@@ -85,8 +85,17 @@ export const AuthProvider = ({ children }) => {
 
 
     const signup = async (firstName, lastName, email, password) => {
-        const res = await api.post('/auth/signup', { firstName, lastName, email, password });
-        return res.data;
+        // First, create the account
+        const signupRes = await api.post('/auth/signup', { firstName, lastName, email, password });
+
+        // Then, automatically log the user in
+        const loginRes = await api.post('/auth/login', { email, password });
+        const { token, user } = loginRes.data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+
+        return { message: signupRes.data.message, user };
     };
 
 
