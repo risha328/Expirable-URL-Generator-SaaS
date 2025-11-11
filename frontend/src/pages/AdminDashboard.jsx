@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '../components/admin/AdminLayout';
+import api from '../api/api';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -50,31 +51,14 @@ export default function AdminDashboard() {
         const fetchStats = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://localhost:5001/admin/dashboard/stats', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await api.get('/admin/dashboard/stats');
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setStats({
-                        totalUsers: data.totalUsers || 0,
-                        totalLinks: data.totalLinks || 0,
-                        totalClicks: data.totalClicks || 0,
-                        activeLinks: data.activeLinks || 0
-                    });
-                } else {
-                    console.error('Failed to fetch dashboard stats');
-                    // Set default values if API fails
-                    setStats({
-                        totalUsers: 0,
-                        totalLinks: 0,
-                        totalClicks: 0,
-                        activeLinks: 0
-                    });
-                }
+                setStats({
+                    totalUsers: response.data.totalUsers || 0,
+                    totalLinks: response.data.totalLinks || 0,
+                    totalClicks: response.data.totalClicks || 0,
+                    activeLinks: response.data.activeLinks || 0
+                });
             } catch (error) {
                 console.error('Error fetching dashboard stats:', error);
                 // Set default values if API fails
@@ -97,29 +81,13 @@ export default function AdminDashboard() {
         const fetchChartData = async () => {
             setChartLoading(true);
             try {
-                const response = await fetch(`http://localhost:5001/admin/dashboard/chart-data?timeRange=${timeRange}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await api.get(`/admin/dashboard/chart-data?timeRange=${timeRange}`);
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setChartData({
-                        labels: data.labels || [],
-                        dailyClicks: data.dailyClicks || [],
-                        activeUsers: data.activeUsers || []
-                    });
-                } else {
-                    console.error('Failed to fetch chart data');
-                    // Set default empty data if API fails
-                    setChartData({
-                        labels: [],
-                        dailyClicks: [],
-                        activeUsers: []
-                    });
-                }
+                setChartData({
+                    labels: response.data.labels || [],
+                    dailyClicks: response.data.dailyClicks || [],
+                    activeUsers: response.data.activeUsers || []
+                });
             } catch (error) {
                 console.error('Error fetching chart data:', error);
                 // Set default empty data if API fails
