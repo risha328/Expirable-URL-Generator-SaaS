@@ -50,7 +50,7 @@ export default function AdminDashboard() {
         const fetchStats = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://localhost:5000/admin/dashboard/stats', {
+                const response = await fetch('http://localhost:5001/admin/dashboard/stats', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
         const fetchChartData = async () => {
             setChartLoading(true);
             try {
-                const response = await fetch(`http://localhost:5000/admin/dashboard/chart-data?timeRange=${timeRange}`, {
+                const response = await fetch(`http://localhost:5001/admin/dashboard/chart-data?timeRange=${timeRange}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'application/json'
