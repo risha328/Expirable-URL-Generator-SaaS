@@ -18,7 +18,7 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(cors(
-  { origin: "http://localhost:5173" }
+  { origin: ["http://localhost:5173", "https://expireo.vercel.app"] }
 ));
 // app.use(rateLimit({ windowMs: 1 * 60 * 1000, max: 100 })); // Disabled for development
 
