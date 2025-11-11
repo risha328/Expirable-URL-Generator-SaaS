@@ -10,6 +10,8 @@ export default function RedirectHandler() {
     const [error, setError] = useState(null);
     const [password, setPassword] = useState('');
     const [isPasswordRequired, setIsPasswordRequired] = useState(false);
+    const [failedAttempts, setFailedAttempts] = useState(0);
+    const [isLocked, setIsLocked] = useState(false);
 
     useEffect(() => {
         if (slug && !isPasswordRequired) {
@@ -68,9 +70,17 @@ export default function RedirectHandler() {
                     return;
                 } else if (response.status === 403) {
                     // Wrong password - show failed attempt count
-                    const failedAttempts = errorData.failedAttempts || 1;
-                    toast.error(`Wrong password! ${failedAttempts} failed attempt(s)`);
-                    setIsPasswordRequired(true);
+                    const currentFailedAttempts = errorData.failedAttempts || 1;
+                    setFailedAttempts(currentFailedAttempts);
+                    toast.error(`Wrong password! ${currentFailedAttempts} failed attempt(s)`);
+
+                    if (currentFailedAttempts >= 5) {
+                        setIsLocked(true);
+                        setError('Your window is locked for 15 minutes.');
+                        toast.error('Your window is locked for 15 minutes.');
+                    } else {
+                        setIsPasswordRequired(true);
+                    }
                     setIsLoading(false);
                     return;
                 } else if (response.status === 429) {
@@ -104,7 +114,7 @@ export default function RedirectHandler() {
 
     const handlePasswordSubmit = (e) => {
         e.preventDefault();
-        if (password.trim()) {
+        if (password.trim() && !isLocked) {
             handleRedirect(password.trim());
         }
     };
@@ -161,9 +171,10 @@ export default function RedirectHandler() {
                         <div className="flex space-x-3">
                             <button
                                 type="submit"
-                                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                                disabled={isLocked}
+                                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
                             >
-                                Access Link
+                                {isLocked ? 'Window Locked' : 'Access Link'}
                             </button>
                             <a
                                 href="/"
@@ -172,6 +183,11 @@ export default function RedirectHandler() {
                                 Cancel
                             </a>
                         </div>
+                        {failedAttempts > 0 && (
+                            <div className="text-center text-sm text-gray-600">
+                                Failed attempts: {failedAttempts}/5
+                            </div>
+                        )}
                     </form>
                 </div>
             </div>
