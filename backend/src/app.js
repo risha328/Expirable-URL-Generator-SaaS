@@ -27,7 +27,7 @@ app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Expirable URL API Running 🚀");
+  res.send("Expirable URL API Running");
 });
 
 app.use("/auth", authRoutes);

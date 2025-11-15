@@ -78,20 +78,40 @@ export const getFlaggedLinks = async (req, res) => {
 // Get IP analytics data
 export const getIPAnalytics = async (req, res) => {
   try {
-    const { limit = 50 } = req.query;
+    const { limit = 50, flagged, blocked } = req.query;
 
-    const ipAnalytics = await IPAnalytics.find({
-      $or: [
-        { flagged: true },
-        { blocked: true },
-        { requestCount: { $gt: 10 } } // IPs with high activity
-      ]
-    })
-    .sort({ requestCount: -1, lastRequest: -1 })
-    .limit(parseInt(limit))
-    .populate('linksAccessed', 'slug targetUrl');
+    let query = {};
 
-    res.json(ipAnalytics);
+    // Build query based on filters
+    if (flagged === 'true') {
+      query.flagged = true;
+    } else if (flagged === 'false') {
+      query.flagged = false;
+    }
+
+    if (blocked === 'true') {
+      query.blocked = true;
+    } else if (blocked === 'false') {
+      query.blocked = false;
+    }
+
+    // If no specific filters, show IPs with activity
+    if (Object.keys(query).length === 0) {
+      query = {
+        $or: [
+          { flagged: true },
+          { blocked: true },
+          { requestCount: { $gt: 5 } } // IPs with moderate activity
+        ]
+      };
+    }
+
+    const ipAnalytics = await IPAnalytics.find(query)
+      .sort({ requestCount: -1, lastRequest: -1 })
+      .limit(parseInt(limit))
+      .populate('linksAccessed', 'slug targetUrl');
+
+    res.json({ ipAnalytics });
   } catch (err) {
     console.error("Error fetching IP analytics:", err);
     res.status(500).json({ message: "Error fetching IP analytics" });

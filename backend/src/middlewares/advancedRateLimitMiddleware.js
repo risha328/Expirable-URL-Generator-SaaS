@@ -14,7 +14,14 @@ export const ipRateLimit = async (req, res, next) => {
     let ipAnalytics = await IPAnalytics.findOne({ ip });
 
     if (!ipAnalytics) {
-      ipAnalytics = new IPAnalytics({ ip });
+      // Get location data from IP (you might want to use a service like ipinfo.io or maxmind)
+      // For now, we'll set defaults that can be updated later
+      ipAnalytics = new IPAnalytics({
+        ip,
+        country: 'Unknown',
+        city: 'Unknown',
+        region: 'Unknown'
+      });
     }
 
     // Check if IP is blocked

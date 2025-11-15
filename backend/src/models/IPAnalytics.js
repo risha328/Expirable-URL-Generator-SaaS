@@ -12,6 +12,10 @@ const ipAnalyticsSchema = new mongoose.Schema({
   blockedAt: Date,
   blockReason: String,
   resetTime: Date, // For temporary blocks
+  // Location data
+  country: { type: String, default: 'Unknown' },
+  city: { type: String, default: 'Unknown' },
+  region: { type: String, default: 'Unknown' },
   // Request tracking for rate limiting
   requestTimestamps: [{
     timestamp: { type: Date, default: Date.now }

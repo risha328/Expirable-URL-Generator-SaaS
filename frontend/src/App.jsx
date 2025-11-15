@@ -10,6 +10,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminUsers from './pages/AdminUsers';
 import AdminLinks from './pages/AdminLinks';
 import AdminAnalytics from './pages/AdminAnalytics';
+import AdminIPAnalytics from './pages/AdminIPAnalytics';
+import AdminIPDetails from './pages/AdminIPDetails';
 import CreateLink from './pages/CreateLink';
 import Analytics from './pages/Analytics';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -112,6 +114,16 @@ function AppContent() {
                 <Route path="/admin/settings" element={
                     <AdminProtectedRoute>
                         <AdminSettings />
+                    </AdminProtectedRoute>
+                } />
+                <Route path="/admin/ip-analytics" element={
+                    <AdminProtectedRoute>
+                        <AdminIPAnalytics />
+                    </AdminProtectedRoute>
+                } />
+                <Route path="/admin/ip-analytics/:id" element={
+                    <AdminProtectedRoute>
+                        <AdminIPDetails />
                     </AdminProtectedRoute>
                 } />
 
