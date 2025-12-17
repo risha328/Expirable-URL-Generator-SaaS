@@ -4,7 +4,7 @@ import IPAnalytics from "../models/IPAnalytics.js";
 const MAX_REQUESTS_PER_IP = process.env.MAX_REQUESTS_PER_IP || 50; // per hour
 const MAX_REQUESTS_PER_LINK = process.env.MAX_REQUESTS_PER_LINK || 100; // per hour
 const TRACKING_WINDOW_HOURS = process.env.TRACKING_WINDOW_HOURS || 1;
-const SUSPICIOUS_THRESHOLD = process.env.SUSPICIOUS_THRESHOLD || 30; // requests per hour
+//const SUSPICIOUS_THRESHOLD = process.env.SUSPICIOUS_THRESHOLD || 30; // requests per hour
 
 export const ipRateLimit = async (req, res, next) => {
   try {
