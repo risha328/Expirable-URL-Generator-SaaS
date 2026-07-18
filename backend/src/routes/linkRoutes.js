@@ -3,6 +3,7 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 import adminMiddleware from "../middlewares/adminMiddleware.js";
 import { checkBruteForce } from "../middlewares/bruteForceMiddleware.js";
 import { ipRateLimit, linkAbuseDetection, updateIPAnalytics } from "../middlewares/advancedRateLimitMiddleware.js";
+import { redirectLimiter } from "../middlewares/rateLimiter.js";
 import { validatePassword } from "../middlewares/passwordValidationMiddleware.js";
 import { createLink, getUserLinks, getDashboardStats, redirectLink, getAllLinks, deleteLink, deleteUserLink, forceExpireLink, getReportedLinks, warnUser, blockUser, getFailedAttempts, getFlaggedLinks, getIPAnalytics, unflagLink, blockIP, unblockIP } from "../controllers/linkController.js";
 
@@ -12,8 +13,8 @@ router.post("/", authMiddleware, createLink);
 router.get("/my", authMiddleware, getUserLinks); // Get user's links
 router.get("/stats", authMiddleware, getDashboardStats); // Get dashboard statistics
 router.delete("/:slug", authMiddleware, deleteUserLink); // Delete user's own link
-router.post("/:slug", ipRateLimit, validatePassword, linkAbuseDetection, checkBruteForce, updateIPAnalytics, redirectLink); // POST for password case
-router.get("/:slug", ipRateLimit, validatePassword, linkAbuseDetection, checkBruteForce, updateIPAnalytics, redirectLink);  // GET for normal case
+router.post("/:slug", redirectLimiter, ipRateLimit, validatePassword, linkAbuseDetection, checkBruteForce, updateIPAnalytics, redirectLink); // POST for password case
+router.get("/:slug", redirectLimiter, ipRateLimit, validatePassword, linkAbuseDetection, checkBruteForce, updateIPAnalytics, redirectLink);  // GET for normal case
 
 // Admin routes
 router.get("/admin/all", adminMiddleware, getAllLinks);

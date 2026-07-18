@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
-import rateLimit from "express-rate-limit";
+import { globalLimiter, authLimiter, chatbotLimiter } from "./middlewares/rateLimiter.js";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
@@ -15,12 +15,15 @@ connectDB();
 
 const app = express();
 
+// Trust reverse proxies (such as Cloudflare, Nginx, Vercel)
+app.set("trust proxy", 1);
+
 // Middleware
 app.use(helmet());
 app.use(cors(
   { origin: ["http://localhost:5173", "https://expireo.vercel.app"] }
 ));
-// app.use(rateLimit({ windowMs: 1 * 60 * 1000, max: 100 })); // Disabled for development
+app.use(globalLimiter);
 
 // Use express.json() for all requests
 app.use(express.json());
@@ -29,6 +32,13 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Expirable URL API Running");
 });
+
+// Selective rate limiting for sensitive/resource-intensive endpoints
+app.use("/auth/login", authLimiter);
+app.use("/auth/signup", authLimiter);
+app.use("/auth/admin/login", authLimiter);
+app.use("/auth/admin/signup", authLimiter);
+app.use("/chat/message", chatbotLimiter);
 
 app.use("/auth", authRoutes);
 app.use("/url", linkRoutes);

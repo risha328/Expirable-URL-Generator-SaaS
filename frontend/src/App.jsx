@@ -36,7 +36,7 @@ function AppContent() {
                 <Route path="/" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <Home />
                             <Footer />
                         </main>
@@ -45,7 +45,7 @@ function AppContent() {
                 <Route path="/pricing" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <Pricing />
                             <Footer />
                         </main>
@@ -54,7 +54,7 @@ function AppContent() {
                 <Route path="/features" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <Features />
                             <Footer />
                         </main>
@@ -63,29 +63,23 @@ function AppContent() {
                 <Route path="/contact" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <Contact />
                             <Footer />
                         </main>
                     </>
                 } />
                 <Route path="/login" element={
-                    <>
+                    <div className="min-h-screen flex flex-col pt-16">
                         <Navbar />
-                        <main className="container mx-auto p-4">
-                            <Login />
-                            <Footer />
-                        </main>
-                    </>
+                        <Login />
+                    </div>
                 } />
                 <Route path="/signup" element={
-                    <>
+                    <div className="min-h-screen flex flex-col pt-16">
                         <Navbar />
-                        <main className="container mx-auto p-4">
-                            <Signup />
-                            <Footer />
-                        </main>
-                    </>
+                        <Signup />
+                    </div>
                 } />
 
                 {/* Admin routes without common navbar and footer */}
@@ -131,7 +125,7 @@ function AppContent() {
                 <Route path="/dashboard" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <ProtectedRoute>
                                 <Dashboard />
                             </ProtectedRoute>
@@ -142,7 +136,7 @@ function AppContent() {
                 <Route path="/create" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <ProtectedRoute>
                                 <CreateLink />
                             </ProtectedRoute>
@@ -153,7 +147,7 @@ function AppContent() {
                 <Route path="/analytics/:slug" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <ProtectedRoute>
                                 <Analytics />
                             </ProtectedRoute>
@@ -164,7 +158,7 @@ function AppContent() {
                 <Route path="/profile" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4">
+                        <main className="container mx-auto p-4 pt-20">
                             <ProtectedRoute>
                                 <Profile />
                             </ProtectedRoute>
