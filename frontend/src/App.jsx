@@ -32,10 +32,12 @@ import MyLinks from './pages/MyLinks';
 import SecretLinks from './pages/SecretLinks';
 import ApiKeys from './pages/ApiKeys';
 import CreateLinkPage from './pages/CreateLinkPage';
+import AnimatedFavicon from './components/AnimatedFavicon';
 
 function AppContent() {
     return (
         <div className="min-h-screen">
+            <AnimatedFavicon />
             <Routes>
                 {/* Public routes with common navbar and footer */}
                 <Route path="/" element={

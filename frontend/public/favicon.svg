@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="linkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#d946ef" />
+    </linearGradient>
+    
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <style>
+    .link-left {
+      transform-origin: 26px 38px;
+      animation: pulseLeft 2.5s ease-in-out infinite alternate;
+    }
+    .link-right {
+      transform-origin: 38px 26px;
+      animation: pulseRight 2.5s ease-in-out infinite alternate;
+    }
+    .glow-bg {
+      animation: glowPulse 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseLeft {
+      0% {
+        transform: translate(-2px, 2px) rotate(-8deg);
+      }
+      100% {
+        transform: translate(1px, -1px) rotate(0deg);
+      }
+    }
+
+    @keyframes pulseRight {
+      0% {
+        transform: translate(2px, -2px) rotate(8deg);
+      }
+      100% {
+        transform: translate(-1px, 1px) rotate(0deg);
+      }
+    }
+
+    @keyframes glowPulse {
+      0% {
+        opacity: 0.3;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+    }
+  </style>
+
+  <!-- Glowing background aura -->
+  <circle class="glow-bg" cx="32" cy="32" r="28" fill="url(#linkGrad)" opacity="0.4" filter="url(#glow)" />
+
+  <!-- Interlocking Link SVG Paths -->
+  <g fill="none" stroke="url(#linkGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <!-- Right Link Ring -->
+    <path class="link-right" d="M28 36l4-4a8 8 0 1 1 11.31-11.31l-4 4a8 8 0 0 1-11.31 0" />
+    <!-- Left Link Ring -->
+    <path class="link-left" d="M36 28l-4 4a8 8 0 1 1-11.31 11.31l4-4a8 8 0 0 1 11.31 0" />
+  </g>
+</svg>
