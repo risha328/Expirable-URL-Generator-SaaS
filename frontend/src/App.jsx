@@ -27,6 +27,11 @@ import Profile from './pages/Profile';
 import RedirectHandler from './components/RedirectHandler';
 import AdminSettings from './pages/AdminSettings';
 import ChatbotComponent from './components/ChatbotComponent';
+import UserLayout from './components/UserLayout';
+import MyLinks from './pages/MyLinks';
+import SecretLinks from './pages/SecretLinks';
+import ApiKeys from './pages/ApiKeys';
+import CreateLinkPage from './pages/CreateLinkPage';
 
 function AppContent() {
     return (
@@ -36,7 +41,7 @@ function AppContent() {
                 <Route path="/" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
+                        <main className="w-full pt-16">
                             <Home />
                             <Footer />
                         </main>
@@ -45,7 +50,7 @@ function AppContent() {
                 <Route path="/pricing" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
+                        <main className="w-full pt-16">
                             <Pricing />
                             <Footer />
                         </main>
@@ -54,7 +59,7 @@ function AppContent() {
                 <Route path="/features" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
+                        <main className="w-full pt-16">
                             <Features />
                             <Footer />
                         </main>
@@ -63,24 +68,14 @@ function AppContent() {
                 <Route path="/contact" element={
                     <>
                         <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
+                        <main className="w-full pt-16">
                             <Contact />
                             <Footer />
                         </main>
                     </>
                 } />
-                <Route path="/login" element={
-                    <div className="min-h-screen flex flex-col pt-16">
-                        <Navbar />
-                        <Login />
-                    </div>
-                } />
-                <Route path="/signup" element={
-                    <div className="min-h-screen flex flex-col pt-16">
-                        <Navbar />
-                        <Signup />
-                    </div>
-                } />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
 
                 {/* Admin routes without common navbar and footer */}
                 <Route path="/admin/login" element={<AdminLogin />} />
@@ -121,50 +116,70 @@ function AppContent() {
                     </AdminProtectedRoute>
                 } />
 
-                {/* Protected user routes with common navbar and footer */}
+                {/* Protected user routes with sidebar layout */}
                 <Route path="/dashboard" element={
-                    <>
-                        <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
-                            <ProtectedRoute>
-                                <Dashboard />
-                            </ProtectedRoute>
-                            <Footer />
-                        </main>
-                    </>
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <Dashboard />
+                        </UserLayout>
+                    </ProtectedRoute>
+                } />
+                <Route path="/my-links" element={
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <MyLinks />
+                        </UserLayout>
+                    </ProtectedRoute>
+                } />
+                <Route path="/my-links/create" element={
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <CreateLinkPage />
+                        </UserLayout>
+                    </ProtectedRoute>
                 } />
                 <Route path="/create" element={
-                    <>
-                        <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
-                            <ProtectedRoute>
-                                <CreateLink />
-                            </ProtectedRoute>
-                            <Footer />
-                        </main>
-                    </>
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <CreateLinkPage />
+                        </UserLayout>
+                    </ProtectedRoute>
+                } />
+                <Route path="/analytics" element={
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <MyLinks />
+                        </UserLayout>
+                    </ProtectedRoute>
                 } />
                 <Route path="/analytics/:slug" element={
-                    <>
-                        <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
-                            <ProtectedRoute>
-                                <Analytics />
-                            </ProtectedRoute>
-                            <Footer />
-                        </main>
-                    </>
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <Analytics />
+                        </UserLayout>
+                    </ProtectedRoute>
+                } />
+
+                <Route path="/secret-links" element={
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <SecretLinks />
+                        </UserLayout>
+                    </ProtectedRoute>
+                } />
+                <Route path="/api-keys" element={
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <ApiKeys />
+                        </UserLayout>
+                    </ProtectedRoute>
                 } />
                 <Route path="/profile" element={
-                    <>
-                        <Navbar />
-                        <main className="container mx-auto p-4 pt-20">
-                            <ProtectedRoute>
-                                <Profile />
-                            </ProtectedRoute>
-                            <Footer />
-                        </main>
-                    </>
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <Profile />
+                        </UserLayout>
+                    </ProtectedRoute>
                 } />
 
                 {/* Redirect handler without navbar/footer */}

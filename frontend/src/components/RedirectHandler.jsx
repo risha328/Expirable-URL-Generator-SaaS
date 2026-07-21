@@ -24,22 +24,29 @@ export default function RedirectHandler() {
             setIsLoading(true);
             setError(null);
 
-            // Use native fetch instead of authenticated API to avoid auth redirects
+            // Use native fetch with optional Auth token to track owner/user clicks
             const url = `${backendUrl}/url/${slug}`;
+            const token = localStorage.getItem('token');
+            const reqHeaders = {};
+            if (token) {
+                reqHeaders['Authorization'] = `Bearer ${token}`;
+            }
+
             let response;
 
             if (providedPassword) {
+                reqHeaders['Content-Type'] = 'application/json';
                 // Use POST for password-protected links
                 response = await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: reqHeaders,
                     body: JSON.stringify({ password: providedPassword }),
                 });
             } else {
                 // Use GET for normal links
-                response = await fetch(url);
+                response = await fetch(url, {
+                    headers: reqHeaders
+                });
             }
 
             if (response.redirected) {

@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import AnimatedLogo from './AnimatedLogo';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -68,24 +69,24 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="text-indigo-600 font-bold text-2xl hover:text-indigo-700 transition-colors">
-                Expireo
-              </Link>
+              <AnimatedLogo />
             </div>
-            <div className="hidden md:ml-6 md:flex md:space-x-8">
-              <Link to="/" className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                {t('navbar.home')}
-              </Link>
-              <Link to="/features" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                {t('navbar.features')}
-              </Link>
-              <Link to="/pricing" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                {t('navbar.pricing')}
-              </Link>
-              <Link to="/contact" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                {t('navbar.contact')}
-              </Link>
-            </div>
+            {!user && (
+              <div className="hidden md:ml-6 md:flex md:space-x-8">
+                <Link to="/" className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  {t('navbar.home')}
+                </Link>
+                <Link to="/features" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  {t('navbar.features')}
+                </Link>
+                <Link to="/pricing" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  {t('navbar.pricing')}
+                </Link>
+                <Link to="/contact" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  {t('navbar.contact')}
+                </Link>
+              </div>
+            )}
           </div>
           <div className="hidden md:flex items-center">
             {/* Language Selector */}
@@ -105,9 +106,8 @@ const Navbar = () => {
                     <button
                       key={lang.code}
                       onClick={() => changeLanguage(lang.code)}
-                      className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${
-                        i18n.language === lang.code ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
-                      }`}
+                      className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${i18n.language === lang.code ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
+                        }`}
                     >
                       {lang.name}
                     </button>
@@ -187,18 +187,22 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="pt-2 pb-3 space-y-1">
-            <Link to="/" className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-              {t('navbar.home')}
-            </Link>
-            <Link to="/features" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-              {t('navbar.features')}
-            </Link>
-            <Link to="/pricing" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-              {t('navbar.pricing')}
-            </Link>
-            <Link to="/contact" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-              {t('navbar.contact')}
-            </Link>
+            {!user && (
+              <>
+                <Link to="/" className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                  {t('navbar.home')}
+                </Link>
+                <Link to="/features" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                  {t('navbar.features')}
+                </Link>
+                <Link to="/pricing" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                  {t('navbar.pricing')}
+                </Link>
+                <Link to="/contact" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                  {t('navbar.contact')}
+                </Link>
+              </>
+            )}
 
             {user && (
               <div className="border-t border-gray-200 pt-4 pb-2">
@@ -265,9 +269,8 @@ const Navbar = () => {
                         changeLanguage(lang.code);
                         setIsMenuOpen(false);
                       }}
-                      className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${
-                        i18n.language === lang.code ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
-                      }`}
+                      className={`flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${i18n.language === lang.code ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
+                        }`}
                     >
                       {lang.name}
                     </button>

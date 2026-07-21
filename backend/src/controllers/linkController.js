@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
 import Link from "../models/Link.js";
 import Analytics from "../models/Analytics.js";
@@ -199,6 +200,19 @@ export const redirectLink = async (req, res) => {
     const link = req.link;
     if (!link) return res.status(404).json({ message: "Link not found" });
 
+    // Extract current user if auth token is provided in request headers
+    let currentUserId = null;
+    const authHeader = req.headers["authorization"];
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key-change-in-production');
+        currentUserId = decoded.id;
+      } catch (err) {
+        // Token verification failed or expired, ignore
+      }
+    }
+
     // Extract comprehensive analytics data
     const userAgent = req.headers["user-agent"];
     const referrer = req.headers["referer"] || req.headers["referrer"];
@@ -209,13 +223,33 @@ export const redirectLink = async (req, res) => {
     const language = extractLanguage(acceptLanguage);
     const timezone = extractTimezone(userAgent);
 
-    // Get location data from IP (placeholder for now)
+    // Get location data from IP
     const locationData = await getLocationFromIP(req.ip);
+
+    // CHECK 1: Is the visitor the creator/owner of the link?
+    const isOwner = currentUserId && link.ownerId && (currentUserId.toString() === link.ownerId.toString());
+
+    // CHECK 2: Has this IP address already clicked this link before?
+    const existingClickFromIP = await Analytics.findOne({
+      linkId: link._id,
+      ip: req.ip
+    });
+
+    // CHECK 3: Has this authenticated user already clicked this link before?
+    let existingClickFromUser = null;
+    if (currentUserId) {
+      existingClickFromUser = await Analytics.findOne({
+        linkId: link._id,
+        userId: currentUserId
+      });
+    }
+
+    const isDuplicateClick = Boolean(existingClickFromIP || existingClickFromUser);
 
     // Create detailed analytics record
     const analyticsData = {
       linkId: link._id,
-      userId: link.ownerId,
+      userId: currentUserId || link.ownerId,
       timestamp: new Date(),
       ip: req.ip,
       referrer: referrer,
@@ -233,14 +267,18 @@ export const redirectLink = async (req, res) => {
       language: language
     };
 
-    // Save analytics data
+    // Save analytics record for auditing & analytics
     await Analytics.create(analyticsData);
 
-    // Update link click count
-    link.clicks++;
-    await link.save();
+    // ONLY increment click count if:
+    // 1. Visitor is NOT the owner/creator of the link
+    // 2. Click is NOT a duplicate from the same IP address or user
+    if (!isOwner && !isDuplicateClick) {
+      link.clicks++;
+      await link.save();
+    }
 
-    // Return target URL as JSON instead of server-side redirect
+    // Return target URL as JSON
     return res.json({ targetUrl: link.targetUrl });
   } catch (err) {
     res.status(500).json({ message: err.message });

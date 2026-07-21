@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import AuthCarousel from '../components/AuthCarousel';
 
 export default function Login() {
     const { login } = useContext(AuthContext);
@@ -101,38 +102,12 @@ export default function Login() {
     };
 
     return (
-        <div className="flex-1 min-h-[calc(100vh-64px)] flex flex-col md:flex-row bg-white">
-            {/* Left Panel - Hero Gradient */}
-            <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 text-white p-12 flex-col justify-between relative overflow-hidden">
-                {/* Subtle decorative blurred circles */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl transform translate-x-20 -translate-y-20"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl transform -translate-x-20 translate-y-20"></div>
-                
-                {/* Logo/Brand Header */}
-                <div className="flex items-center space-x-2 z-10">
-                    <div className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/20">
-                        <span className="text-white font-bold text-lg">E</span>
-                    </div>
-                    <span className="text-xl font-bold tracking-wider text-white">Expireo</span>
-                </div>
-
-                {/* Bottom Overlay Card */}
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-lg border border-white/20 shadow-2xl z-10">
-                    <div className="flex items-center space-x-2 text-xs font-semibold tracking-wider text-green-400 uppercase mb-4">
-                        <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
-                        <span>Global Node Network Active</span>
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-                        Empowering the next billion links.
-                    </h2>
-                    <p className="text-white/80 text-sm leading-relaxed">
-                        SnapLink Pro provides ultra-low latency redirection with military-grade expiration protocols.
-                    </p>
-                </div>
-            </div>
+        <div className="flex-1 min-h-screen flex flex-col lg:flex-row bg-white">
+            {/* Left Panel - 2-Second Auto Carousel */}
+            <AuthCarousel />
 
             {/* Right Panel - Login Form */}
-            <div className="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-16 bg-white overflow-y-auto min-h-[calc(100vh-64px)]">
+            <div className="w-full lg:w-1/2 flex flex-col justify-between p-8 lg:p-16 bg-white overflow-y-auto min-h-screen">
                 {/* Header for Mobile only */}
                 <div className="md:hidden flex items-center space-x-2 mb-8">
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
