@@ -32,7 +32,14 @@ app.use(helmet({
   contentSecurityPolicy: false,
 }));
 app.use(cors(
-  { origin: ["http://localhost:5173", "https://expireo.vercel.app"] }
+  {
+    origin: [
+      "http://localhost:5173",
+      "https://expireo.vercel.app",
+      "https://expireo.site",
+      "https://www.expireo.site",
+    ],
+  }
 ));
 app.use(globalLimiter);
 
