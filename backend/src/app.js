@@ -37,7 +37,9 @@ app.use(cors(
       "http://localhost:5173",
       "https://expireo.vercel.app",
       "https://expireo.site",
+      "http://expireo.site",
       "https://www.expireo.site",
+      "http://www.expireo.site",
     ],
   }
 ));
