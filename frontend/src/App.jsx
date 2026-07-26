@@ -24,6 +24,7 @@ import Contact from './pages/Contact';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Billing from './pages/Billing';
 import RedirectHandler from './components/RedirectHandler';
 import AdminSettings from './pages/AdminSettings';
 import ChatbotComponent from './components/ChatbotComponent';
@@ -173,6 +174,13 @@ function AppContent() {
                     <ProtectedRoute>
                         <UserLayout>
                             <ApiKeys />
+                        </UserLayout>
+                    </ProtectedRoute>
+                } />
+                <Route path="/billing" element={
+                    <ProtectedRoute>
+                        <UserLayout>
+                            <Billing />
                         </UserLayout>
                     </ProtectedRoute>
                 } />

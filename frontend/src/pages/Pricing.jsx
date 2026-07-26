@@ -1,17 +1,22 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import api from '../api/api';
+import { loadRazorpayScript, openRazorpayCheckout } from '../utils/razorpay';
 
 const Pricing = () => {
   const { t } = useTranslation();
   const [isAnnual, setIsAnnual] = useState(true);
-  const { user, updateSubscription } = useContext(AuthContext);
+  const [payingPlan, setPayingPlan] = useState(null);
+  const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Display prices in INR to match Razorpay planConfig (paise → rupees)
   const plans = [
     {
+      id: 'Free',
       name: t('pricing.plans.free.name'),
       description: t('pricing.plans.free.description'),
       price: { monthly: 0, annual: 0 },
@@ -26,9 +31,10 @@ const Pricing = () => {
       popular: false
     },
     {
+      id: 'Pro',
       name: t('pricing.plans.pro.name'),
       description: t('pricing.plans.pro.description'),
-      price: { monthly: 4, annual: 40 },
+      price: { monthly: 399, annual: 3990 },
       features: [
         t('pricing.plans.pro.features.1'),
         t('pricing.plans.pro.features.2'),
@@ -42,9 +48,10 @@ const Pricing = () => {
       popular: true
     },
     {
+      id: 'Business',
       name: t('pricing.plans.business.name'),
       description: t('pricing.plans.business.description'),
-      price: { monthly: 10, annual: 100 },
+      price: { monthly: 999, annual: 9990 },
       features: [
         t('pricing.plans.business.features.1'),
         t('pricing.plans.business.features.2'),
@@ -59,6 +66,7 @@ const Pricing = () => {
       popular: false
     },
     {
+      id: 'Enterprise',
       name: t('pricing.plans.enterprise.name'),
       description: t('pricing.plans.enterprise.description'),
       price: { monthly: t('pricing.plans.enterprise.custom'), annual: t('pricing.plans.enterprise.custom') },
@@ -77,25 +85,144 @@ const Pricing = () => {
     }
   ];
 
-  const toggleBilling = () => {
-    setIsAnnual(!isAnnual);
-  };
+  const toggleBilling = () => setIsAnnual(!isAnnual);
 
-  const handlePayNow = async (planName) => {
+  const handlePayNow = async (planId) => {
     if (!user) {
-      navigate('/login');
+      navigate('/login', { state: { from: { pathname: '/pricing' } } });
       return;
     }
 
-    if (planName === 'Pro') {
-      try {
-        await updateSubscription(true, planName);
-        toast.success(t('pricing.toast.success'));
-        navigate('/dashboard');
-      } catch (error) {
-        toast.error(t('pricing.toast.error'));
-      }
+    if (planId === 'Free') {
+      navigate('/dashboard');
+      return;
     }
+
+    if (planId === 'Enterprise') {
+      navigate('/contact');
+      return;
+    }
+
+    if (planId !== 'Pro' && planId !== 'Business') {
+      return;
+    }
+
+    setPayingPlan(planId);
+
+    try {
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        toast.error('Unable to load Razorpay. Please try again.');
+        return;
+      }
+
+      const billingCycle = isAnnual ? 'annual' : 'monthly';
+
+      // Use one-time Orders API (stable). Subscriptions require Plans API which returns 401 on this account.
+      const { data: order } = await api.post('/payments/create-order', {
+        plan: planId,
+        billingCycle,
+      });
+
+      if (!order?.orderId || !order?.keyId || !order?.amount) {
+        throw new Error(order?.message || 'Failed to create Razorpay order. Check backend logs.');
+      }
+
+      const paymentResponse = await openRazorpayCheckout({
+        key: order.keyId,
+        amount: Number(order.amount),
+        currency: order.currency || 'INR',
+        name: 'Expireo',
+        description: `${planId} plan (${billingCycle})`,
+        order_id: order.orderId,
+        prefill: {
+          name: order.prefill?.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+          email: order.prefill?.email || user.email || '',
+          contact: order.prefill?.contact || '',
+        },
+        notes: {
+          plan: planId,
+          billingCycle,
+        },
+        theme: { color: '#4F46E5' },
+      });
+
+      if (!paymentResponse?.razorpay_payment_id) {
+        throw new Error('Payment was not completed');
+      }
+
+      const { data: verified } = await api.post('/payments/verify', {
+        razorpay_order_id: paymentResponse.razorpay_order_id,
+        razorpay_payment_id: paymentResponse.razorpay_payment_id,
+        razorpay_signature: paymentResponse.razorpay_signature,
+      });
+
+      if (verified.user) {
+        localStorage.setItem('user', JSON.stringify(verified.user));
+        setUser(verified.user);
+      }
+
+      toast.success(t('pricing.toast.success') || 'Payment successful! Plan activated.');
+      navigate('/billing');
+    } catch (error) {
+      if (error?.message === 'PAYMENT_CANCELLED') {
+        toast.error('Payment cancelled');
+      } else {
+        console.error('Razorpay checkout error:', error);
+        toast.error(
+          error?.response?.data?.message ||
+            error?.message ||
+            t('pricing.toast.error') ||
+            'Payment failed. Please try again.'
+        );
+      }
+    } finally {
+      setPayingPlan(null);
+    }
+  };
+
+  const renderCta = (plan) => {
+    const baseClass = `block w-full py-3 px-6 text-center rounded-md text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed ${
+      plan.popular
+        ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+        : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+    }`;
+
+    if (plan.id === 'Pro' || plan.id === 'Business') {
+      const isCurrent =
+        user?.isSubscribed &&
+        user?.subscriptionPlan === plan.id &&
+        user?.subscriptionStatus === 'active';
+
+      return (
+        <button
+          type="button"
+          onClick={() => handlePayNow(plan.id)}
+          disabled={!!payingPlan || isCurrent}
+          className={baseClass}
+        >
+          {payingPlan === plan.id
+            ? 'Processing...'
+            : isCurrent
+              ? 'Current Plan'
+              : t('pricing.payNow')}
+        </button>
+      );
+    }
+
+    if (plan.id === 'Free') {
+      return (
+        <button type="button" onClick={() => handlePayNow('Free')} className={baseClass}>
+          {plan.cta}
+        </button>
+      );
+    }
+
+    return (
+      <Link to="/contact" className={baseClass}>
+        {plan.cta}
+      </Link>
+    );
   };
 
   return (
@@ -134,10 +261,10 @@ const Pricing = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="mt-16 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-x-8">
+        <div className="mt-12 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-x-8">
           {plans.map((plan) => (
             <div
-              key={plan.name}
+              key={plan.id}
               className={`relative p-8 bg-white rounded-2xl shadow-sm border ${
                 plan.popular ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200'
               }`}
@@ -158,7 +285,7 @@ const Pricing = () => {
                   {typeof plan.price[isAnnual ? 'annual' : 'monthly'] === 'number' ? (
                     <>
                       <span className="text-4xl font-extrabold tracking-tight text-gray-900">
-                        ${isAnnual ? plan.price.annual : plan.price.monthly}
+                        ₹{isAnnual ? plan.price.annual : plan.price.monthly}
                       </span>
                       <span className="ml-1 text-xl font-semibold text-gray-500">
                         {isAnnual ? t('pricing.billing.perYear') : t('pricing.billing.perMonth')}
@@ -170,7 +297,7 @@ const Pricing = () => {
                     </span>
                   )}
                 </div>
-                {typeof plan.price[isAnnual ? 'annual' : 'monthly'] === 'number' && isAnnual && (
+                {typeof plan.price[isAnnual ? 'annual' : 'monthly'] === 'number' && isAnnual && plan.price.annual > 0 && (
                   <p className="mt-1 text-sm text-gray-500">{t('pricing.billing.billedAnnually')}</p>
                 )}
               </div>
@@ -195,29 +322,7 @@ const Pricing = () => {
                 ))}
               </ul>
 
-              {plan.name === 'Pro' ? (
-                <button
-                  onClick={() => handlePayNow(plan.name)}
-                  className={`block w-full py-3 px-6 text-center rounded-md text-base font-semibold ${
-                    plan.popular
-                      ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                >
-                  {t('pricing.payNow')}
-                </button>
-              ) : (
-                <a
-                  href="#"
-                  className={`block w-full py-3 px-6 text-center rounded-md text-base font-semibold ${
-                    plan.popular
-                      ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                >
-                  {plan.cta}
-                </a>
-              )}
+              {renderCta(plan)}
             </div>
           ))}
         </div>
@@ -272,18 +377,18 @@ const Pricing = () => {
             {t('pricing.cta.description')}
           </p>
           <div className="mt-8">
-            <a
-              href="#"
+            <Link
+              to="/contact"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50"
             >
               {t('pricing.cta.contactSales')}
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/contact"
               className="ml-4 inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-indigo-600"
             >
               {t('pricing.cta.scheduleDemo')}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

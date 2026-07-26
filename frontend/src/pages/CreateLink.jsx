@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../api/api';
+import BrandMark from '../components/BrandMark';
 
 // Simple URL safety check (client-side)
 const isSafeUrl = (url) => {
@@ -132,8 +133,8 @@ export default function CreateLink() {
                         Back to Dashboard
                     </button>
                     <div className="flex items-center justify-center space-x-2 mb-4">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-xl">E</span>
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white">
+                            <BrandMark className="w-5 h-5" />
                         </div>
                         <span className="text-2xl font-bold text-gray-900">Expireo</span>
                     </div>

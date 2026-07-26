@@ -3,6 +3,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import BrandMark from '../BrandMark';
 
 export default function AdminNavbar() {
     const { user, logout } = useContext(AuthContext);
@@ -27,8 +28,8 @@ export default function AdminNavbar() {
                             to="/admin"
                             className="flex items-center space-x-1 hover:opacity-90 transition-opacity duration-200"
                         >
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md">
-                                <span className="text-white font-bold text-xl">E</span>
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md text-white">
+                                <BrandMark className="w-5 h-5" />
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-xl font-bold text-gray-900 leading-tight">Expireo</span>

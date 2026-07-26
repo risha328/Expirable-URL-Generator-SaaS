@@ -1,5 +1,5 @@
+import "dotenv/config";
 import express from "express";
-import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
 import { globalLimiter, authLimiter, chatbotLimiter } from "./middlewares/rateLimiter.js";
@@ -9,9 +9,18 @@ import linkRoutes from "./routes/linkRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
+import paymentRoutes from "./modules/payments/payment.routes.js";
+import { startSubscriptionExpiryJob } from "./modules/payments/expiry.job.js";
+import { seedDefaultPromos } from "./modules/payments/payment.controller.js";
 
-dotenv.config();
-connectDB();
+connectDB().then(async () => {
+  try {
+    await seedDefaultPromos();
+  } catch (e) {
+    console.warn("Promo seed skipped:", e.message);
+  }
+});
+startSubscriptionExpiryJob();
 
 const app = express();
 
@@ -19,14 +28,24 @@ const app = express();
 app.set("trust proxy", 1);
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(cors(
   { origin: ["http://localhost:5173", "https://expireo.vercel.app"] }
 ));
 app.use(globalLimiter);
 
-// Use express.json() for all requests
-app.use(express.json());
+// Capture raw body for Razorpay webhook signature verification
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      if (req.originalUrl?.startsWith("/payments/webhook")) {
+        req.rawBody = buf.toString("utf8");
+      }
+    },
+  })
+);
 
 // Routes
 app.get("/", (req, res) => {
@@ -45,9 +64,7 @@ app.use("/url", linkRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/admin", adminRoutes);
 app.use("/chat", chatbotRoutes);
+app.use("/payments", paymentRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-

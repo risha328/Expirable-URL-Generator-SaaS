@@ -76,11 +76,18 @@ export const AuthProvider = ({ children }) => {
     };
 
     const updateSubscription = async (isSubscribed, subscriptionPlan) => {
+        // Admin-only endpoint; regular users must use Razorpay Checkout on /pricing
         const res = await api.put('/auth/subscription', { isSubscribed, subscriptionPlan });
         const { user } = res.data;
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
         return user;
+    };
+
+    const applyVerifiedUser = (verifiedUser) => {
+        if (!verifiedUser) return;
+        localStorage.setItem('user', JSON.stringify(verifiedUser));
+        setUser(verifiedUser);
     };
 
 
@@ -115,6 +122,7 @@ export const AuthProvider = ({ children }) => {
             signup,
             logout,
             updateSubscription,
+            applyVerifiedUser,
             isLoading,
             isInitialized
         }}>

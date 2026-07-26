@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import api from '../api/api';
+import BrandMark from '../components/BrandMark';
 
 export default function AdminLogin() {
     const { login, setUser } = useContext(AuthContext);
@@ -99,8 +100,8 @@ export default function AdminLogin() {
                 
                 {/* Logo/Brand Header */}
                 <div className="flex items-center space-x-2 z-10">
-                    <div className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/20">
-                        <span className="text-white font-bold text-lg">E</span>
+                    <div className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/20 text-white">
+                        <BrandMark className="w-4 h-4" />
                     </div>
                     <span className="text-xl font-bold tracking-wider text-white">Expireo Admin</span>
                 </div>
@@ -124,8 +125,8 @@ export default function AdminLogin() {
             <div className="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-16 bg-white overflow-y-auto min-h-screen">
                 {/* Header for Mobile only */}
                 <div className="md:hidden flex items-center space-x-2 mb-8">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-650 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">E</span>
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-650 rounded-lg flex items-center justify-center text-white">
+                        <BrandMark className="w-4 h-4" />
                     </div>
                     <span className="text-xl font-bold tracking-wider text-gray-900">Expireo Admin</span>
                 </div>

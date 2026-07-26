@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { syncSubscriptionExpiry } from "../modules/payments/payment.controller.js";
 
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MINUTES = 15;
@@ -81,6 +82,8 @@ export const login = async (req, res) => {
       lockReason: null
     });
 
+    await syncSubscriptionExpiry(user);
+
     const token = jwt.sign(
       { id: user._id, firstName: user.firstName, lastName: user.lastName, role: user.role },
       process.env.JWT_SECRET,
@@ -95,7 +98,10 @@ export const login = async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
-        isSubscribed: user.isSubscribed
+        isSubscribed: user.isSubscribed,
+        subscriptionPlan: user.subscriptionPlan || (user.isSubscribed ? "Pro" : "Free"),
+        subscriptionStatus: user.subscriptionStatus,
+        subscriptionExpiresAt: user.subscriptionExpiresAt,
       }
     });
   } catch (err) {
@@ -213,6 +219,8 @@ export const validateToken = async (req, res) => {
     const user = await User.findById(req.user.id).select('-passwordHash');
     if (!user) return res.status(401).json({ message: "User not found" });
 
+    await syncSubscriptionExpiry(user);
+
     res.json({
       user: {
         id: user._id,
@@ -220,7 +228,10 @@ export const validateToken = async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
-        isSubscribed: user.isSubscribed
+        isSubscribed: user.isSubscribed,
+        subscriptionPlan: user.subscriptionPlan || (user.isSubscribed ? "Pro" : "Free"),
+        subscriptionStatus: user.subscriptionStatus,
+        subscriptionExpiresAt: user.subscriptionExpiresAt,
       }
     });
   } catch (err) {
@@ -254,10 +265,17 @@ export const getAllUsers = async (req, res) => {
 
 export const updateSubscription = async (req, res) => {
   try {
-    const userId = req.user.id;
+    // Only admins can manually change subscriptions (payments go through Razorpay)
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Subscription changes require payment. Please use Pricing checkout.",
+      });
+    }
+
+    const userId = req.body.userId || req.user.id;
     const { isSubscribed, subscriptionPlan } = req.body;
 
-    if (typeof isSubscribed !== 'boolean') {
+    if (typeof isSubscribed !== "boolean") {
       return res.status(400).json({ message: "isSubscribed must be a boolean" });
     }
 
@@ -265,12 +283,16 @@ export const updateSubscription = async (req, res) => {
     if (subscriptionPlan) {
       updateData.subscriptionPlan = subscriptionPlan;
     }
+    if (isSubscribed) {
+      updateData.subscriptionStatus = "active";
+    } else {
+      updateData.subscriptionStatus = "cancelled";
+      updateData.subscriptionPlan = subscriptionPlan || "Free";
+    }
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      updateData,
-      { new: true }
-    ).select('-passwordHash');
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-passwordHash");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -285,8 +307,10 @@ export const updateSubscription = async (req, res) => {
         email: user.email,
         role: user.role,
         isSubscribed: user.isSubscribed,
-        subscriptionPlan: user.subscriptionPlan
-      }
+        subscriptionPlan: user.subscriptionPlan,
+        subscriptionStatus: user.subscriptionStatus,
+        subscriptionExpiresAt: user.subscriptionExpiresAt,
+      },
     });
   } catch (err) {
     res.status(500).json({ message: err.message });

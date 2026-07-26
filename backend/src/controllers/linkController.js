@@ -14,6 +14,7 @@ import {
   extractTimezone,
   getLocationFromIP
 } from "../utils/analyticsUtils.js";
+import { syncSubscriptionExpiry } from "../modules/payments/payment.controller.js";
 
 // Simple URL safety check
 const isSafeUrl = (url) => {
@@ -60,6 +61,8 @@ export const createLink = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    await syncSubscriptionExpiry(user);
 
     // Check subscription limits for free users
     if (!user.isSubscribed) {

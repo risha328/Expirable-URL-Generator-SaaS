@@ -283,7 +283,7 @@ const Profile = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profile.subscription')}</h3>
                 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
                       <p className="text-sm font-medium text-gray-900">
                         {t('profile.currentPlan')}:
@@ -294,15 +294,34 @@ const Profile = () => {
                       <p className={`text-sm ${profile.isSubscribed ? 'text-green-600' : 'text-gray-500'}`}>
                         {profile.isSubscribed ? t('profile.proActive') : t('profile.freePlan')}
                       </p>
+                      {user?.subscriptionExpiresAt && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Expires: {new Date(user.subscriptionExpiresAt).toLocaleString()}
+                        </p>
+                      )}
+                      {user?.subscriptionStatus && (
+                        <p className="text-xs text-gray-400 capitalize mt-0.5">
+                          Status: {user.subscriptionStatus}
+                          {user.billingCycle ? ` · ${user.billingCycle}` : ''}
+                        </p>
+                      )}
                     </div>
-                    {!profile.isSubscribed && (
+                    <div className="flex flex-wrap gap-2">
                       <a
-                        href="/pricing"
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200"
+                        href="/billing"
+                        className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-all duration-200 text-sm"
                       >
-                        {t('profile.upgrade')}
+                        Manage billing
                       </a>
-                    )}
+                      {!profile.isSubscribed && (
+                        <a
+                          href="/pricing"
+                          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 text-sm"
+                        >
+                          {t('profile.upgrade')}
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
