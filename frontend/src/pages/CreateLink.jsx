@@ -45,6 +45,9 @@ export default function CreateLink() {
     const [isPageLoading, setIsPageLoading] = useState(true);
     const [linksThisMonth, setLinksThisMonth] = useState(0);
     const navigate = useNavigate();
+    const pad = (n) => String(n).padStart(2, '0');
+    const now = new Date();
+    const minExpiry = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
     useEffect(() => {
         // Simulate page loading time
@@ -63,6 +66,12 @@ export default function CreateLink() {
         // Client-side safety check
         if (!isSafeUrl(targetUrl)) {
             setErr("The provided URL appears to be unsafe and cannot be shortened. Please enter a valid, safe URL.");
+            setIsLoading(false);
+            return;
+        }
+
+        if (expiry && new Date(expiry) <= new Date()) {
+            setErr("Expiration must be a future date and time.");
             setIsLoading(false);
             return;
         }
@@ -214,6 +223,7 @@ export default function CreateLink() {
                                     value={expiry}
                                     onChange={e => setExpiry(e.target.value)}
                                     type="datetime-local"
+                                    min={minExpiry}
                                     className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
                                 />
                             </div>

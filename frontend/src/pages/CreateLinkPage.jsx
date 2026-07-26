@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/api';
 import toast from 'react-hot-toast';
+import { AuthContext } from '../context/AuthContext';
+
+const ALIAS_PATTERN = /^[a-z0-9](?:[a-z0-9_-]{0,48}[a-z0-9])?$/;
+
+const toDateTimeLocalValue = (date) => {
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
 
 export default function CreateLinkPage() {
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showQrCode, setShowQrCode] = useState(true);
+    const shortHost = typeof window !== 'undefined' ? window.location.host : 'expireo.site';
+    const minExpiresAt = toDateTimeLocalValue(new Date());
 
     const [formData, setFormData] = useState({
         destinationUrl: '',
@@ -24,7 +35,7 @@ export default function CreateLinkPage() {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: name === 'customAlias' ? value.toLowerCase().replace(/\s+/g, '-') : value
         }));
     };
 
@@ -35,21 +46,42 @@ export default function CreateLinkPage() {
             return;
         }
 
+        const alias = formData.customAlias.trim().toLowerCase();
+        if (alias) {
+            if (!user?.isSubscribed) {
+                toast.error('Custom aliases are a Pro feature. Upgrade to use them.');
+                return;
+            }
+            if (alias.length < 3 || alias.length > 50 || !ALIAS_PATTERN.test(alias)) {
+                toast.error('Alias must be 3–50 characters: letters, numbers, hyphens, or underscores.');
+                return;
+            }
+        }
+
+        if (formData.expiresAt && new Date(formData.expiresAt) <= new Date()) {
+            toast.error('Expiration must be a future date and time.');
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const payload = {
                 targetUrl: formData.destinationUrl,
                 password: formData.password || undefined,
                 expiry: formData.expiresAt ? new Date(formData.expiresAt).toISOString() : undefined,
-                customAlias: formData.customAlias || undefined,
+                customAlias: alias || undefined,
                 maxClicks: formData.maxClicks ? parseInt(formData.maxClicks) : undefined,
                 utmSource: formData.campaignSource || undefined,
                 utmMedium: formData.campaignMedium || undefined,
                 utmCampaign: formData.campaignName || undefined
             };
 
-            await api.post('/url', payload);
-            toast.success('Secure expirable link created successfully!');
+            const { data } = await api.post('/url', payload);
+            toast.success(
+                data?.slug
+                    ? `Link created: ${shortHost}/${data.slug}`
+                    : 'Secure expirable link created successfully!'
+            );
             navigate('/my-links');
         } catch (err) {
             console.error('Failed to create URL:', err);
@@ -98,10 +130,15 @@ export default function CreateLinkPage() {
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
                                     Custom Alias
+                                    {!user?.isSubscribed && (
+                                        <span className="ml-2 text-[10px] font-extrabold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">
+                                            PRO
+                                        </span>
+                                    )}
                                 </label>
                                 <div className="flex rounded-xl border border-gray-200 overflow-hidden bg-gray-50/50 focus-within:ring-2 focus-within:ring-blue-500 focus-within:bg-white transition-all">
-                                    <span className="px-3 py-3 text-xs font-medium text-gray-500 bg-gray-100 border-r border-gray-200 flex items-center select-none">
-                                        snap.lk/
+                                    <span className="px-3 py-3 text-xs font-medium text-gray-500 bg-gray-100 border-r border-gray-200 flex items-center select-none max-w-[45%] truncate">
+                                        {shortHost}/
                                     </span>
                                     <input
                                         type="text"
@@ -109,9 +146,19 @@ export default function CreateLinkPage() {
                                         value={formData.customAlias}
                                         onChange={handleChange}
                                         placeholder="summer-sale"
-                                        className="w-full px-3 py-2 text-sm bg-transparent border-none focus:outline-none"
+                                        disabled={!user?.isSubscribed}
+                                        className="w-full px-3 py-2 text-sm bg-transparent border-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
                                     />
                                 </div>
+                                {!user?.isSubscribed ? (
+                                    <p className="mt-1.5 text-[11px] text-gray-500">
+                                        Upgrade to Pro to choose your own short link path.
+                                    </p>
+                                ) : (
+                                    <p className="mt-1.5 text-[11px] text-gray-500">
+                                        Letters, numbers, hyphens, underscores · 3–50 characters
+                                    </p>
+                                )}
                             </div>
 
                             <div>
@@ -123,6 +170,7 @@ export default function CreateLinkPage() {
                                     name="expiresAt"
                                     value={formData.expiresAt}
                                     onChange={handleChange}
+                                    min={minExpiresAt}
                                     className="w-full px-3.5 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white text-sm text-gray-700 transition-all"
                                 />
                             </div>
@@ -259,8 +307,8 @@ export default function CreateLinkPage() {
                                 <span className="text-gray-400 text-xs">•••</span>
                             </div>
 
-                            <p className="font-bold text-blue-600 text-base">
-                                snap.lk/{formData.customAlias || 'custom'}
+                            <p className="font-bold text-blue-600 text-base break-all">
+                                {shortHost}/{formData.customAlias || 'random-code'}
                             </p>
 
                             <p className="text-xs text-gray-500 truncate">

@@ -32,8 +32,15 @@ export const getAnalytics = async (req, res) => {
       timestamp: { $gte: startDate }
     }).sort({ timestamp: -1 });
 
+    const allTimeEvents = await Analytics.countDocuments({ linkId: link._id });
+    const clicks = Math.max(link.clicks || 0, allTimeEvents);
+
+    if (clicks > (link.clicks || 0)) {
+      await Link.updateOne({ _id: link._id }, { $set: { clicks } });
+    }
+
     res.json({
-      clicks: link.clicks,
+      clicks,
       createdAt: link.createdAt,
       expiry: link.expiry,
       analytics: analytics

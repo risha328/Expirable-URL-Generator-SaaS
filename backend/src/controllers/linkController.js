@@ -46,10 +46,59 @@ const isSafeUrl = (url) => {
   }
 };
 
+const RESERVED_ALIASES = new Set([
+  "login",
+  "signup",
+  "pricing",
+  "features",
+  "contact",
+  "admin",
+  "dashboard",
+  "my-links",
+  "create",
+  "analytics",
+  "secret-links",
+  "api-keys",
+  "billing",
+  "profile",
+  "auth",
+  "url",
+  "payments",
+  "chat",
+  "api",
+  "assets",
+  "static",
+  "favicon",
+  "robots",
+  "sitemap",
+]);
+
+const ALIAS_PATTERN = /^[a-z0-9](?:[a-z0-9_-]{0,48}[a-z0-9])?$/;
+
+const normalizeCustomAlias = (value) => {
+  if (value == null || value === "") return null;
+  return String(value).trim().toLowerCase();
+};
+
+const validateCustomAlias = (alias) => {
+  if (!alias) return null;
+  if (alias.length < 3 || alias.length > 50) {
+    return "Custom alias must be between 3 and 50 characters";
+  }
+  if (!ALIAS_PATTERN.test(alias)) {
+    return "Custom alias can only contain letters, numbers, hyphens, and underscores";
+  }
+  if (RESERVED_ALIASES.has(alias)) {
+    return "This alias is reserved. Please choose another one.";
+  }
+  return null;
+};
+
 export const createLink = async (req, res) => {
   try {
-    const { targetUrl, password, expiry } = req.body;
+    const { targetUrl, password, expiry, customAlias } = req.body;
     const ownerId = req.user.id;
+    const alias = normalizeCustomAlias(customAlias);
 
     // Check if the URL is safe
     if (!isSafeUrl(targetUrl)) {
@@ -98,10 +147,29 @@ export const createLink = async (req, res) => {
           requiresPro: true
         });
       }
+
+      if (alias) {
+        return res.status(403).json({
+          message: "Custom aliases are a Pro feature. Upgrade to Pro to use this feature.",
+          requiresPro: true
+        });
+      }
+    }
+
+    if (alias) {
+      const aliasError = validateCustomAlias(alias);
+      if (aliasError) {
+        return res.status(400).json({ message: aliasError });
+      }
+
+      const existing = await Link.findOne({ slug: alias }).select("_id");
+      if (existing) {
+        return res.status(409).json({ message: "This alias is already taken. Please choose another one." });
+      }
     }
 
     console.log(`Creating link for user: ${req.user.firstName} ${req.user.lastName}`);
-    const slug = nanoid(7);
+    const slug = alias || nanoid(7);
 
     let passwordHash = null;
     if (password) {
@@ -117,8 +185,11 @@ export const createLink = async (req, res) => {
       expiry
     });
 
-    res.json({ slug });
+    res.json({ slug: link.slug });
   } catch (err) {
+    if (err?.code === 11000) {
+      return res.status(409).json({ message: "This alias is already taken. Please choose another one." });
+    }
     res.status(500).json({ message: err.message });
   }
 };
@@ -162,8 +233,34 @@ export const createLink = async (req, res) => {
 export const getUserLinks = async (req, res) => {
   try {
     const userId = req.user.id;
-    const links = await Link.find({ ownerId: userId }).sort({ createdAt: -1 });
-    res.json(links);
+    const links = await Link.find({ ownerId: userId }).sort({ createdAt: -1 }).lean();
+
+    // Backfill click totals from analytics when the stored counter is behind
+    const linkIds = links.map((l) => l._id);
+    const eventCounts = linkIds.length
+      ? await Analytics.aggregate([
+          { $match: { linkId: { $in: linkIds } } },
+          { $group: { _id: "$linkId", count: { $sum: 1 } } },
+        ])
+      : [];
+    const countById = Object.fromEntries(
+      eventCounts.map((row) => [row._id.toString(), row.count])
+    );
+
+    const withClicks = links.map((link) => {
+      const eventCount = countById[link._id.toString()] || 0;
+      const clicks = Math.max(link.clicks || 0, eventCount);
+      return { ...link, clicks };
+    });
+
+    // Persist corrections so dashboard stats stay accurate
+    await Promise.all(
+      withClicks
+        .filter((link, i) => link.clicks > (links[i].clicks || 0))
+        .map((link) => Link.updateOne({ _id: link._id }, { $set: { clicks: link.clicks } }))
+    );
+
+    res.json(withClicks);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -174,11 +271,24 @@ export const getDashboardStats = async (req, res) => {
     const userId = req.user.id;
 
     // Get all user's links
-    const links = await Link.find({ ownerId: userId });
+    const links = await Link.find({ ownerId: userId }).lean();
+    const linkIds = links.map((l) => l._id);
+    const eventCounts = linkIds.length
+      ? await Analytics.aggregate([
+          { $match: { linkId: { $in: linkIds } } },
+          { $group: { _id: "$linkId", count: { $sum: 1 } } },
+        ])
+      : [];
+    const countById = Object.fromEntries(
+      eventCounts.map((row) => [row._id.toString(), row.count])
+    );
 
-    // Calculate statistics
+    // Calculate statistics (prefer analytics event count when counter is behind)
     const totalLinks = links.length;
-    const totalClicks = links.reduce((sum, link) => sum + (link.clicks || 0), 0);
+    const totalClicks = links.reduce((sum, link) => {
+      const eventCount = countById[link._id.toString()] || 0;
+      return sum + Math.max(link.clicks || 0, eventCount);
+    }, 0);
 
     // Count active links (not expired)
     const activeLinks = links.filter(link => {
@@ -229,30 +339,10 @@ export const redirectLink = async (req, res) => {
     // Get location data from IP
     const locationData = await getLocationFromIP(req.ip);
 
-    // CHECK 1: Is the visitor the creator/owner of the link?
-    const isOwner = currentUserId && link.ownerId && (currentUserId.toString() === link.ownerId.toString());
-
-    // CHECK 2: Has this IP address already clicked this link before?
-    const existingClickFromIP = await Analytics.findOne({
-      linkId: link._id,
-      ip: req.ip
-    });
-
-    // CHECK 3: Has this authenticated user already clicked this link before?
-    let existingClickFromUser = null;
-    if (currentUserId) {
-      existingClickFromUser = await Analytics.findOne({
-        linkId: link._id,
-        userId: currentUserId
-      });
-    }
-
-    const isDuplicateClick = Boolean(existingClickFromIP || existingClickFromUser);
-
-    // Create detailed analytics record
+    // Create detailed analytics record (do not attribute anonymous visits to the owner)
     const analyticsData = {
       linkId: link._id,
-      userId: currentUserId || link.ownerId,
+      userId: currentUserId || null,
       timestamp: new Date(),
       ip: req.ip,
       referrer: referrer,
@@ -270,16 +360,11 @@ export const redirectLink = async (req, res) => {
       language: language
     };
 
-    // Save analytics record for auditing & analytics
     await Analytics.create(analyticsData);
 
-    // ONLY increment click count if:
-    // 1. Visitor is NOT the owner/creator of the link
-    // 2. Click is NOT a duplicate from the same IP address or user
-    if (!isOwner && !isDuplicateClick) {
-      link.clicks++;
-      await link.save();
-    }
+    // Count every successful access so dashboard / My Links / Analytics stay in sync
+    link.clicks = (link.clicks || 0) + 1;
+    await link.save();
 
     // Return target URL as JSON
     return res.json({ targetUrl: link.targetUrl });
