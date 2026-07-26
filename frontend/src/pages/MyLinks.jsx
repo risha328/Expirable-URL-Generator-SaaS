@@ -24,9 +24,12 @@ export default function MyLinks() {
         fetchLinks();
     }, []);
 
+    const getExpiry = (link) => link.expiry || link.expiresAt || null;
+
     const isLinkExpired = (link) => {
-        if (!link.expiresAt) return false;
-        return new Date(link.expiresAt) < new Date();
+        const expiry = getExpiry(link);
+        if (!expiry) return false;
+        return new Date(expiry) < new Date();
     };
 
     const filteredLinks = links.filter((link) => {
@@ -157,10 +160,12 @@ export default function MyLinks() {
                                                 )}
                                             </td>
                                             <td className="p-4 font-semibold text-gray-700">
-                                                {link.clicksCount || 0}
+                                                {link.clicks || 0}
                                             </td>
                                             <td className="p-4 text-xs text-gray-500">
-                                                {link.expiresAt ? new Date(link.expiresAt).toLocaleString() : 'Never'}
+                                                {getExpiry(link)
+                                                    ? new Date(getExpiry(link)).toLocaleString()
+                                                    : 'Never'}
                                             </td>
                                             <td className="p-4 text-right space-x-2">
                                                 <button

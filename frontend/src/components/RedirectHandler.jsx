@@ -8,6 +8,7 @@ export default function RedirectHandler() {
     const { slug } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [expiredAt, setExpiredAt] = useState(null);
     const [password, setPassword] = useState('');
     const [isPasswordRequired, setIsPasswordRequired] = useState(false);
     const [failedAttempts, setFailedAttempts] = useState(0);
@@ -71,6 +72,9 @@ export default function RedirectHandler() {
                     setError('Link not found');
                 } else if (response.status === 410) {
                     setError('Link has expired');
+                    if (errorData.expiry) {
+                        setExpiredAt(errorData.expiry);
+                    }
                 } else if (response.status === 401) {
                     setIsPasswordRequired(true);
                     setIsLoading(false);
@@ -211,7 +215,13 @@ export default function RedirectHandler() {
                         </svg>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Link Error</h2>
-                    <p className="text-gray-600 mb-6">{error}</p>
+                    <p className="text-gray-600 mb-2">{error}</p>
+                    {expiredAt && (
+                        <p className="text-sm text-gray-500 mb-6">
+                            Expired on {new Date(expiredAt).toLocaleString()}
+                        </p>
+                    )}
+                    {!expiredAt && <div className="mb-6" />}
                     <div className="space-y-3">
                         <a
                             href="/"

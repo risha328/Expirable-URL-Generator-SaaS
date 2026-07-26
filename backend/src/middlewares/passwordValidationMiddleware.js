@@ -18,7 +18,10 @@ export const validatePassword = async (req, res, next) => {
 
     // Check if link is expired
     if (link.expiry && new Date() > link.expiry) {
-      return res.status(410).json({ message: "Link expired" });
+      return res.status(410).json({
+        message: "Link expired",
+        expiry: link.expiry
+      });
     }
 
     if (link.passwordHash) {
