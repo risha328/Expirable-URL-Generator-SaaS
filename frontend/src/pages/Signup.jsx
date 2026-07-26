@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthCarousel from '../components/AuthCarousel';
+import AnimatedLogo from '../components/AnimatedLogo';
 
 export default function Signup() {
     const { signup } = useContext(AuthContext);
@@ -88,24 +89,21 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex-1 min-h-screen flex flex-col lg:flex-row bg-white">
+        <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white">
             {/* Left Panel - 2-Second Auto Carousel */}
             <AuthCarousel />
 
             {/* Right Panel - Signup Form */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-between p-8 lg:p-16 bg-white overflow-y-auto min-h-screen">
-                {/* Header for Mobile only */}
-                <div className="md:hidden flex items-center space-x-2 mb-8">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">E</span>
-                    </div>
-                    <span className="text-xl font-bold tracking-wider text-gray-900">Expireo</span>
+            <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-8 lg:p-16 bg-white overflow-y-auto flex-1 min-h-screen">
+                {/* Mobile logo — carousel hidden on small screens */}
+                <div className="lg:hidden mb-6">
+                    <AnimatedLogo size="small" />
                 </div>
 
-                <div className="my-auto max-w-md w-full mx-auto space-y-8">
+                <div className="my-auto max-w-md w-full mx-auto space-y-6 sm:space-y-8 lg:py-0">
                     {/* Header */}
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                             Create your account
                         </h2>
                         <p className="mt-2 text-sm text-gray-500">
@@ -126,8 +124,8 @@ export default function Signup() {
                     {/* Form */}
                     <form onSubmit={onSubmit} className="space-y-4">
                         {/* First & Last Name */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                            <div className="min-w-0">
                                 <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-1.5">
                                     First Name
                                 </label>
@@ -143,7 +141,7 @@ export default function Signup() {
                                         type="text"
                                         value={formData.firstName}
                                         onChange={handleChange}
-                                        className={`w-full pl-9 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
+                                        className={`w-full min-w-0 pl-9 pr-3 sm:pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
                                             errors.firstName ? 'border-red-300 bg-red-50/20' : 'border-gray-300'
                                         }`}
                                         placeholder="John"
@@ -154,7 +152,7 @@ export default function Signup() {
                                 )}
                             </div>
 
-                            <div>
+                            <div className="min-w-0">
                                 <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700 mb-1.5">
                                     Last Name
                                 </label>
@@ -170,7 +168,7 @@ export default function Signup() {
                                         type="text"
                                         value={formData.lastName}
                                         onChange={handleChange}
-                                        className={`w-full pl-9 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
+                                        className={`w-full min-w-0 pl-9 pr-3 sm:pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
                                             errors.lastName ? 'border-red-300 bg-red-50/20' : 'border-gray-300'
                                         }`}
                                         placeholder="Doe"
@@ -199,7 +197,7 @@ export default function Signup() {
                                     type="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className={`w-full pl-9 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
+                                    className={`w-full pl-9 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
                                         errors.email ? 'border-red-300 bg-red-50/20' : 'border-gray-300'
                                     }`}
                                     placeholder="name@company.com"
@@ -227,7 +225,7 @@ export default function Signup() {
                                     type={showPassword ? "text" : "password"}
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className={`w-full pl-9 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
+                                    className={`w-full pl-9 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
                                         errors.password ? 'border-red-300 bg-red-50/20' : 'border-gray-300'
                                     }`}
                                     placeholder="••••••••"
@@ -283,7 +281,7 @@ export default function Signup() {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-8 pt-6 border-t border-gray-100 text-center flex justify-center space-x-6 text-xs text-gray-400 font-medium">
+                <div className="mt-8 pt-6 border-t border-gray-100 text-center flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-400 font-medium">
                     <a href="#" className="hover:text-gray-600 transition">Privacy Policy</a>
                     <a href="#" className="hover:text-gray-600 transition">Terms of Service</a>
                     <a href="#" className="hover:text-gray-600 transition">Help Center</a>

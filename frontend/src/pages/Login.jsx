@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import AuthCarousel from '../components/AuthCarousel';
+import AnimatedLogo from '../components/AnimatedLogo';
 
 export default function Login() {
     const { login } = useContext(AuthContext);
@@ -102,24 +103,21 @@ export default function Login() {
     };
 
     return (
-        <div className="flex-1 min-h-screen flex flex-col lg:flex-row bg-white">
+        <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white">
             {/* Left Panel - 2-Second Auto Carousel */}
             <AuthCarousel />
 
             {/* Right Panel - Login Form */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-between p-8 lg:p-16 bg-white overflow-y-auto min-h-screen">
-                {/* Header for Mobile only */}
-                <div className="md:hidden flex items-center space-x-2 mb-8">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">E</span>
-                    </div>
-                    <span className="text-xl font-bold tracking-wider text-gray-900">Expireo</span>
+            <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-8 lg:p-16 bg-white overflow-y-auto flex-1 min-h-screen">
+                {/* Mobile logo — carousel hidden on small screens */}
+                <div className="lg:hidden mb-6">
+                    <AnimatedLogo size="small" />
                 </div>
 
-                <div className="my-auto max-w-md w-full mx-auto space-y-8">
+                <div className="my-auto max-w-md w-full mx-auto space-y-6 sm:space-y-8 lg:py-0">
                     {/* Header */}
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                             Welcome back
                         </h2>
                         <p className="mt-2 text-sm text-gray-500">
@@ -257,7 +255,7 @@ export default function Login() {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-8 pt-6 border-t border-gray-100 text-center flex justify-center space-x-6 text-xs text-gray-400 font-medium">
+                <div className="mt-8 pt-6 border-t border-gray-100 text-center flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-400 font-medium">
                     <a href="#" className="hover:text-gray-600 transition">Privacy Policy</a>
                     <a href="#" className="hover:text-gray-600 transition">Terms of Service</a>
                     <a href="#" className="hover:text-gray-600 transition">Help Center</a>
