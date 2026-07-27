@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../api/api';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { formatLinkExpiry, isLinkExpired } from '../utils/linkStatus';
 
 export default function MyLinks() {
     const [links, setLinks] = useState([]);
@@ -23,14 +24,6 @@ export default function MyLinks() {
         };
         fetchLinks();
     }, []);
-
-    const getExpiry = (link) => link.expiry || link.expiresAt || null;
-
-    const isLinkExpired = (link) => {
-        const expiry = getExpiry(link);
-        if (!expiry) return false;
-        return new Date(expiry) < new Date();
-    };
 
     const filteredLinks = links.filter((link) => {
         const expired = isLinkExpired(link);
@@ -163,9 +156,7 @@ export default function MyLinks() {
                                                 {link.clicks || 0}
                                             </td>
                                             <td className="p-4 text-xs text-gray-500">
-                                                {getExpiry(link)
-                                                    ? new Date(getExpiry(link)).toLocaleString()
-                                                    : 'Never'}
+                                                {formatLinkExpiry(link, (expiry) => new Date(expiry).toLocaleString())}
                                             </td>
                                             <td className="p-4 text-right space-x-2">
                                                 <button

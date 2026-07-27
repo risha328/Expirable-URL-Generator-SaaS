@@ -290,8 +290,9 @@ export const getDashboardStats = async (req, res) => {
       return sum + Math.max(link.clicks || 0, eventCount);
     }, 0);
 
-    // Count active links (not expired)
-    const activeLinks = links.filter(link => {
+    // Count active links (not expired by date or admin action)
+    const activeLinks = links.filter((link) => {
+      if (link.status === 'expired') return false;
       return !link.expiry || new Date(link.expiry) > new Date();
     }).length;
 

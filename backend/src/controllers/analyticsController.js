@@ -41,6 +41,7 @@ export const getAnalytics = async (req, res) => {
 
     res.json({
       clicks,
+      status: link.status,
       createdAt: link.createdAt,
       expiry: link.expiry,
       analytics: analytics

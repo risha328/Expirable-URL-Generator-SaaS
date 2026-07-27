@@ -48,6 +48,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api/api';
+import { formatLinkExpiry } from '../utils/linkStatus';
 
 export default function Analytics() {
     const { slug } = useParams();
@@ -237,7 +238,7 @@ export default function Analytics() {
                         <div className="min-w-0">
                             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Expires</p>
                             <p className="text-sm font-bold text-gray-900 truncate">
-                                {data.expiry ? formatDate(data.expiry) : 'Never'}
+                                {formatLinkExpiry(data, formatDate)}
                             </p>
                         </div>
                     </div>

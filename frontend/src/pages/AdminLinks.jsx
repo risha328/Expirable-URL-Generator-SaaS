@@ -160,37 +160,51 @@ export default function AdminLinks() {
                   </span>
                 </td>
                 {showActions && (
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      onClick={() => handleDelete(link._id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
-                    {link.status === 'active' && (
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex items-center gap-1.5">
                       <button
-                        onClick={() => handleForceExpire(link._id)}
-                        className="text-orange-600 hover:text-orange-900"
+                        onClick={() => handleDelete(link._id)}
+                        title="Delete link"
+                        className="p-2 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-800 transition-colors"
                       >
-                        Force Expire
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                       </button>
-                    )}
-                    {link.ownerId && (
-                      <>
+                      {link.status === 'active' && (
                         <button
-                          onClick={() => handleWarnUser(link.ownerId._id)}
-                          className="text-yellow-600 hover:text-yellow-900"
+                          onClick={() => handleForceExpire(link._id)}
+                          title="Force expire"
+                          className="p-2 rounded-lg text-orange-600 hover:bg-orange-50 hover:text-orange-800 transition-colors"
                         >
-                          Warn User
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
                         </button>
-                        <button
-                          onClick={() => handleBlockUser(link.ownerId._id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Block User
-                        </button>
-                      </>
-                    )}
+                      )}
+                      {link.ownerId && (
+                        <>
+                          <button
+                            onClick={() => handleWarnUser(link.ownerId._id)}
+                            title="Warn user"
+                            className="p-2 rounded-lg text-amber-600 hover:bg-amber-50 hover:text-amber-800 transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleBlockUser(link.ownerId._id)}
+                            title="Block user"
+                            className="p-2 rounded-lg text-rose-600 hover:bg-rose-50 hover:text-rose-800 transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 )}
               </tr>

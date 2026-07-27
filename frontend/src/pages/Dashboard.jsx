@@ -51,6 +51,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import api from '../api/api';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { formatLinkExpiry, getLinkExpiryDate, getLinkExpiryStatus, isLinkExpired } from '../utils/linkStatus';
 
 export default function Dashboard() {
     const { user } = useContext(AuthContext);
@@ -138,18 +139,21 @@ export default function Dashboard() {
         return ((clicks / stats.totalClicks) * 100).toFixed(1);
     };
 
-    const formatExpiryDate = (expiryDate) => {
-        if (!expiryDate) return 'No expiry';
-        return new Date(expiryDate).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
+    const formatExpiryDate = (link) =>
+        formatLinkExpiry(link, (expiryDate) =>
+            new Date(expiryDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+            })
+        );
 
-    const getTimeRemaining = (expiryDate) => {
+    const getTimeRemaining = (link) => {
+        if (isLinkExpired(link)) return 'Expired';
+
+        const expiryDate = getLinkExpiryDate(link);
         if (!expiryDate) return 'Never expires';
 
         const now = new Date();
@@ -171,17 +175,7 @@ export default function Dashboard() {
         }
     };
 
-    const getExpiryStatus = (expiryDate) => {
-        if (!expiryDate) return 'no-expiry';
-
-        const now = new Date();
-        const expiry = new Date(expiryDate);
-        const diffMs = expiry - now;
-
-        if (diffMs <= 0) return 'expired';
-        if (diffMs <= 24 * 60 * 60 * 1000) return 'expiring-soon'; // Within 24 hours
-        return 'active';
-    };
+    const getExpiryStatus = getLinkExpiryStatus;
 
     const getStatusBadge = (status) => {
         switch (status) {
@@ -422,15 +416,15 @@ export default function Dashboard() {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(getExpiryStatus(link.expiry))}`}>
-                                                        {getStatusText(getExpiryStatus(link.expiry))}
+                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(getExpiryStatus(link))}`}>
+                                                        {getStatusText(getExpiryStatus(link))}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {formatExpiryDate(link.expiry)}
+                                                    {formatExpiryDate(link)}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {getTimeRemaining(link.expiry)}
+                                                    {getTimeRemaining(link)}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <div className="flex items-center justify-end space-x-2">

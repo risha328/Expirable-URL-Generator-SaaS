@@ -2,10 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import api from '../api/api';
-import BrandMark from '../components/BrandMark';
+import AuthCarousel from '../components/AuthCarousel';
+import AnimatedLogo from '../components/AnimatedLogo';
 
 export default function AdminLogin() {
-    const { login, setUser } = useContext(AuthContext);
+    const { setUser } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -18,7 +19,6 @@ export default function AdminLogin() {
     const location = useLocation();
 
     useEffect(() => {
-        // Check if user is already logged in and is admin
         if (location.state?.message) {
             setSubmitError(location.state.message);
         }
@@ -30,7 +30,6 @@ export default function AdminLogin() {
             ...prev,
             [name]: value
         }));
-        // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -65,17 +64,12 @@ export default function AdminLogin() {
 
         setIsLoading(true);
         try {
-            // Use admin-specific login endpoint via api instance
             const response = await api.post('/auth/admin/login', formData);
 
-            // Store token and user data
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
-
-            // Update AuthContext user state
             setUser(response.data.user);
 
-            // Redirect to admin dashboard or original location
             const from = location.state?.from?.pathname || '/admin/dashboard';
             nav(from, {
                 state: {
@@ -91,58 +85,24 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row bg-white">
-            {/* Left Panel - Hero Gradient */}
-            <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-900 via-slate-800 to-blue-900 text-white p-12 flex-col justify-between relative overflow-hidden">
-                {/* Subtle decorative blurred circles */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl transform translate-x-20 -translate-y-20"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl transform -translate-x-20 translate-y-20"></div>
-                
-                {/* Logo/Brand Header */}
-                <div className="flex items-center space-x-2 z-10">
-                    <div className="w-8 h-8 bg-white/10 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/20 text-white">
-                        <BrandMark className="w-4 h-4" />
-                    </div>
-                    <span className="text-xl font-bold tracking-wider text-white">Expireo Admin</span>
+        <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white">
+            <AuthCarousel />
+
+            <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-8 lg:p-16 bg-white overflow-y-auto flex-1 min-h-screen">
+                <div className="lg:hidden mb-6">
+                    <AnimatedLogo size="small" />
                 </div>
 
-                {/* Bottom Overlay Card */}
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-lg border border-white/20 shadow-2xl z-10">
-                    <div className="flex items-center space-x-2 text-xs font-semibold tracking-wider text-red-400 uppercase mb-4">
-                        <span className="w-2.5 h-2.5 rounded-full bg-red-400 animate-pulse"></span>
-                        <span>Admin Control Active</span>
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-                        System Oversight Control
-                    </h2>
-                    <p className="text-white/80 text-sm leading-relaxed">
-                        Access system analytics, security monitoring logs, active link records, and rate limiting status.
-                    </p>
-                </div>
-            </div>
-
-            {/* Right Panel - Admin Login Form */}
-            <div className="w-full md:w-1/2 flex flex-col justify-between p-8 md:p-16 bg-white overflow-y-auto min-h-screen">
-                {/* Header for Mobile only */}
-                <div className="md:hidden flex items-center space-x-2 mb-8">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-650 rounded-lg flex items-center justify-center text-white">
-                        <BrandMark className="w-4 h-4" />
-                    </div>
-                    <span className="text-xl font-bold tracking-wider text-gray-900">Expireo Admin</span>
-                </div>
-
-                <div className="my-auto max-w-md w-full mx-auto space-y-8">
-                    {/* Header */}
+                <div className="my-auto max-w-md w-full mx-auto space-y-6 sm:space-y-8 lg:py-0">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
-                            Admin Access
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                            Welcome back
                         </h2>
                         <p className="mt-2 text-sm text-gray-500">
-                            Enter your credentials to access the admin panel.
+                            Enter your details to access the admin panel.
                         </p>
                     </div>
 
-                    {/* Error Notice */}
                     {submitError && (
                         <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
                             <svg className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -152,9 +112,7 @@ export default function AdminLogin() {
                         </div>
                     )}
 
-                    {/* Form */}
                     <form onSubmit={onSubmit} className="space-y-5">
-                        {/* Email Address */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
                                 Email Address
@@ -171,26 +129,25 @@ export default function AdminLogin() {
                                     type="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
+                                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 ${
                                         errors.email ? 'border-red-300 bg-red-50/20' : 'border-gray-300'
                                     }`}
-                                    placeholder="admin@expireo.com"
+                                    placeholder="name@company.com"
                                 />
                             </div>
                             {errors.email && (
-                                <p className="mt-1.5 text-xs text-red-650 font-medium">{errors.email}</p>
+                                <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.email}</p>
                             )}
                         </div>
 
-                        {/* Password */}
                         <div>
                             <div className="flex items-center justify-between mb-1.5">
                                 <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
                                     Password
                                 </label>
-                                <Link 
-                                    to="/admin/forgot-password" 
-                                    className="text-xs font-semibold text-blue-655 hover:text-blue-750 transition duration-200"
+                                <Link
+                                    to="/forgot-password"
+                                    className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition duration-200"
                                 >
                                     Forgot password?
                                 </Link>
@@ -207,7 +164,7 @@ export default function AdminLogin() {
                                     type={showPassword ? "text" : "password"}
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 text-sm ${
+                                    className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition duration-200 outline-none text-gray-850 ${
                                         errors.password ? 'border-red-300 bg-red-50/20' : 'border-gray-300'
                                     }`}
                                     placeholder="••••••••"
@@ -230,44 +187,45 @@ export default function AdminLogin() {
                                 </button>
                             </div>
                             {errors.password && (
-                                <p className="mt-1.5 text-xs text-red-650 font-medium">{errors.password}</p>
+                                <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.password}</p>
                             )}
                         </div>
 
-                        {/* Submit Button */}
+                        <div className="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="remember-me"
+                                type="checkbox"
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                            />
+                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 font-medium cursor-pointer">
+                                Remember for 30 days
+                            </label>
+                        </div>
+
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-blue-650 hover:bg-blue-750 active:bg-blue-800 disabled:opacity-50 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm text-sm"
+                            className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm text-sm"
                         >
-                            {isLoading ? 'Accessing...' : 'Access Admin Panel'}
+                            {isLoading ? 'Signing In...' : 'Sign In'}
                         </button>
                     </form>
 
-                    {/* Toggle Links */}
-                    <div className="text-center pt-4 border-t border-gray-100 mt-6 space-y-2">
+                    <div className="text-center">
                         <p className="text-sm text-gray-500">
-                            Don't have an admin account?{' '}
-                            <Link 
-                                to="/admin/signup" 
+                            Don't have an account?{' '}
+                            <Link
+                                to="/admin/signup"
                                 className="font-semibold text-blue-600 hover:text-blue-700 transition duration-200"
                             >
-                                Create Admin Account
-                            </Link>
-                        </p>
-                        <p className="text-sm text-gray-400">
-                            <Link 
-                                to="/login" 
-                                className="hover:text-gray-600 transition duration-200 font-medium"
-                            >
-                                ← Back to User Login
+                                Create an account
                             </Link>
                         </p>
                     </div>
                 </div>
 
-                {/* Footer */}
-                <div className="mt-8 pt-6 border-t border-gray-100 text-center flex justify-center space-x-6 text-xs text-gray-400 font-medium">
+                <div className="mt-8 pt-6 border-t border-gray-100 text-center flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-400 font-medium">
                     <a href="#" className="hover:text-gray-600 transition">Privacy Policy</a>
                     <a href="#" className="hover:text-gray-600 transition">Terms of Service</a>
                     <a href="#" className="hover:text-gray-600 transition">Help Center</a>
